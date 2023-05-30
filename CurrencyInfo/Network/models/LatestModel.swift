@@ -11,10 +11,10 @@ struct LatestModel: Codable {
     let success: Bool
     let timestamp: Int
     let base, date: String
-    let rates: [CurrencyAbb.RawValue : Double]
+    let rates: [Currency.RawValue : Double]
 }
 
-enum CurrencyAbb: String, Codable{
+enum Currency: String, Codable{
     
     case AED
     case AFN

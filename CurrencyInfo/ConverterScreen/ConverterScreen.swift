@@ -9,35 +9,23 @@ import UIKit
 
 class ConverterScreen: UIViewController {
 
+    
+    var viewModel: ConverterScreenViewModel!
+    
     override func viewDidLoad() {
         
         
         super.viewDidLoad()
 
         
-        performLatestRatesRequest()
+        viewModel = ConverterScreenViewModel(controller: self)
+        
+//        viewModel.performLatestRatesRequest()
+        viewModel.performGetAvailableCurrenciesRequest()
 
     }
 
     
-    func performLatestRatesRequest(){
-        let latestRequest = LatestRequest.constructURl()
-
-        Network.perform(url: latestRequest,
-                        LatestModel.self){
-            result in
-            
-            switch result{
-            case .success(let data):
-                
-                print(data)
-                
-            case .failure(let error):
-                print(error)
-
-            }
-        }
-    }
 
 }
 
