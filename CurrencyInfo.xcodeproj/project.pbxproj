@@ -9,23 +9,29 @@
 /* Begin PBXBuildFile section */
 		EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04A92A269B71003D45AB /* AppDelegate.swift */; };
 		EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */; };
-		EF3B04AE2A269B71003D45AB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AD2A269B71003D45AB /* ViewController.swift */; };
+		EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AD2A269B71003D45AB /* ConverterScreen.swift */; };
 		EF3B04B12A269B71003D45AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF3B04AF2A269B71003D45AB /* Main.storyboard */; };
 		EF3B04B32A269B72003D45AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF3B04B22A269B72003D45AB /* Assets.xcassets */; };
 		EF3B04B62A269B72003D45AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF3B04B42A269B72003D45AB /* LaunchScreen.storyboard */; };
 		EF3B04BE2A269BCA003D45AB /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04BD2A269BCA003D45AB /* Network.swift */; };
+		EF3B04C12A26A333003D45AB /* NetworkModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C02A26A333003D45AB /* NetworkModels.swift */; };
+		EF3B04C32A26A606003D45AB /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C22A26A606003D45AB /* Requests.swift */; };
+		EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		EF3B04A62A269B71003D45AB /* CurrencyInfo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyInfo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF3B04A92A269B71003D45AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		EF3B04AD2A269B71003D45AB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EF3B04AD2A269B71003D45AB /* ConverterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterScreen.swift; sourceTree = "<group>"; };
 		EF3B04B02A269B71003D45AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EF3B04B22A269B72003D45AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF3B04B52A269B72003D45AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF3B04B72A269B72003D45AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EF3B04BD2A269BCA003D45AB /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		EF3B04C02A26A333003D45AB /* NetworkModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModels.swift; sourceTree = "<group>"; };
+		EF3B04C22A26A606003D45AB /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterScreenVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +64,35 @@
 		EF3B04A82A269B71003D45AB /* CurrencyInfo */ = {
 			isa = PBXGroup;
 			children = (
-				EF3B04BD2A269BCA003D45AB /* Network.swift */,
+				EF3B04C42A26AAFA003D45AB /* ConverterScreen */,
+				EF3B04BF2A26A319003D45AB /* Network */,
 				EF3B04A92A269B71003D45AB /* AppDelegate.swift */,
 				EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */,
-				EF3B04AD2A269B71003D45AB /* ViewController.swift */,
 				EF3B04AF2A269B71003D45AB /* Main.storyboard */,
 				EF3B04B22A269B72003D45AB /* Assets.xcassets */,
 				EF3B04B42A269B72003D45AB /* LaunchScreen.storyboard */,
 				EF3B04B72A269B72003D45AB /* Info.plist */,
 			);
 			path = CurrencyInfo;
+			sourceTree = "<group>";
+		};
+		EF3B04BF2A26A319003D45AB /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				EF3B04BD2A269BCA003D45AB /* Network.swift */,
+				EF3B04C02A26A333003D45AB /* NetworkModels.swift */,
+				EF3B04C22A26A606003D45AB /* Requests.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		EF3B04C42A26AAFA003D45AB /* ConverterScreen */ = {
+			isa = PBXGroup;
+			children = (
+				EF3B04AD2A269B71003D45AB /* ConverterScreen.swift */,
+				EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */,
+			);
+			path = ConverterScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,8 +166,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF3B04AE2A269B71003D45AB /* ViewController.swift in Sources */,
+				EF3B04C12A26A333003D45AB /* NetworkModels.swift in Sources */,
+				EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */,
 				EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */,
+				EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */,
+				EF3B04C32A26A606003D45AB /* Requests.swift in Sources */,
 				EF3B04BE2A269BCA003D45AB /* Network.swift in Sources */,
 				EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */,
 			);
