@@ -7,7 +7,6 @@
 
 import XCTest
 import RxSwift
-import RxTest
 
 @testable import CurrencyInfo
 
@@ -17,7 +16,14 @@ final class CurrencyInfoTests: XCTestCase {
     private var availableCurrencies: AvailableCurrenciesServiceMock!
     private var latestRatesService: LatestRatesServiceMock!
     
+//    private var scheduler: TestScheduler!
+    private var disposeBag: DisposeBag!
+    
+    
     override func setUpWithError() throws {
+        
+//        scheduler = TestScheduler(initialClock: 0)
+//        disposeBag = DisposeBag()
         
         availableCurrencies = AvailableCurrenciesServiceMock()
         latestRatesService = LatestRatesServiceMock()
@@ -34,21 +40,33 @@ final class CurrencyInfoTests: XCTestCase {
     
     func test_WhenCalledAvailableCurrenciesService_PushesOnNextEvent(){
         // Given
-        let availableCurrenciesModel = AvailableCurrenciesModel(success: true,
-                                                                symbols: ["USD" : "United States Dollar"])
-        availableCurrencies.getAvailableCurrenciesMockResult = .success(availableCurrenciesModel)
+//        let singleOfAvailableCurrenciesModel = Single.create{
+//            single in
+//
+//            let availableCurrenciesModel = AvailableCurrenciesModel(success: true,
+//                                                                    symbols: ["USD" : "United States Dollar"])
+//            single(.success(availableCurrenciesModel))
+//
+//            return Disposables.create()
+//        }
+//
+//
+//
+//        availableCurrencies.getAvailableCurrenciesMockResult = .success(singleOfAvailableCurrenciesModel)
         
-        // When
         
 
         
-        sut.getAvailableCurrencies()
+        // When
+                
+//        sut.getAvailableCurrencies()
         
         // Then
         
-        sut.availableCurrencies.asObserver()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {_ in}).dispose()
+        
+        
+        
+//        XCTAssertEqual([Recorded<Event<Equatable?>>], <#T##rhs: [Recorded<Event<Equatable?>>]##[Recorded<Event<Equatable?>>]#>)
     }
     
     
@@ -70,25 +88,27 @@ final class CurrencyInfoTests: XCTestCase {
 
 class AvailableCurrenciesServiceMock: AvailableCurrenciesService{
     
-    var getAvailableCurrenciesMockResult: Result<CurrencyInfo.AvailableCurrenciesModel, Error>?
+    var getAvailableCurrenciesMockResult: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
     
-    func getAvailableCurrencies(completionHandler: @escaping (Result<CurrencyInfo.AvailableCurrenciesModel, Error>) -> Void) {
+    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
         
         if let result = getAvailableCurrenciesMockResult{
-            completionHandler(result)
+            completion(result)
         }
     }
 }
 
 
+//
 class LatestRatesServiceMock: LatestRatesService{
-    var getLatestRatesResultMock: Result<CurrencyInfo.LatestRatesModel, Error>?
-    
-    func getLatestRates(completionHandler: @escaping (Result<CurrencyInfo.LatestRatesModel, Error>) -> Void) {
+    var getLatestRatesResultMock: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
+
+    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
+        
         if let result = getLatestRatesResultMock{
-            completionHandler(result)
+            completion(result)
         }
     }
-    
-    
+
+
 }

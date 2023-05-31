@@ -6,11 +6,11 @@
 //
 
 import Foundation
-
+import RxSwift
 
 protocol LatestRatesService{
-        
-    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, ErrorResult>)->Void)
+    
+    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
 }
 
 class LatestRates: LatestRatesService{
@@ -19,7 +19,7 @@ class LatestRates: LatestRatesService{
 
     var latestRatesRequest = LatestRatesRequest.constructURlRequest()
     
-    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, ErrorResult>)->Void){
+    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void){
         
                 
         network.performGet(request: &latestRatesRequest,
@@ -29,26 +29,15 @@ class LatestRates: LatestRatesService{
             
             switch result{
             case .success(let data):
-                break
-//                NetworkParser.parseReturnedData(data: data, LatestRatesModel.self){
-//                    result in
-//                    switch result{
-//                    case .success(let data):
 //
-//                        completionHandler(.success(data))
-//
-//                        break
-//
-//                    case .failure(let error):
-//                        completionHandler(.failure(.parser(string: "Error while parsing json data \(error.localizedDescription)")))
-//
-//                        break
-//                    }
-//                }
+                // Parsing
+                let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
+                
+                completion(.success(single))
                 
             case .failure(let error):
-                completionHandler(.failure(error))
-                
+                completion(.failure(.network(string: error.localizedDescription)))
+
             }
         }
     }

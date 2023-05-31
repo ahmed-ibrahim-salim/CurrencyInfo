@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "055C51FE-0D3B-4C63-ABCE-8B85D6E0D5D8",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:CurrencyInfo.xcodeproj",
+      "identifier" : "EF3B04A52A269B71003D45AB",
+      "name" : "CurrencyInfo"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:CurrencyInfo.xcodeproj",
+        "identifier" : "EF0FB6CB2A272BA900F71F53",
+        "name" : "CurrencyInfoTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -11,7 +11,7 @@ import RxSwift
 class NetworkParser{
     
     static func parseReturnedData<T:Codable>(data: Data,
-                                      _ type: T.Type) -> Single<Any>{
+                                      _ type: T.Type) -> Single<T>{
         return Single.create{
             
             single in

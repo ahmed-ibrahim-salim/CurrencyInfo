@@ -7,6 +7,12 @@
 
 import Foundation
 import RxSwift
+import RxRelay
+import RxCocoa
+
+//protocol ConverterScreenViewModelOutput{
+//    func updateView()
+//}
 
 class ConverterScreenViewModel {
     
@@ -24,12 +30,16 @@ class ConverterScreenViewModel {
     private let availableCurrenciesService: AvailableCurrenciesService
     private let LatestRatesService: LatestRatesService
 
+    
+    
     init(
          availableCurrenciesService: AvailableCurrenciesService,
          LatestRatesService: LatestRatesService
     ) {
         self.LatestRatesService = LatestRatesService
         self.availableCurrenciesService = availableCurrenciesService
+        
+    
     }
     
     
@@ -57,23 +67,19 @@ class ConverterScreenViewModel {
                 
                 single.subscribe(onSuccess: {
                     data in
-                    if let modelReturned = data as? AvailableCurrenciesModel{
+                    
+                    let curruncies: [Currency?] = data.symbols.map({
+                        dictionaryItem in
                         
-                        
-                        let curruncies: [Currency?] = modelReturned.symbols.map({
-                            dictionaryItem in
-                            
-                            if let currency = Currency(rawValue: dictionaryItem.key){
-                                return currency
-                            }
-                            return nil
-                        })
-                        
-                        self.availableCurrencies.onNext(curruncies.compactMap({$0}))
-                        
-                    }else{
-                        self.error.onNext(ErrorResult.custom(string: "parsing returned a Wrong type"))
-                    }
+                        if let currency = Currency(rawValue: dictionaryItem.key){
+                            return currency
+                        }
+                        return nil
+                    })
+                    
+                    self.availableCurrencies.onNext(curruncies.compactMap({$0}))
+                    
+                    
                 }, onFailure: {
                     error in
                     self.error.onNext(error)

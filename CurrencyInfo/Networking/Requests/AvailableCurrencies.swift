@@ -10,12 +10,7 @@ import RxSwift
 
 protocol AvailableCurrenciesService{
         
-//    func getAvailableCurrencies(completionHandler: @escaping (Result<AvailableCurrenciesModel, ErrorResult>)->Void)
-    
-//    func getAvailableCurrencies() -> Observable<T>
-//    /Observable<AvailableCurrenciesModel>
-    
-    func getAvailableCurrencies(completion: @escaping (Result<Single<Any>,ErrorResult>)-> Void)
+    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
     
 }
 
@@ -24,7 +19,8 @@ class AvailableCurrencies: AvailableCurrenciesService{
     
     private var network = GenericNetwork.shared
     
-    func getAvailableCurrencies(completion: @escaping (Result<Single<Any>,ErrorResult>)-> Void){
+    
+    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void){
         
         var availableCurrenciesRequest = AvailableCurrenciesRequest.constructURlRequest()
         
@@ -39,6 +35,7 @@ class AvailableCurrencies: AvailableCurrenciesService{
                 // Parsing
                 let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
                 
+
                 completion(.success(single))
 
                 
