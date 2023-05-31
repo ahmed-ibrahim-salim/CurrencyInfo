@@ -6,96 +6,107 @@
 //
 
 import Foundation
+import RxSwift
 
-
-class ConverterScreenViewModel: NSObject {
+class ConverterScreenViewModel {
     
-    weak var controller: ConverterScreen!
+    weak var controller: ConverterScreen?
         
-    var availableCurrencies: [Currency] = []{
-        didSet{
-            if !availableCurrencies.isEmpty{
-                print(availableCurrencies)
-            }
-        }
+    
+//    private var rates: [Currency.RawValue : Double] = [:]{
+//        didSet{
+//            if !rates.isEmpty{
+//                print(rates)
+//            }
+//        }
+//    }
+
+    private let availableCurrenciesService: AvailableCurrenciesService
+    private let LatestRatesService: LatestRatesService
+
+    init(
+         availableCurrenciesService: AvailableCurrenciesService,
+         LatestRatesService: LatestRatesService
+    ) {
+        self.LatestRatesService = LatestRatesService
+        self.availableCurrenciesService = availableCurrenciesService
     }
     
-    var rates: [Currency.RawValue : Double] = [:]{
-        didSet{
-            if !rates.isEmpty{
-                print(rates)
-            }
-        }
-    }
-
-    init(controller: ConverterScreen!) {
-        self.controller = controller
-    }
+    
+    let isLoading = PublishSubject<Bool>()
+        
+    var availableCurrencies = PublishSubject<[Currency]>()
+        
+    let error = PublishSubject<Error>()
     
     
     //MARK: Network
 
-    
-//    func performGetAvailableCurrenciesRequest(){
-//        let availableCurrenciesRequest = AvailableCurrenciesRequest.constructURl()
-//
-//        Network.perform(url: availableCurrenciesRequest,
-//                        AvailableCurrenciesModel.self){
-//            [weak self] result in
-//
-//            guard let self = self else{return}
-//
-//            switch result{
-//            case .success(let data):
-//
-//                let curruncies: [Currency?] = data.symbols.map({
-//                    dictionaryItem in
-//
-//                    if let currency = Currency(rawValue: dictionaryItem.key){
-//                        return currency
-//                    }
-//                    return nil
-//                })
-//
-//                self.availableCurrencies = curruncies.compactMap({$0})
-//
-//                break
-//
-//            case .failure(let error):
-//                print(error)
-//
-//            }
-//        }
-//    }
-    
-    private func getConversionResult(from: Currency,
-                                 to: Currency,
-                                 amount: Double) throws -> Double?{
-        var result = 0.0
+    func getAvailableCurrencies(){
+
+        isLoading.onNext(true)
         
-        if let rateForFirstCurrency = rates[from.rawValue],
-            let rateForSecondCurrency = rates[from.rawValue]{
-            
-              //  28.5       = 25     * 1.223
-            let amountInEuro = amount * rateForFirstCurrency
-                        
-            //    1500                 =  28.5        * 32.90
-            let amountInSecondCurrency = amountInEuro * rateForSecondCurrency
-            
-            result = amountInSecondCurrency
-        }else{
-            
-            guard let _ = rates[from.rawValue] else{
-                throw CurrencyRateError.firstCurrencyRateIsMissing
-            }
-            
-            guard let _ = rates[to.rawValue] else{
-                throw CurrencyRateError.secondCurrencyRateIsMissing
+        availableCurrenciesService.getAvailableCurrencies(){
+            [weak self] result in
+
+            guard let self = self else{return}
+
+            switch result{
+            case .success(let data):
+                
+                isLoading.onNext(false)
+
+                let curruncies: [Currency?] = data.symbols.map({
+                    dictionaryItem in
+
+                    if let currency = Currency(rawValue: dictionaryItem.key){
+                        return currency
+                    }
+                    return nil
+                })
+
+                self.availableCurrencies.onNext(curruncies.compactMap({$0}))
+                
+
+                break
+
+            case .failure(let error):
+                isLoading.onNext(false)
+                self.error.onNext(error)
+                print(error)
+
             }
         }
-        
-        return result
     }
+    
+//    private func getConversionResult(from: Currency,
+//                                 to: Currency,
+//                                 amount: Double) throws -> Double?{
+//        var result = 0.0
+//
+//        if let rateForFirstCurrency = rates[from.rawValue],
+//            let rateForSecondCurrency = rates[from.rawValue]{
+//
+//              //  28.5       = 25     * 1.223
+//            let amountInEuro = amount * rateForFirstCurrency
+//
+//            //    1500                 =  28.5        * 32.90
+//            let amountInSecondCurrency = amountInEuro * rateForSecondCurrency
+//
+//            result = amountInSecondCurrency
+//        }else{
+//
+//            guard let _ = rates[from.rawValue] else{
+//                throw CurrencyRateError.firstCurrencyRateIsMissing
+//            }
+//
+//            guard let _ = rates[to.rawValue] else{
+//                throw CurrencyRateError.secondCurrencyRateIsMissing
+//            }
+//        }
+//
+//        return result
+//    }
     
 }
 
