@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LatestModel: Codable {
+struct LatestRatesModel: Codable {
     let success: Bool
     let timestamp: Int
     let base, date: String

@@ -20,12 +20,7 @@ class ConverterScreen: UIViewController {
         
         viewModel = ConverterScreenViewModel(controller: self)
         
-//        viewModel.performLatestRatesRequest()
-        viewModel.performGetAvailableCurrenciesRequest()
 
     }
-
-    
-
 }
 

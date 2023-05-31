@@ -8,13 +8,16 @@
 
 import UIKit
 
-class Network{
+
+struct GenericNetwork{
+    
+    static let shared = GenericNetwork()
     
     static let accessKey = "9717e66194da9954443497f08ac17ec5"
     static let baseUrl = "http://data.fixer.io/api"
     
     
-    static private func parseReturnedData<T:Codable>(data: Data,
+    private func parseReturnedData<T:Codable>(data: Data,
                                                      _ type: T.Type,
                                                      completionHandler: @escaping ((Result<T, Error>) -> Void)){
         
@@ -30,11 +33,11 @@ class Network{
         }
     }
     
-    static func perform<T:Codable>(url: URL,
+    func performGet<T:Codable>(url: URL,
                         _ type: T.Type,
                         completionHandler: @escaping ((Result<T, Error>) -> Void)){
                 
-        let task = URLSession.shared.dataTask(with: url) {
+        URLSession.shared.dataTask(with: url) {
             
             data, response, error in
             
@@ -43,7 +46,7 @@ class Network{
             if let data = data {
                 
                 // parsing
-                parseReturnedData(data: data, type){
+                self.parseReturnedData(data: data, type){
                     result in
                     
                     switch result{
@@ -59,9 +62,7 @@ class Network{
             } else if let error = error {
                 print("HTTP Request Failed \(error)")
             }
-        }
-        
-        task.resume()
+        }.resume()
     }
 }
 

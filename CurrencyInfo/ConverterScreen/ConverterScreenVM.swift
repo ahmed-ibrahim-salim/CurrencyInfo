@@ -8,7 +8,6 @@
 import Foundation
 
 
-
 class ConverterScreenViewModel: NSObject {
     
     weak var controller: ConverterScreen!
@@ -35,59 +34,39 @@ class ConverterScreenViewModel: NSObject {
     
     
     //MARK: Network
-    func performLatestRatesRequest(){
-        let latestRequest = LatestRequest.constructURl()
 
-        Network.perform(url: latestRequest,
-                        LatestModel.self){
-            [weak self] result in
-            
-            guard let self = self else{return}
-            
-            switch result{
-            case .success(let data):
-                
-                self.rates = data.rates
-                break
-                
-            case .failure(let error):
-                print(error)
-
-            }
-        }
-    }
     
-    func performGetAvailableCurrenciesRequest(){
-        let availableCurrenciesRequest = AvailableCurrenciesRequest.constructURl()
-
-        Network.perform(url: availableCurrenciesRequest,
-                        AvailableCurrenciesModel.self){
-            [weak self] result in
-            
-            guard let self = self else{return}
-            
-            switch result{
-            case .success(let data):
-                
-                let curruncies: [Currency?] = data.symbols.map({
-                    dictionaryItem in
-                    
-                    if let currency = Currency(rawValue: dictionaryItem.key){
-                        return currency
-                    }
-                    return nil
-                })
-                
-                self.availableCurrencies = curruncies.compactMap({$0})
-                
-                break
-                
-            case .failure(let error):
-                print(error)
-
-            }
-        }
-    }
+//    func performGetAvailableCurrenciesRequest(){
+//        let availableCurrenciesRequest = AvailableCurrenciesRequest.constructURl()
+//
+//        Network.perform(url: availableCurrenciesRequest,
+//                        AvailableCurrenciesModel.self){
+//            [weak self] result in
+//
+//            guard let self = self else{return}
+//
+//            switch result{
+//            case .success(let data):
+//
+//                let curruncies: [Currency?] = data.symbols.map({
+//                    dictionaryItem in
+//
+//                    if let currency = Currency(rawValue: dictionaryItem.key){
+//                        return currency
+//                    }
+//                    return nil
+//                })
+//
+//                self.availableCurrencies = curruncies.compactMap({$0})
+//
+//                break
+//
+//            case .failure(let error):
+//                print(error)
+//
+//            }
+//        }
+//    }
     
     private func getConversionResult(from: Currency,
                                  to: Currency,
