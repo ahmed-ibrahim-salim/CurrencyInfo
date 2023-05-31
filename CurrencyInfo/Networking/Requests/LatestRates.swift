@@ -17,12 +17,12 @@ class LatestRates: LatestRatesService{
     
     private var network = GenericNetwork.shared
 
-    let latestRatesRequest = LatestRatesRequest.constructURl()
+    var latestRatesRequest = LatestRatesRequest.constructURlRequest()
     
     func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, Error>)->Void){
         
                 
-        network.performGet(url: latestRatesRequest,
+        network.performGet(request: &latestRatesRequest,
                            LatestRatesModel.self){
             [weak self] result in
             
@@ -46,7 +46,7 @@ class LatestRates: LatestRatesService{
 
 struct LatestRatesRequest{
     
-    static func constructURl()->URL{
+    static func constructURlRequest()->URLRequest{
         // should be
         // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
         var url = URL(string: GenericNetwork.baseUrl)!
@@ -60,7 +60,8 @@ struct LatestRatesRequest{
         
         url.append(queryItems: queryItems)
         
-        return url
+        return RequestFactory.request(method: .GET, url: url)
+
     }
     
 }

@@ -19,10 +19,10 @@ class AvailableCurrencies: AvailableCurrenciesService{
     
     func getAvailableCurrencies(completionHandler: @escaping (Result<AvailableCurrenciesModel, Error>)->Void){
         
-        let availableCurrenciesRequest = AvailableCurrenciesRequest.constructURl()
+        var availableCurrenciesRequest = AvailableCurrenciesRequest.constructURlRequest()
 
         
-        network.performGet(url: availableCurrenciesRequest,
+        network.performGet(request: &availableCurrenciesRequest,
                            AvailableCurrenciesModel.self){
             result in
                         
@@ -43,7 +43,7 @@ class AvailableCurrencies: AvailableCurrenciesService{
 
 struct AvailableCurrenciesRequest{
     
-    static func constructURl()->URL{
+    static func constructURlRequest()->URLRequest{
         // should be
         // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5
         var url = URL(string: GenericNetwork.baseUrl)!
@@ -54,7 +54,28 @@ struct AvailableCurrenciesRequest{
         
         url.append(queryItems: queryItems)
         
-        return url
+        
+        
+        return RequestFactory.request(method: .GET, url: url)
     }
     
+}
+
+
+
+final class RequestFactory {
+    
+    enum Method: String {
+        case GET
+        case POST
+        case PUT
+        case DELETE
+        case PATCH
+    }
+    
+    static func request(method: Method, url: URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        return request
+    }
 }

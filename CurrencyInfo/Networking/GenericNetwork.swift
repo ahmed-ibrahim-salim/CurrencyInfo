@@ -33,15 +33,27 @@ struct GenericNetwork{
         }
     }
     
-    func performGet<T:Codable>(url: URL,
+    func performGet<T:Codable>(request: inout URLRequest,
                         _ type: T.Type,
-                        completionHandler: @escaping ((Result<T, Error>) -> Void)){
+                        completionHandler: @escaping ((Result<T, ErrorResult>) -> Void)){
+        
+        if let reachability = Reachability(), !reachability.isReachable {
+            request.cachePolicy = .returnCacheDataDontLoad
+        }
+        
+        
                 
-        URLSession.shared.dataTask(with: url) {
+        URLSession.shared.dataTask(with: request) {
             
             data, response, error in
             
 //            print(response)
+            
+            if let error = error {
+                completionHandler(.failure(.network(string: "An error occured during request :" + error.localizedDescription)))
+                return
+            }
+            
             
             if let data = data {
                 
@@ -59,8 +71,6 @@ struct GenericNetwork{
                     }
                 }
 
-            } else if let error = error {
-                print("HTTP Request Failed \(error)")
             }
         }.resume()
     }

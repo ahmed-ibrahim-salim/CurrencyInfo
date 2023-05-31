@@ -10,16 +10,18 @@ import RxSwift
 
 class ConverterScreen: UIViewController {
     
-    
+    // MARK: Vars
     var viewModel: ConverterScreenViewModel!
+    var availableCurrencies: [Currency] = []
+    let disposeBag = DisposeBag()
     
+    // MARK: Life cycle
     override func viewDidLoad() {
-        
         
         super.viewDidLoad()
         
         instantiateViewModel()
-        
+        setupViewModelBinding()
         
     }
     private func instantiateViewModel(){
@@ -36,10 +38,9 @@ class ConverterScreen: UIViewController {
         viewModel.controller = self
     }
     
-    var availableCurrencies: [Currency] = []
-    let disposeBag = DisposeBag()
 
-    func setupBinding(){
+//  MARK: ViewModel Binding
+    func setupViewModelBinding(){
         
         viewModel?.availableCurrencies
             .asObserver()
@@ -60,13 +61,11 @@ class ConverterScreen: UIViewController {
             .subscribe(onNext: {
                 [weak self] isLoading in
                 if isLoading {
-                    //                        self?.loadingAnimation.alpha = 1
-                    //                        self?.loadingAnimation.play()
+//                        self?.loadingAnimation.alpha = 1
+//                        self?.loadingAnimation.play()
                 } else {
-                    //                        self?.loadingAnimation.alpha = 0
-                    //                        self?.loadingAnimation.stop()
-                    //                        // stop refresh control
-                    //                        self?.mainTableView.refreshControl?.endRefreshing()
+//                        self?.loadingAnimation.alpha = 0
+//                        self?.loadingAnimation.stop()
                     
                 }
             }).disposed(by: disposeBag)

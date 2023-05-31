@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EF0FB6CF2A272BA900F71F53 /* CurrencyInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0FB6CE2A272BA900F71F53 /* CurrencyInfoTests.swift */; };
+		EF0FB6CF2A272BA900F71F53 /* CurrencyConverterViewmodelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0FB6CE2A272BA900F71F53 /* CurrencyConverterViewmodelTests.swift */; };
 		EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04A92A269B71003D45AB /* AppDelegate.swift */; };
 		EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */; };
 		EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AD2A269B71003D45AB /* ConverterScreen.swift */; };
@@ -24,6 +24,8 @@
 		EFD269562A273EB0006BE880 /* AvailableCurrencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD269552A273EB0006BE880 /* AvailableCurrencies.swift */; };
 		EFD269592A273F17006BE880 /* LatestRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD269582A273F17006BE880 /* LatestRates.swift */; };
 		EFD2695B2A274A7D006BE880 /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695A2A274A7D006BE880 /* Extenstions.swift */; };
+		EFD2695E2A275905006BE880 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695D2A275905006BE880 /* Reachability.swift */; };
+		EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695F2A275A81006BE880 /* ErrorResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +40,7 @@
 
 /* Begin PBXFileReference section */
 		EF0FB6CC2A272BA900F71F53 /* CurrencyInfoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CurrencyInfoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EF0FB6CE2A272BA900F71F53 /* CurrencyInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInfoTests.swift; sourceTree = "<group>"; };
+		EF0FB6CE2A272BA900F71F53 /* CurrencyConverterViewmodelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterViewmodelTests.swift; sourceTree = "<group>"; };
 		EF3B04A62A269B71003D45AB /* CurrencyInfo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyInfo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF3B04A92A269B71003D45AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +56,8 @@
 		EFD269552A273EB0006BE880 /* AvailableCurrencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCurrencies.swift; sourceTree = "<group>"; };
 		EFD269582A273F17006BE880 /* LatestRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestRates.swift; sourceTree = "<group>"; };
 		EFD2695A2A274A7D006BE880 /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
+		EFD2695D2A275905006BE880 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		EFD2695F2A275A81006BE880 /* ErrorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +84,7 @@
 		EF0FB6CD2A272BA900F71F53 /* CurrencyInfoTests */ = {
 			isa = PBXGroup;
 			children = (
-				EF0FB6CE2A272BA900F71F53 /* CurrencyInfoTests.swift */,
+				EF0FB6CE2A272BA900F71F53 /* CurrencyConverterViewmodelTests.swift */,
 			);
 			path = CurrencyInfoTests;
 			sourceTree = "<group>";
@@ -106,8 +110,9 @@
 		EF3B04A82A269B71003D45AB /* CurrencyInfo */ = {
 			isa = PBXGroup;
 			children = (
-				EF3B04C42A26AAFA003D45AB /* ConverterScreen */,
 				EF3B04BF2A26A319003D45AB /* Networking */,
+				EFD2695C2A2758F2006BE880 /* Reachability */,
+				EF3B04C42A26AAFA003D45AB /* ConverterScreen */,
 				EF3B04A92A269B71003D45AB /* AppDelegate.swift */,
 				EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */,
 				EF3B04AF2A269B71003D45AB /* Main.storyboard */,
@@ -125,6 +130,7 @@
 				EF3B04C72A26B47F003D45AB /* Models */,
 				EFD269572A273EED006BE880 /* Requests */,
 				EF3B04BD2A269BCA003D45AB /* GenericNetwork.swift */,
+				EFD2695F2A275A81006BE880 /* ErrorResult.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -154,6 +160,14 @@
 				EFD269582A273F17006BE880 /* LatestRates.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		EFD2695C2A2758F2006BE880 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				EFD2695D2A275905006BE880 /* Reachability.swift */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,7 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF0FB6CF2A272BA900F71F53 /* CurrencyInfoTests.swift in Sources */,
+				EF0FB6CF2A272BA900F71F53 /* CurrencyConverterViewmodelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,9 +291,11 @@
 				EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */,
 				EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */,
 				EFD269562A273EB0006BE880 /* AvailableCurrencies.swift in Sources */,
+				EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */,
 				EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */,
 				EFD269592A273F17006BE880 /* LatestRates.swift in Sources */,
 				EFD2695B2A274A7D006BE880 /* Extenstions.swift in Sources */,
+				EFD2695E2A275905006BE880 /* Reachability.swift in Sources */,
 				EF3B04BE2A269BCA003D45AB /* GenericNetwork.swift in Sources */,
 				EF3B04C92A26B4A8003D45AB /* AvailableCurrenciesModel.swift in Sources */,
 				EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */,
