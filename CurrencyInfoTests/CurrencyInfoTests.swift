@@ -7,6 +7,7 @@
 
 import XCTest
 import RxSwift
+import RxTest
 
 @testable import CurrencyInfo
 
@@ -15,19 +16,19 @@ final class CurrencyInfoTests: XCTestCase {
     private var sut: ConverterScreenViewModel!
     private var availableCurrencies: AvailableCurrenciesServiceMock!
     private var latestRatesService: LatestRatesServiceMock!
-    
-//    private var scheduler: TestScheduler!
+
+    private var scheduler: TestScheduler!
     private var disposeBag: DisposeBag!
-    
-    
+
+
     override func setUpWithError() throws {
-        
-//        scheduler = TestScheduler(initialClock: 0)
-//        disposeBag = DisposeBag()
-        
+
+        scheduler = TestScheduler(initialClock: 0)
+        disposeBag = DisposeBag()
+
         availableCurrencies = AvailableCurrenciesServiceMock()
         latestRatesService = LatestRatesServiceMock()
-        
+
         sut = ConverterScreenViewModel(availableCurrenciesService: availableCurrencies,
                                        LatestRatesService: latestRatesService)
     }
@@ -37,39 +38,39 @@ final class CurrencyInfoTests: XCTestCase {
         availableCurrencies = nil
         latestRatesService = nil
     }
-    
+
     func test_WhenCalledAvailableCurrenciesService_PushesOnNextEvent(){
         // Given
-//        let singleOfAvailableCurrenciesModel = Single.create{
-//            single in
-//
-//            let availableCurrenciesModel = AvailableCurrenciesModel(success: true,
-//                                                                    symbols: ["USD" : "United States Dollar"])
-//            single(.success(availableCurrenciesModel))
-//
-//            return Disposables.create()
-//        }
-//
-//
-//
-//        availableCurrencies.getAvailableCurrenciesMockResult = .success(singleOfAvailableCurrenciesModel)
-        
-        
+        let singleOfAvailableCurrenciesModel = Single.create{
+            single in
 
-        
+            let availableCurrenciesModel = AvailableCurrenciesModel(success: true,
+                                                                    symbols: ["USD" : "United States Dollar"])
+            single(.success(availableCurrenciesModel))
+
+            return Disposables.create()
+        }
+
+
+
+        availableCurrencies.getAvailableCurrenciesMockResult = .success(singleOfAvailableCurrenciesModel)
+
+
+
+
         // When
-                
-//        sut.getAvailableCurrencies()
-        
+
+        sut.getAvailableCurrencies()
+
         // Then
-        
-        
-        
-        
+
+
+
+
 //        XCTAssertEqual([Recorded<Event<Equatable?>>], <#T##rhs: [Recorded<Event<Equatable?>>]##[Recorded<Event<Equatable?>>]#>)
     }
-    
-    
+
+
 //    func test_WhenCalledlatestRatesService_PushesOnNextEvent(){
 //        // Given
 //        let latestRatesModel = LatestRatesModel(success: true,
@@ -87,11 +88,11 @@ final class CurrencyInfoTests: XCTestCase {
 }
 
 class AvailableCurrenciesServiceMock: AvailableCurrenciesService{
-    
+
     var getAvailableCurrenciesMockResult: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
-    
+
     func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
-        
+
         if let result = getAvailableCurrenciesMockResult{
             completion(result)
         }
@@ -104,7 +105,7 @@ class LatestRatesServiceMock: LatestRatesService{
     var getLatestRatesResultMock: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
 
     func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
-        
+
         if let result = getLatestRatesResultMock{
             completion(result)
         }
@@ -112,3 +113,4 @@ class LatestRatesServiceMock: LatestRatesService{
 
 
 }
+
