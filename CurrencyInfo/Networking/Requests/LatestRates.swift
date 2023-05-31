@@ -10,7 +10,7 @@ import Foundation
 
 protocol LatestRatesService{
         
-    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, Error>)->Void)
+    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, ErrorResult>)->Void)
 }
 
 class LatestRates: LatestRatesService{
@@ -19,21 +19,32 @@ class LatestRates: LatestRatesService{
 
     var latestRatesRequest = LatestRatesRequest.constructURlRequest()
     
-    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, Error>)->Void){
+    func getLatestRates(completionHandler: @escaping (Result<LatestRatesModel, ErrorResult>)->Void){
         
                 
         network.performGet(request: &latestRatesRequest,
                            LatestRatesModel.self){
-            [weak self] result in
+             result in
             
-            guard let self = self else{return}
             
             switch result{
             case .success(let data):
-                
-                
-                completionHandler(.success(data))
                 break
+//                NetworkParser.parseReturnedData(data: data, LatestRatesModel.self){
+//                    result in
+//                    switch result{
+//                    case .success(let data):
+//
+//                        completionHandler(.success(data))
+//
+//                        break
+//
+//                    case .failure(let error):
+//                        completionHandler(.failure(.parser(string: "Error while parsing json data \(error.localizedDescription)")))
+//
+//                        break
+//                    }
+//                }
                 
             case .failure(let error):
                 completionHandler(.failure(error))

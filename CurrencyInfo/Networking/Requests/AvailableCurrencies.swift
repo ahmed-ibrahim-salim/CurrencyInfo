@@ -6,35 +6,45 @@
 //
 
 import Foundation
-
+import RxSwift
 
 protocol AvailableCurrenciesService{
         
-    func getAvailableCurrencies(completionHandler: @escaping (Result<AvailableCurrenciesModel, Error>)->Void)
+//    func getAvailableCurrencies(completionHandler: @escaping (Result<AvailableCurrenciesModel, ErrorResult>)->Void)
+    
+//    func getAvailableCurrencies() -> Observable<T>
+//    /Observable<AvailableCurrenciesModel>
+    
+    func getAvailableCurrencies(completion: @escaping (Result<Single<Any>,ErrorResult>)-> Void)
+    
 }
+
 
 class AvailableCurrencies: AvailableCurrenciesService{
     
     private var network = GenericNetwork.shared
     
-    func getAvailableCurrencies(completionHandler: @escaping (Result<AvailableCurrenciesModel, Error>)->Void){
+    func getAvailableCurrencies(completion: @escaping (Result<Single<Any>,ErrorResult>)-> Void){
         
         var availableCurrenciesRequest = AvailableCurrenciesRequest.constructURlRequest()
-
         
+                 
         network.performGet(request: &availableCurrenciesRequest,
                            AvailableCurrenciesModel.self){
             result in
-                        
+            
             switch result{
             case .success(let data):
                 
-                completionHandler(.success(data))
-                break
+                // Parsing
+                let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
+                
+                completion(.success(single))
+
                 
             case .failure(let error):
-                completionHandler(.failure(error))
-                
+                completion(.failure(.network(string: error.localizedDescription)))
+                break
             }
         }
     }

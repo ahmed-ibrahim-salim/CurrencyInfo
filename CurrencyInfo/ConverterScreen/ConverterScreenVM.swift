@@ -12,7 +12,7 @@ class ConverterScreenViewModel {
     
     weak var controller: ConverterScreen?
         
-    
+    let disposeBag = DisposeBag()
 //    private var rates: [Currency.RawValue : Double] = [:]{
 //        didSet{
 //            if !rates.isEmpty{
@@ -48,33 +48,42 @@ class ConverterScreenViewModel {
         
         availableCurrenciesService.getAvailableCurrencies(){
             [weak self] result in
-
             guard let self = self else{return}
-
+            
             switch result{
-            case .success(let data):
+            case .success(let single):
                 
                 isLoading.onNext(false)
-
-                let curruncies: [Currency?] = data.symbols.map({
-                    dictionaryItem in
-
-                    if let currency = Currency(rawValue: dictionaryItem.key){
-                        return currency
-                    }
-                    return nil
-                })
-
-                self.availableCurrencies.onNext(curruncies.compactMap({$0}))
                 
-
-                break
+                single.subscribe(onSuccess: {
+                    data in
+                    if let modelReturned = data as? AvailableCurrenciesModel{
+                        
+                        
+                        let curruncies: [Currency?] = modelReturned.symbols.map({
+                            dictionaryItem in
+                            
+                            if let currency = Currency(rawValue: dictionaryItem.key){
+                                return currency
+                            }
+                            return nil
+                        })
+                        
+                        self.availableCurrencies.onNext(curruncies.compactMap({$0}))
+                        
+                    }else{
+                        self.error.onNext(ErrorResult.custom(string: "parsing returned a Wrong type"))
+                    }
+                }, onFailure: {
+                    error in
+                    self.error.onNext(error)
+                }).disposed(by: self.disposeBag)
 
             case .failure(let error):
                 isLoading.onNext(false)
                 self.error.onNext(error)
                 print(error)
-
+                
             }
         }
     }

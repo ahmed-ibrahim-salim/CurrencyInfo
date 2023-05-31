@@ -26,6 +26,7 @@
 		EFD2695B2A274A7D006BE880 /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695A2A274A7D006BE880 /* Extenstions.swift */; };
 		EFD2695E2A275905006BE880 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695D2A275905006BE880 /* Reachability.swift */; };
 		EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695F2A275A81006BE880 /* ErrorResult.swift */; };
+		EFD269622A276170006BE880 /* NetworkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD269612A276170006BE880 /* NetworkParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		EFD2695A2A274A7D006BE880 /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		EFD2695D2A275905006BE880 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		EFD2695F2A275A81006BE880 /* ErrorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResult.swift; sourceTree = "<group>"; };
+		EFD269612A276170006BE880 /* NetworkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				EFD269572A273EED006BE880 /* Requests */,
 				EF3B04BD2A269BCA003D45AB /* GenericNetwork.swift */,
 				EFD2695F2A275A81006BE880 /* ErrorResult.swift */,
+				EFD269612A276170006BE880 /* NetworkParser.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */,
 				EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */,
 				EFD269562A273EB0006BE880 /* AvailableCurrencies.swift in Sources */,
+				EFD269622A276170006BE880 /* NetworkParser.swift in Sources */,
 				EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */,
 				EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */,
 				EFD269592A273F17006BE880 /* LatestRates.swift in Sources */,

@@ -20,9 +20,14 @@ class ConverterScreen: UIViewController {
         
         super.viewDidLoad()
         
+        view.backgroundColor = .systemRed
         instantiateViewModel()
         setupViewModelBinding()
         
+        
+        
+        viewModel.getAvailableCurrencies()
+
     }
     private func instantiateViewModel(){
         
@@ -36,6 +41,9 @@ class ConverterScreen: UIViewController {
         
         
         viewModel.controller = self
+        
+        
+        
     }
     
 
