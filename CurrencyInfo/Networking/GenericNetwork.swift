@@ -7,6 +7,7 @@
 
 
 import UIKit
+import RxSwift
 
 
 struct GenericNetwork{
@@ -19,32 +20,34 @@ struct GenericNetwork{
     
     
     
-    func performGet<T:Codable>(request: inout URLRequest,
-                        _ type: T.Type,
-                        completionHandler: @escaping ((Result<Data, ErrorResult>) -> Void)){
+    func performGet<T:Codable>(request: URLRequest,
+                               _ type: T.Type) -> Observable<(response: HTTPURLResponse, data: Data)>{
         
-        if let reachability = Reachability(), !reachability.isReachable {
-            request.cachePolicy = .returnCacheDataDontLoad
-        }
-        
+
         
                 
-        URLSession.shared.dataTask(with: request) {
-            
-            data, response, error in
-            
-//            print(response)
-            
-            if let error = error {
-                completionHandler(.failure(.network(string: "An error occured during request :" + error.localizedDescription)))
-                return
-            }
-            
-            
-            if let data = data {
-                completionHandler(.success(data))
-            }
-        }.resume()
+        return URLSession.shared.rx.response(request: request)
+        
+//        URLSession.shared.dataTask(with: request) {
+//
+//            data, response, error in
+//
+////            print(response)
+
+//        }.resume()
+    }
+    
+    
+    static func handleNetworkErrors(response: HTTPURLResponse) -> ErrorResult?{
+        
+        if 200..<300 ~= response.statusCode{
+            return nil
+
+        }else{
+            return ErrorResult.network(string: response.debugDescription)
+        }
+
+        
     }
 }
 

@@ -43,55 +43,93 @@ class ConverterScreenViewModel {
     }
     
     
-    let isLoading = PublishSubject<Bool>()
         
-    var availableCurrencies = PublishSubject<[Currency]>()
-        
-    let error = PublishSubject<Error>()
+    
+    struct Output{
+        let availableCurrencies: Driver<[Currency]>
+        let errorMessage: Driver<String>
+        let isLoading: Driver<Bool>
+
+    }
+    
+    struct Input{
+        let reload: PublishRelay<Void>
+    }
     
     
     //MARK: Network
 
     func getAvailableCurrencies(){
 
-        isLoading.onNext(true)
         
-        availableCurrenciesService.getAvailableCurrencies(){
-            [weak self] result in
-            guard let self = self else{return}
-            
-            switch result{
-            case .success(let single):
-                
-                isLoading.onNext(false)
-                
-                single.subscribe(onSuccess: {
-                    data in
-                    
-                    let curruncies: [Currency?] = data.symbols.map({
-                        dictionaryItem in
-                        
-                        if let currency = Currency(rawValue: dictionaryItem.key){
-                            return currency
-                        }
-                        return nil
-                    })
-                    
-                    self.availableCurrencies.onNext(curruncies.compactMap({$0}))
-                    
-                    
-                }, onFailure: {
-                    error in
-                    self.error.onNext(error)
-                }).disposed(by: self.disposeBag)
+        let errorRelay = PublishRelay<String>()
+        let reloadRelay = PublishRelay<Void>()
+        let loadingRelay = PublishRelay<Bool>()
 
-            case .failure(let error):
-                isLoading.onNext(false)
-                self.error.onNext(error)
-                print(error)
+        
+        
+        let rates = availableCurrenciesService.getAvailableCurrencies().compactMap({
+            data, error in
+            
+            data
+        })
+//            .filter({ data, error in
+//                let error
+//                return true
+//            })
+//            .map{ $0.rates }
+//            .asDriver { (error) -> Driver<[CurrencyRate]> in
+//                errorRelay.accept((error as? ErrorResult)?.localizedDescription ?? error.localizedDescription)
+//                return Driver.just([])
+//            }
+//            .subscribe(
+//            onNext: { result, error in
+//
+//                if let error = error{
+//
+//                }
+//
+//            }
+//        ).disposed(by: disposeBag)
+//
+//        availableCurrenciesService.getAvailableCurrencies(){
+//            [weak self] result in
+//            guard let self = self else{return}
+//
+//            switch result{
+//            case .success(let single):
+//
+//                isLoading.onNext(false)
                 
-            }
-        }
+//                single.bind(to: <#T##PublishRelay<Element>...#>)
+                
+//                single.subscribe(onSuccess: {
+//                    data in
+//
+//                    let curruncies: [Currency?] = data.symbols.map({
+//                        dictionaryItem in
+//
+//                        if let currency = Currency(rawValue: dictionaryItem.key){
+//                            return currency
+//                        }
+//                        return nil
+//                    })
+//
+//                    self.availableCurrencies.onNext(curruncies.compactMap({$0}))
+//
+//
+//                }, onFailure: {
+//                    error in
+//                    self.error.onNext(error)
+//                }).disposed(by: self.disposeBag)
+
+//            case .failure(let error):
+//                isLoading.onNext(false)
+//                self.error.onNext(error)
+//                print(error)
+//
+//            }
+//        }
     }
     
 //    private func getConversionResult(from: Currency,
