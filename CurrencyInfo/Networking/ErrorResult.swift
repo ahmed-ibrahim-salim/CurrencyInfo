@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ErrorResult: Error, Codable {
+enum ErrorResult: Error, Codable, Equatable {
     case network(string: String)
     case parser(string: String)
     case custom(string: String)

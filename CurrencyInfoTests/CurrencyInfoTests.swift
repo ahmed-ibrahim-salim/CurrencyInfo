@@ -14,7 +14,7 @@ import RxSwift
 final class CurrencyInfoTests: XCTestCase {
 
     private var sut: ConverterScreenViewModel!
-//    private var availableCurrencies: AvailableCurrenciesServiceMock!
+    private var availableCurrenciesService: AvailableCurrenciesServiceMock!
 //    private var latestRatesService: LatestRatesServiceMock!
 
     private var scheduler: TestScheduler!
@@ -26,10 +26,10 @@ final class CurrencyInfoTests: XCTestCase {
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
 
-//        availableCurrencies = AvailableCurrenciesServiceMock()
+        availableCurrenciesService = AvailableCurrenciesServiceMock()
 //        latestRatesService = LatestRatesServiceMock()
 
-        sut = ConverterScreenViewModel()
+        sut = ConverterScreenViewModel(availableCurrenciesService: availableCurrenciesService)
 //        ConverterScreenViewModel(availableCurrenciesService: availableCurrencies,
 //                                       LatestRatesService: latestRatesService)
     }
@@ -40,9 +40,9 @@ final class CurrencyInfoTests: XCTestCase {
 //        latestRatesService = nil
     }
 
-    func test_aaa(){
+    func test_WhenCallGetAvailableCurrencies_WithError_ReturnsError(){
         let rates = scheduler.createObserver([Currency].self)
-        let errorMessage = scheduler.createObserver(String.self)
+        let errorMessage = scheduler.createObserver(ErrorResult.self)
         
         sut.output.error
             .drive(errorMessage)
@@ -52,108 +52,44 @@ final class CurrencyInfoTests: XCTestCase {
             .drive(rates)
             .disposed(by: disposeBag)
         
-        
+    
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.input.viewDidRefresh)
             .disposed(by: disposeBag)
-        
-        
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.input.viewDidRefresh)
-            .disposed(by: disposeBag)
-        
-        
+
         scheduler.start()
-        
-        
-        XCTAssertEqual(errorMessage.events, [.next(10, "")])
-        
-        XCTAssertEqual(rates.events, [.next(10, [])])
-
-
+                
+        XCTAssertEqual(errorMessage.events, [.next(10, ErrorResult.custom(string: "The operation couldn’t be completed. (CurrencyInfo.ErrorResult error 2.)"))])
+    
     }
     
-    
-//    func test_WhenCalledAvailableCurrenciesService_PushesOnNextEvent(){
-//        // Given
-//
-//
-//        let availableCurrenciesModel = scheduler.createObserver(AvailableCurrenciesModel.self)
-//
-//
-//        let singleOfAvailableCurrenciesModel = Single.create{
-//            single in
-//
-//            let availableCurrenciesModel = AvailableCurrenciesModel(success: true,
-//                                                                    symbols: ["USD" : "United States Dollar"])
-//            single(.success(availableCurrenciesModel))
-//
-//            return Disposables.create()
-//        }
-//
-//
-//
-//        availableCurrencies.getAvailableCurrenciesMockResult = .success(singleOfAvailableCurrenciesModel)
-//
-//
-//
-//
-//        // When
-//        let aa = availableCurrencies.getAvailableCurrenciesMockResult
-//
-        
-        
-//        sut.getAvailableCurrencies()
-
-        // Then
-
-
-
-
-//        XCTAssertEqual([Recorded<Event<Equatable?>>], <#T##rhs: [Recorded<Event<Equatable?>>]##[Recorded<Event<Equatable?>>]#>)
-//    }
-
-
-//    func test_WhenCalledlatestRatesService_PushesOnNextEvent(){
-//        // Given
-//        let latestRatesModel = LatestRatesModel(success: true,
-//                                                timestamp: 2,
-//                                                base: "EUR",
-//                                                date: "",
-//                                                rates: ["USD" : 1.113])
-//
-//
-//        // When
-//
-//
-//        // Then
-//    }
 }
+
+
+
 
 class AvailableCurrenciesServiceMock: AvailableCurrenciesService{
-
-    var getAvailableCurrenciesMockResult: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
-
-    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
-
-        if let result = getAvailableCurrenciesMockResult{
-            completion(result)
-        }
+    
+    
+    
+    func getAvailableSymbols() -> Single<AvailableCurrenciesModel> {
+        
+        return Single.error(ErrorResult.custom(string: "error"))
     }
 }
-
-
 //
-class LatestRatesServiceMock: LatestRatesService{
-    var getLatestRatesResultMock: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
-
-    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
-
-        if let result = getLatestRatesResultMock{
-            completion(result)
-        }
-    }
-
-
-}
+//
+////
+//class LatestRatesServiceMock: LatestRatesService{
+//    var getLatestRatesResultMock: Result<Single<AvailableCurrenciesModel>, ErrorResult>?
+//
+//    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>, ErrorResult>) -> Void) {
+//
+//        if let result = getLatestRatesResultMock{
+//            completion(result)
+//        }
+//    }
+//
+//
+//}
 

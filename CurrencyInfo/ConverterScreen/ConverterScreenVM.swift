@@ -22,17 +22,12 @@ extension Observable where Element: Any {
             loadingSubject.onNext(false)
         })
     }
-    
-   
 }
-
-
-
 
 class ConverterScreenViewModel {
     
 //    weak var controller: ConverterScreen?
-    private let availableCurrenciesService: AvailableCurrenciesService
+    let availableCurrenciesService: AvailableCurrenciesService
 //    private let LatestRatesService: LatestRatesService
 
     //MARK: Initialise
@@ -53,7 +48,8 @@ class ConverterScreenViewModel {
         // 3) assign output with ui driver, loading and error related to that ui item
         output = Output(availlableRates: availableRates,
                         isLoading: isLoadingSubject.asDriver(onErrorJustReturn: false),
-                        error: errorSubject.asDriver(onErrorJustReturn: "Unknown error"))
+                        error: errorSubject
+            .asDriver(onErrorJustReturn: ErrorResult.custom(string: "Unknown error")))
         
         
         
@@ -80,7 +76,9 @@ class ConverterScreenViewModel {
                 case let .error(error):
                     
                     print(error)
-                    self.errorSubject.onNext(error.localizedDescription)
+                    // changing to my custom error
+                    let customError = ErrorResult.custom(string: error.localizedDescription)
+                    self.errorSubject.onNext(customError)
                 default: break
                 }
             })
@@ -93,21 +91,18 @@ class ConverterScreenViewModel {
     
     let disposeBag = DisposeBag()
     private let isLoadingSubject = PublishSubject<Bool>()
-    private let errorSubject = PublishSubject<String>()
+    private let errorSubject = PublishSubject<ErrorResult>()
     
     let output: Output
     private let ratesSubject = PublishSubject<[Currency]>()
 
     struct Output{
-//        let availableCurrencies: Driver<[Currency]>
-//        let errorMessage: Driver<String>
-//        let isLoading: Driver<Bool>
         
         let availlableRates: Driver<[Currency]>
         // Loading
         let isLoading: Driver<Bool>
         // Error
-        let error: Driver<String>
+        let error: Driver<ErrorResult>
 
     }
     
