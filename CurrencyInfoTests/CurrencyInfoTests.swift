@@ -36,7 +36,7 @@ final class CurrencyInfoTests: XCTestCase {
     override func tearDownWithError() throws {
         sut = nil
         availableCurrencies = nil
-        latestRatesService = nil
+        latestRatesService = nil   
     }
 
     func test_WhenCalledAvailableCurrenciesService_PushesOnNextEvent(){
