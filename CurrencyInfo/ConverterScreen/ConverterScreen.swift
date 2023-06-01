@@ -15,6 +15,11 @@ class ConverterScreen: UIViewController {
     var availableCurrencies: [Currency] = []
     let disposeBag = DisposeBag()
     
+    
+    
+    
+    @IBOutlet weak var humidityLabel: UILabel!
+
     // MARK: Life cycle
     override func viewDidLoad() {
         
@@ -22,69 +27,49 @@ class ConverterScreen: UIViewController {
         
         view.backgroundColor = .systemRed
         instantiateViewModel()
-        setupViewModelBinding()
+//        setupViewModelBinding()
         
         
         
-        viewModel.getAvailableCurrencies()
+//        viewModel.getAvailableCurrencies()
+        
+        bindViewModel()
 
     }
     private func instantiateViewModel(){
-        
-        let availableCurrenciesService = AvailableCurrencies()
-        let LatestRatesService = LatestRates()
-        
-        
-        
-        viewModel = ConverterScreenViewModel(availableCurrenciesService: availableCurrenciesService,
-                                             LatestRatesService: LatestRatesService)
+//
+//        let availableCurrenciesService = AvailableCurrencies()
+//        let LatestRatesService = LatestRates()
         
         
-        viewModel.controller = self
+        
+//        viewModel = ConverterScreenViewModel(availableCurrenciesService: availableCurrenciesService,
+//                                             LatestRatesService: LatestRatesService)
         
         
+//        viewModel.controller = self
+        
+//        viewModel = ConverterScreenViewModel()
         
     }
     
 
 //  MARK: ViewModel Binding
-    func setupViewModelBinding(){
-        
-        viewModel?.availableCurrencies
-            .asObserver()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                [weak self] availableCurrencies in
-                self?.availableCurrencies = availableCurrencies
-//
-                
-                
-//                self?.mainTableView.reloadData()
-            }).disposed(by: disposeBag)
+    
+    private func bindViewModel() {
         
         
-        viewModel?.isLoading
-            .asObserver()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                [weak self] isLoading in
-                if isLoading {
-//                        self?.loadingAnimation.alpha = 1
-//                        self?.loadingAnimation.play()
-                } else {
-//                        self?.loadingAnimation.alpha = 0
-//                        self?.loadingAnimation.stop()
-                    
-                }
-            }).disposed(by: disposeBag)
         
-        viewModel?.error
-            .asObserver()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] err in
-                self?.showAlert(message: err.localizedDescription)
-            }).disposed(by: disposeBag)
+        // MARK: Inputs
+
+        
+        
+        //MARK: outputs
+        viewModel.output.availlableRates.drive().disposed(by: disposeBag)
+//            .drive(humidityLabel.rx.text)
+//            .disposed(by: disposeBag)
     }
+
 }
 
 

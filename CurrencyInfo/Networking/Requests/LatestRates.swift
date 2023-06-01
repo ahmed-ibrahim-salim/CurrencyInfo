@@ -10,7 +10,7 @@ import RxSwift
 
 protocol LatestRatesService{
     
-    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
+//    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
 }
 
 class LatestRates: LatestRatesService{
@@ -19,28 +19,28 @@ class LatestRates: LatestRatesService{
 
     var latestRatesRequest = LatestRatesRequest.constructURlRequest()
     
-    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void){
-        
-                
-        network.performGet(request: &latestRatesRequest,
-                           LatestRatesModel.self){
-             result in
-            
-            
-            switch result{
-            case .success(let data):
+//    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void){
 //
-                // Parsing
-                let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
-                
-                completion(.success(single))
-                
-            case .failure(let error):
-                completion(.failure(.network(string: error.localizedDescription)))
-
-            }
-        }
-    }
+//
+//        network.performGet(request: latestRatesRequest,
+//                           LatestRatesModel.self){
+//             result in
+//
+//
+//            switch result{
+//            case .success(let data):
+////
+//                // Parsing
+//                let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
+//
+//                completion(.success(single))
+//
+//            case .failure(let error):
+//                completion(.failure(.network(string: error.localizedDescription)))
+//
+//            }
+//        }
+//    }
 }
 
 

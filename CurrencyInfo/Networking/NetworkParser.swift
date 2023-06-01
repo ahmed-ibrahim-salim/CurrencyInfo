@@ -11,19 +11,46 @@ import RxSwift
 class NetworkParser{
     
     static func parseReturnedData<T:Codable>(data: Data,
-                                             _ type: T.Type) -> (T?, ErrorResult?){
+                                             _ type: T.Type) -> Observable<T>{
         
         do{
             let model = try JSONDecoder().decode(type.self, from: data)
             
             print(model)
             
-            return (model, nil)
+            return Observable.just(model)
             
         }catch{
             
-            return (nil, ErrorResult.network(string: "Network error " + error.localizedDescription))
+            return Observable.error(ErrorResult.network(string: "Network error " + error.localizedDescription))
+//            (nil, ErrorResult.network(string: "Network error " + error.localizedDescription))
         }
+        
+        
+    }
+    
+    
+    
+    static func parseReturnedDataaaa<T:Codable>(data: Data,
+                                             _ type: T.Type) throws -> T{
+        
+//        do{
+        try JSONDecoder().decode(type.self, from: data) 
+            
+//            print(model)
+//
+//            return Observable.just(model)
+//            throw ErrorResult.parser(string: "")
+//
+//
+//        return model
+        
+        
+//        }catch{
+//
+//            return Observable.error(ErrorResult.network(string: "Network error " + error.localizedDescription))
+////            (nil, ErrorResult.network(string: "Network error " + error.localizedDescription))
+//        }
         
         
     }

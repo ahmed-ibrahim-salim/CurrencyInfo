@@ -7,7 +7,7 @@ target 'CurrencyInfo' do
   # Pods for CurrencyInfo
 
    pod 'RxSwift'
-#   pod 'RxCocoa'
+   pod 'RxCocoa'
    pod 'RxRelay'
 
   target 'CurrencyInfoTests' do

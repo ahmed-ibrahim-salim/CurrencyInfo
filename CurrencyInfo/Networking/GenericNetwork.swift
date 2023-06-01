@@ -37,17 +37,36 @@ struct GenericNetwork{
 //        }.resume()
     }
     
-    
-    static func handleNetworkErrors(response: HTTPURLResponse) -> ErrorResult?{
+    static func handleNetworkErrors(response: HTTPURLResponse, data: Data) -> Observable<Data>{
         
         if 200..<300 ~= response.statusCode{
-            return nil
+            return Observable.just(data)
 
         }else{
-            return ErrorResult.network(string: response.debugDescription)
+            return Observable.error(ErrorResult.network(string: response.debugDescription))
         }
 
         
     }
+    static func handleNetworkErrorsWithSingle(response: HTTPURLResponse)->Single<Any>{
+        
+        
+        return Single.create{
+            single in
+            
+            if 200..<300 ~= response.statusCode{
+                 single(.success(1))
+//                Observable.just(data)
+
+            }else{
+                single(.failure(ErrorResult.network(string: response.debugDescription)))
+//                Observable.error(ErrorResult.network(string: response.debugDescription))
+            }
+            
+            return Disposables.create()
+        }
+
+    }
+    
 }
 

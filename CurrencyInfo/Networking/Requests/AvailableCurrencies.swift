@@ -11,7 +11,7 @@ import RxSwift
 protocol AvailableCurrenciesService{
         
 //    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
-    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>
+//    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>
 }
 
 
@@ -20,31 +20,36 @@ class AvailableCurrencies: AvailableCurrenciesService{
     private var network = GenericNetwork.shared
     
     //completion: @escaping (Result<Observable<AvailableCurrenciesModel>,ErrorResult>)-> Void
-    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>{
-        
-        var result: Observable<(AvailableCurrenciesModel?, ErrorResult?)> = AvailableCurrenciesRequest.constructURlRequest()
-            .map{$0}
-            .flatMap{
-                [weak self] request -> Observable<(response: HTTPURLResponse, data: Data)>  in
-                
-                return self!.network.performGet(request: request,
-                                                AvailableCurrenciesModel.self)
-            }
-            .map{
-                response, data -> (AvailableCurrenciesModel?, ErrorResult?) in
-                
-                if let networkError =  GenericNetwork.handleNetworkErrors(response: response){
-                    
-                    return (nil, networkError)
-                }else{
-                    let parsingResult = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
-
-                    return parsingResult
-                    
-                }
-            }
-        
-        return result
+//    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>{
+//
+//        var result = AvailableCurrenciesRequest.constructURlRequest()
+//            .flatMap{
+//                [weak self] request -> Observable<(response: HTTPURLResponse, data: Data)>  in
+//
+//                return self!.network.performGet(request: request,
+//                                                AvailableCurrenciesModel.self)
+//            }
+//            .map{
+//                response, data in
+//
+//               let data = GenericNetwork.handleNetworkErrors(response: response, data: data)
+//
+//
+//                let parsingResult = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
+//
+////                return nil
+//                    return parsingResult
+////
+//
+//            }
+////            .map{
+////                data in
+////
+////
+////                }
+//
+//
+//        return result
          
         
         //
@@ -76,7 +81,7 @@ class AvailableCurrencies: AvailableCurrenciesService{
 //                return Observable.error(ErrorResult.network(string: error.localizedDescription))
 //            }
 //        }
-    }
+//    }
 }
 
 
@@ -98,6 +103,21 @@ struct AvailableCurrenciesRequest{
         return Observable.of(RequestFactory.request(method: .GET, url: url))
     }
     
+    static func constructURlRequestNoObser()->URLRequest{
+        // should be
+        // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5
+        var url = URL(string: GenericNetwork.baseUrl)!
+        
+        url.append(path: "symbols")
+                
+        let queryItems = [URLQueryItem(name: "access_key", value: GenericNetwork.accessKey)]
+        
+        url.append(queryItems: queryItems)
+        
+        
+        
+        return RequestFactory.request(method: .GET, url: url)
+    }
 }
 
 
