@@ -22,20 +22,48 @@ class ConverterScreen: UIViewController {
 
     // MARK: Life cycle
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
         view.backgroundColor = .systemRed
-        instantiateViewModel()
-//        setupViewModelBinding()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didBecomeActiveThenRefresh),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+                
+        let availableCurrenciesService = AvailableCurrencies()
+
         
-        
-//        viewModel.getAvailableCurrencies()
+        viewModel = ConverterScreenViewModel(availableCurrenciesService: availableCurrenciesService)
         
         bindViewModel()
 
     }
+
+
+//  MARK: ViewModel Binding
+    private let refreshSubject = PublishSubject<Void>()
+    
+   
+    @objc private func didBecomeActiveThenRefresh() {
+        refreshSubject.onNext(())
+    }
+     
+    private func bindViewModel() {
+        
+        // MARK: Inputs
+        refreshSubject
+            .subscribe(viewModel.input.viewDidRefresh)
+            .disposed(by: disposeBag)
+        
+        
+        //MARK: outputs
+        viewModel.output.availlableRates.drive()
+            .disposed(by: disposeBag)
+        //            .drive(humidityLabel.rx.text)
+        //            .disposed(by: disposeBag)
+        
+    }
+    
     private func instantiateViewModel(){
 //
 //        let availableCurrenciesService = AvailableCurrencies()
@@ -52,24 +80,6 @@ class ConverterScreen: UIViewController {
 //        viewModel = ConverterScreenViewModel()
         
     }
-    
-
-//  MARK: ViewModel Binding
-    
-    private func bindViewModel() {
-        
-        
-        
-        // MARK: Inputs
-
-        
-        
-        //MARK: outputs
-        viewModel.output.availlableRates.drive().disposed(by: disposeBag)
-//            .drive(humidityLabel.rx.text)
-//            .disposed(by: disposeBag)
-    }
-
 }
 
 

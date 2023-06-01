@@ -20,53 +20,53 @@ struct GenericNetwork{
     
     
     
-    func performGet<T:Codable>(request: URLRequest,
-                               _ type: T.Type) -> Observable<(response: HTTPURLResponse, data: Data)>{
-        
-
-        
-                
-        return URLSession.shared.rx.response(request: request)
-        
-//        URLSession.shared.dataTask(with: request) {
+//    func performGet<T:Codable>(request: URLRequest,
+//                               _ type: T.Type) -> Observable<(response: HTTPURLResponse, data: Data)>{
 //
-//            data, response, error in
 //
-////            print(response)
-
-//        }.resume()
-    }
+//
+//
+//        return URLSession.shared.rx.response(request: request)
+//
+////        URLSession.shared.dataTask(with: request) {
+////
+////            data, response, error in
+////
+//////            print(response)
+//
+////        }.resume()
+//    }
     
-    static func handleNetworkErrors(response: HTTPURLResponse, data: Data) -> Observable<Data>{
-        
-        if 200..<300 ~= response.statusCode{
-            return Observable.just(data)
-
-        }else{
-            return Observable.error(ErrorResult.network(string: response.debugDescription))
-        }
-
-        
-    }
-    static func handleNetworkErrorsWithSingle(response: HTTPURLResponse)->Single<Any>{
-        
-        
-        return Single.create{
-            single in
-            
-            if 200..<300 ~= response.statusCode{
-                 single(.success(1))
-//                Observable.just(data)
-
-            }else{
-                single(.failure(ErrorResult.network(string: response.debugDescription)))
-//                Observable.error(ErrorResult.network(string: response.debugDescription))
-            }
-            
-            return Disposables.create()
-        }
-
-    }
+//    static func handleNetworkErrors(response: HTTPURLResponse, data: Data) -> Observable<Data>{
+//        
+//        if 200..<300 ~= response.statusCode{
+//            return Observable.just(data)
+//
+//        }else{
+//            return Observable.error(ErrorResult.network(string: response.debugDescription))
+//        }
+//
+//        
+//    }
+//    static func handleNetworkErrorsWithSingle(response: HTTPURLResponse)->Single<Any>{
+//        
+//        
+//        return Single.create{
+//            single in
+//            
+//            if 200..<300 ~= response.statusCode{
+//                 single(.success(1))
+////                Observable.just(data)
+//
+//            }else{
+//                single(.failure(ErrorResult.network(string: response.debugDescription)))
+////                Observable.error(ErrorResult.network(string: response.debugDescription))
+//            }
+//            
+//            return Disposables.create()
+//        }
+//
+//    }
     
 }
 

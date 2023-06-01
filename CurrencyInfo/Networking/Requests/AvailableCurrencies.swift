@@ -9,99 +9,46 @@ import Foundation
 import RxSwift
 
 protocol AvailableCurrenciesService{
-        
-//    func getAvailableCurrencies(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
-//    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>
+    func getAvailableSymbols()->Single<AvailableCurrenciesModel>
 }
 
 
 class AvailableCurrencies: AvailableCurrenciesService{
-    
-    private var network = GenericNetwork.shared
-    
-    //completion: @escaping (Result<Observable<AvailableCurrenciesModel>,ErrorResult>)-> Void
-//    func getAvailableCurrencies()->Observable<(AvailableCurrenciesModel?, ErrorResult?)>{
-//
-//        var result = AvailableCurrenciesRequest.constructURlRequest()
-//            .flatMap{
-//                [weak self] request -> Observable<(response: HTTPURLResponse, data: Data)>  in
-//
-//                return self!.network.performGet(request: request,
-//                                                AvailableCurrenciesModel.self)
-//            }
-//            .map{
-//                response, data in
-//
-//               let data = GenericNetwork.handleNetworkErrors(response: response, data: data)
-//
-//
-//                let parsingResult = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
-//
-////                return nil
-//                    return parsingResult
-////
-//
-//            }
-////            .map{
-////                data in
-////
-////
-////                }
-//
-//
-//        return result
-         
+    func getAvailableSymbols()->Single<AvailableCurrenciesModel>{
         
-        //
-        //            if let error = error {
-        //                completionHandler(.failure(.network(string: "An error occured during request :" + error.localizedDescription)))
-        //                return
-        //            }
-        //
-        //
-        //            if let data = data {
-        //                completionHandler(.success(data))
-        //            }
+        let getAvailableSymbols = URLSession.shared.rx
+            .response(request: AvailableCurrenciesRequest.constructURlRequestNoObser())
+            .asSingle()
+            .catchAvailableCurrenciesError(AvailableCurrenciesModel.self)
         
-        
-//        {
-//
-//            result in
-//
-//            switch result{
-//            case .success(let data):
-//
-//                // Parsing
-//                let observable = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
-//
-//                return observable
-//
-//            case .failure(let error):
-//
-//                return Observable.error(ErrorResult.network(string: error.localizedDescription))
-//            }
-//        }
-//    }
+        return getAvailableSymbols
+    }
 }
 
+extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HTTPURLResponse, data: Data){
+    
+    func catchAvailableCurrenciesError(_ type: AvailableCurrenciesModel.Type) -> Single<AvailableCurrenciesModel> {
+        return flatMap { response, data in
+
+            if 200..<300 ~= response.statusCode{
+                do{
+                    let decodedData = try JSONDecoder().decode(type.self, from: data)
+
+                    return .just(decodedData)
+                }catch{
+                    throw error
+                }
+
+            }else{
+                throw ErrorResult.network(string: response.debugDescription)
+            }
+        }
+    }
+
+}
 
 struct AvailableCurrenciesRequest{
-    
-    static func constructURlRequest()->Observable<URLRequest>{
-        // should be
-        // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5
-        var url = URL(string: GenericNetwork.baseUrl)!
-        
-        url.append(path: "symbols")
-                
-        let queryItems = [URLQueryItem(name: "access_key", value: GenericNetwork.accessKey)]
-        
-        url.append(queryItems: queryItems)
-        
-        
-        
-        return Observable.of(RequestFactory.request(method: .GET, url: url))
-    }
+
     
     static func constructURlRequestNoObser()->URLRequest{
         // should be
@@ -110,7 +57,7 @@ struct AvailableCurrenciesRequest{
         
         url.append(path: "symbols")
                 
-        let queryItems = [URLQueryItem(name: "access_key", value: GenericNetwork.accessKey)]
+        let queryItems = [URLQueryItem(name: "access_k", value: GenericNetwork.accessKey)]
         
         url.append(queryItems: queryItems)
         

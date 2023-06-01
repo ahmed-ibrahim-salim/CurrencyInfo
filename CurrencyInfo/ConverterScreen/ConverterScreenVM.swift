@@ -26,62 +26,25 @@ extension Observable where Element: Any {
    
 }
 
-extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HTTPURLResponse, data: Data){
 
-    
-//    func catchPropellerError(_ type: PropellerErrorResponse.Type) -> Single<ElementType> {
-//        return flatMap { response in
-//            guard (200...299).contains(response.statusCode) else {
-//                do {
-//                    let propellerErrorResponse = try response.map(type.self)
-//                    throw PropellerError(message: propellerErrorResponse.message ?? propellerErrorResponse.description ?? "")
-//                } catch {
-//                    throw error
-//                }
-//            }
-//            return .just(response)
-//        }
-//    }
-    
-    
-    func catchAvailableCurrenciesError(_ type: AvailableCurrenciesModel.Type) -> Single<AvailableCurrenciesModel> {
-        return flatMap { response, data in
-
-            if 200..<300 ~= response.statusCode{
-                do{
-                    let decodedData = try JSONDecoder().decode(type.self, from: data)
-
-                    return .just(decodedData)
-                }catch{
-                    throw error
-                }
-
-            }else{
-                throw ErrorResult.network(string: response.debugDescription)
-            }
-        }
-    }
-
-}
 
 
 class ConverterScreenViewModel {
     
 //    weak var controller: ConverterScreen?
-//    private let availableCurrenciesService: AvailableCurrenciesService
+    private let availableCurrenciesService: AvailableCurrenciesService
 //    private let LatestRatesService: LatestRatesService
 
     //MARK: Initialise
     init(
-//         availableCurrenciesService: AvailableCurrenciesService,
+         availableCurrenciesService: AvailableCurrenciesService
 //         LatestRatesService: LatestRatesService
     ) {
 //        self.LatestRatesService = LatestRatesService
-//        self.availableCurrenciesService = availableCurrenciesService
+        self.availableCurrenciesService = availableCurrenciesService
         
     
-        // 1)
-        input = Input(viewDidRefresh: viewDidRefreshSubject.asObserver())
+
         
         // 2) connect Driver with subject, and get required field
         let availableRates = ratesSubject
@@ -90,38 +53,47 @@ class ConverterScreenViewModel {
         // 3) assign output with ui driver, loading and error related to that ui item
         output = Output(availlableRates: availableRates,
                         isLoading: isLoadingSubject.asDriver(onErrorJustReturn: false),
-                        error: errorSubject.asDriver(onErrorJustReturn: ErrorResult.custom(string: "Unknown")))
-        
-        // 4) prepare request and errors with an single trait
-        let getAvailableSymbols = URLSession.shared.rx.response(request: AvailableCurrenciesRequest.constructURlRequestNoObser()).asSingle().catchAvailableCurrenciesError(AvailableCurrenciesModel.self)
+                        error: errorSubject.asDriver(onErrorJustReturn: "Unknown error"))
         
         
+        
+        // 1)
+        input = Input(viewDidRefresh: viewDidRefreshSubject.asObserver())
         
         // 5) initial for view did refresh
         viewDidRefreshSubject
             .startLoading(loadingSubject: isLoadingSubject)
-            .flatMap { getAvailableSymbols.asObservable().materialize() }
-        
+            .flatMap { availableCurrenciesService.getAvailableSymbols().asObservable().materialize() }
+
             .stopLoading(loadingSubject: isLoadingSubject)
             .subscribe(onNext: { [unowned self] materializedEvent in
                 switch materializedEvent {
-                case let .next(airVisualNearestCityResponse, propellerForecastResponse):
+                case let .next(availableCurrenciesModel):
+                    
+                    let symbols = availableCurrenciesModel.symbols
+                    
+                    let availableCurrencies = self.getCurreciesFromSymbols(symbols: symbols)
 
-                    self.ratesSubject.onNext([])
+                    print(availableCurrencies)
+                    
+                    self.ratesSubject.onNext(availableCurrencies)
                 case let .error(error):
-                    self.errorSubject.onNext(error)
+                    
+                    print(error)
+                    self.errorSubject.onNext(error.localizedDescription)
                 default: break
                 }
             })
             .disposed(by: disposeBag)
         
+//
     }
     
     // MARK: - Outputs
     
     let disposeBag = DisposeBag()
     private let isLoadingSubject = PublishSubject<Bool>()
-    private let errorSubject = PublishSubject<Error>()
+    private let errorSubject = PublishSubject<String>()
     
     let output: Output
     private let ratesSubject = PublishSubject<[Currency]>()
@@ -135,7 +107,7 @@ class ConverterScreenViewModel {
         // Loading
         let isLoading: Driver<Bool>
         // Error
-        let error: Driver<Error>
+        let error: Driver<String>
 
     }
     
@@ -155,20 +127,20 @@ class ConverterScreenViewModel {
     
     //MARK: Network
 
-//    func getCurreciesFromSymbols(symbols: [Currency.RawValue: String])-> [Currency]{
-//
-//        let curruncies: [Currency] = symbols.map({
-//            dictionaryItem in
-//
-//            if let currency = Currency(rawValue: dictionaryItem.key){
-//                return currency
-//            }
-//            return nil
-//        }).compactMap({$0})
-//
-//        return curruncies
-//
-//    }
+    func getCurreciesFromSymbols(symbols: [Currency.RawValue: String])-> [Currency]{
+
+        let curruncies: [Currency] = symbols.map({
+            dictionaryItem in
+
+            if let currency = Currency(rawValue: dictionaryItem.key){
+                return currency
+            }
+            return nil
+        }).compactMap({$0})
+
+        return curruncies
+
+    }
 //
 //    func getAvailableCurrencies(){
 //

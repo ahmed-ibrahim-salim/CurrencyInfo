@@ -8,34 +8,34 @@
 import Foundation
 import RxSwift
 
-class NetworkParser{
+//class NetworkParser{
     
-    static func parseReturnedData<T:Codable>(data: Data,
-                                             _ type: T.Type) -> Observable<T>{
-        
-        do{
-            let model = try JSONDecoder().decode(type.self, from: data)
-            
-            print(model)
-            
-            return Observable.just(model)
-            
-        }catch{
-            
-            return Observable.error(ErrorResult.network(string: "Network error " + error.localizedDescription))
-//            (nil, ErrorResult.network(string: "Network error " + error.localizedDescription))
-        }
-        
-        
-    }
-    
-    
-    
-    static func parseReturnedDataaaa<T:Codable>(data: Data,
-                                             _ type: T.Type) throws -> T{
-        
+//    static func parseReturnedData<T:Codable>(data: Data,
+//                                             _ type: T.Type) -> Observable<T>{
+//        
 //        do{
-        try JSONDecoder().decode(type.self, from: data) 
+//            let model = try JSONDecoder().decode(type.self, from: data)
+//            
+//            print(model)
+//            
+//            return Observable.just(model)
+//            
+//        }catch{
+//            
+//            return Observable.error(ErrorResult.network(string: "Network error " + error.localizedDescription))
+////            (nil, ErrorResult.network(string: "Network error " + error.localizedDescription))
+//        }
+//        
+//        
+//    }
+    
+    
+    
+//    static func parseReturnedDataaaa<T:Codable>(data: Data,
+//                                             _ type: T.Type) throws -> T{
+//
+////        do{
+//        try JSONDecoder().decode(type.self, from: data)
             
 //            print(model)
 //
@@ -53,5 +53,5 @@ class NetworkParser{
 //        }
         
         
-    }
-}
+//    }
+//}
