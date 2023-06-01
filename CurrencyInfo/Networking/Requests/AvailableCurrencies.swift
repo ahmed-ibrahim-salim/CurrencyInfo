@@ -57,7 +57,7 @@ struct AvailableCurrenciesRequest{
         
         url.append(path: "symbols")
                 
-        let queryItems = [URLQueryItem(name: "access_k", value: GenericNetwork.accessKey)]
+        let queryItems = [URLQueryItem(name: "access_key", value: GenericNetwork.accessKey)]
         
         url.append(queryItems: queryItems)
         

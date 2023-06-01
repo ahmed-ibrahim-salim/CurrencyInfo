@@ -14,7 +14,7 @@ import RxSwift
 final class CurrencyInfoTests: XCTestCase {
 
     private var sut: ConverterScreenViewModel!
-    private var availableCurrenciesService: AvailableCurrenciesServiceMock!
+    private var availableCurrenciesService: AvailableCurrenciesServiceMockWithError!
 //    private var latestRatesService: LatestRatesServiceMock!
 
     private var scheduler: TestScheduler!
@@ -26,7 +26,7 @@ final class CurrencyInfoTests: XCTestCase {
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
 
-        availableCurrenciesService = AvailableCurrenciesServiceMock()
+        availableCurrenciesService = AvailableCurrenciesServiceMockWithError()
 //        latestRatesService = LatestRatesServiceMock()
 
         sut = ConverterScreenViewModel(availableCurrenciesService: availableCurrenciesService)
@@ -41,6 +41,7 @@ final class CurrencyInfoTests: XCTestCase {
     }
 
     func test_WhenCallGetAvailableCurrencies_WithError_ReturnsError(){
+        // given
         let rates = scheduler.createObserver([Currency].self)
         let errorMessage = scheduler.createObserver(ErrorResult.self)
         
@@ -52,31 +53,87 @@ final class CurrencyInfoTests: XCTestCase {
             .drive(rates)
             .disposed(by: disposeBag)
         
-    
+    // When
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.input.viewDidRefresh)
             .disposed(by: disposeBag)
 
         scheduler.start()
-                
+           
+        // Then
         XCTAssertEqual(errorMessage.events, [.next(10, ErrorResult.custom(string: "The operation couldn’t be completed. (CurrencyInfo.ErrorResult error 2.)"))])
     
     }
+    func test_WhenCalledRefreshWithNoCurrencies_ReturnsEmptyCurrencies() {
+        // Given
+        // create scheduler
+        let rates = scheduler.createObserver([Currency].self)
+        
+        sut.output.availlableRates
+            .drive(rates)
+            .disposed(by: disposeBag)
+        
+        // when
+        scheduler.createColdObservable([.next(10, ())])
+            .bind(to: sut.input.viewDidRefresh)
+            .disposed(by: disposeBag)
+        
+        scheduler.start()
+        
+        // then
+        // gets no events
+        XCTAssertEqual(rates.events, [])
+    }
     
+    func testFetchCurrencies() {
+        
+        // Given
+        // create scheduler
+        let rates = scheduler.createObserver([Currency].self)
+        
+        // giving a service mocking currencies
+        let availableCurrenciesModel = AvailableCurrenciesModel(success: true, symbols: [Currency.USD.rawValue : ""])
+        
+        availableCurrenciesService.availableCurrenciesModel = availableCurrenciesModel
+        
+        let availableSymbols = availableCurrenciesModel.symbols.map({Currency(rawValue: $0.key)}).compactMap({$0})
+        
+        
+        // bind the result
+        sut.output.availlableRates
+            .drive(rates)
+            .disposed(by: disposeBag)
+        
+        // When
+        // mock a reload
+        scheduler.createColdObservable([.next(10, ())])
+            .bind(to: sut.input.viewDidRefresh)
+            .disposed(by: disposeBag)
+        
+        scheduler.start()
+        // Then
+        XCTAssertEqual(rates.events, [.next(10, availableSymbols)])
+    }
+
 }
 
 
-
-
-class AvailableCurrenciesServiceMock: AvailableCurrenciesService{
+class AvailableCurrenciesServiceMockWithError: AvailableCurrenciesService{
     
-    
+    var availableCurrenciesModel: AvailableCurrenciesModel? = nil
     
     func getAvailableSymbols() -> Single<AvailableCurrenciesModel> {
-        
-        return Single.error(ErrorResult.custom(string: "error"))
+        if let availableCurrenciesModel = availableCurrenciesModel {
+            
+            return .just(availableCurrenciesModel)
+            
+        } else {
+            
+            return Single.error(ErrorResult.custom(string: "error"))
+        }
     }
 }
+
 //
 //
 ////

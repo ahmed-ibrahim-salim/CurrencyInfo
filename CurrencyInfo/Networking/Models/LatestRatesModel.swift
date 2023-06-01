@@ -14,6 +14,8 @@ struct LatestRatesModel: Codable {
     let rates: [Currency.RawValue : Double]
 }
 
+
+
 enum Currency: String, Codable{
     
     case AED

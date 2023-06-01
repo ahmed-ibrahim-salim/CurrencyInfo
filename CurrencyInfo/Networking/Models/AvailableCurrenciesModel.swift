@@ -10,5 +10,5 @@ import Foundation
 // MARK: - AvailableCurrenciesModel
 struct AvailableCurrenciesModel: Codable {
     let success: Bool
-    let symbols: [Currency.RawValue: String]
+    let symbols: [Currency.RawValue : String]
 }

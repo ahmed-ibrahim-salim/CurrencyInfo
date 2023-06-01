@@ -10,26 +10,35 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
-extension Observable where Element: Any {
-    func startLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
-        return self.do(onNext: { _ in
-            loadingSubject.onNext(true)
-        })
-    }
-
-    func stopLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
-        return self.do(onNext: { _ in
-            loadingSubject.onNext(false)
-        })
-    }
-}
-
 class ConverterScreenViewModel {
     
-//    weak var controller: ConverterScreen?
     let availableCurrenciesService: AvailableCurrenciesService
 //    private let LatestRatesService: LatestRatesService
 
+    // MARK: - Outputs
+    let disposeBag = DisposeBag()
+    private let isLoadingSubject = PublishSubject<Bool>()
+    private let errorSubject = PublishSubject<ErrorResult>()
+    
+    let output: Output
+    private let ratesSubject = PublishSubject<[Currency]>()
+
+    struct Output{
+        let availlableRates: Driver<[Currency]>
+        // Loading
+        let isLoading: Driver<Bool>
+        // Error
+        let error: Driver<ErrorResult>
+
+    }
+    
+    // MARK: - Inputs
+    let input: Input
+    struct Input {
+        let viewDidRefresh: AnyObserver<Void>
+    }
+    private let viewDidRefreshSubject = PublishSubject<Void>()
+    
     //MARK: Initialise
     init(
          availableCurrenciesService: AvailableCurrenciesService
@@ -38,12 +47,8 @@ class ConverterScreenViewModel {
 //        self.LatestRatesService = LatestRatesService
         self.availableCurrenciesService = availableCurrenciesService
         
-    
-
-        
         // 2) connect Driver with subject, and get required field
-        let availableRates = ratesSubject
-            .asDriver(onErrorJustReturn: [])
+        let availableRates = ratesSubject.asDriver(onErrorJustReturn: [])
         
         // 3) assign output with ui driver, loading and error related to that ui item
         output = Output(availlableRates: availableRates,
@@ -86,43 +91,12 @@ class ConverterScreenViewModel {
         
 //
     }
-    
-    // MARK: - Outputs
-    
-    let disposeBag = DisposeBag()
-    private let isLoadingSubject = PublishSubject<Bool>()
-    private let errorSubject = PublishSubject<ErrorResult>()
-    
-    let output: Output
-    private let ratesSubject = PublishSubject<[Currency]>()
 
-    struct Output{
-        
-        let availlableRates: Driver<[Currency]>
-        // Loading
-        let isLoading: Driver<Bool>
-        // Error
-        let error: Driver<ErrorResult>
-
-    }
-    
-    // MARK: - Inputs
-
-    let input: Input
-
-    struct Input {
-        let viewDidRefresh: AnyObserver<Void>
-    }
-
-    private let viewDidRefreshSubject = PublishSubject<Void>()
-//    private let aqiStandardSubject = BehaviorSubject<Int>(value: 0)
-    
-    
     
     
     //MARK: Network
 
-    func getCurreciesFromSymbols(symbols: [Currency.RawValue: String])-> [Currency]{
+    func getCurreciesFromSymbols(symbols: [Currency.RawValue : String])-> [Currency]{
 
         let curruncies: [Currency] = symbols.map({
             dictionaryItem in
@@ -262,4 +236,18 @@ extension CurrencyRateError: LocalizedError {
     }
     
     
+}
+
+extension Observable where Element: Any {
+    func startLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
+        return self.do(onNext: { _ in
+            loadingSubject.onNext(true)
+        })
+    }
+
+    func stopLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
+        return self.do(onNext: { _ in
+            loadingSubject.onNext(false)
+        })
+    }
 }
