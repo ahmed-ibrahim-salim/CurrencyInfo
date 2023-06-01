@@ -6,8 +6,8 @@
 //
 
 import XCTest
-import RxSwift
 import RxTest
+import RxSwift
 
 @testable import CurrencyInfo
 

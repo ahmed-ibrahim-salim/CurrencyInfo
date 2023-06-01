@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+ platform :ios, '14.0'
 
 target 'CurrencyInfo' do
   use_frameworks!
@@ -7,16 +7,15 @@ target 'CurrencyInfo' do
   # Pods for CurrencyInfo
 
    pod 'RxSwift'
-   pod 'RxCocoa'
+#   pod 'RxCocoa'
    pod 'RxRelay'
 
-end
+  target 'CurrencyInfoTests' do
+    inherit! :search_paths
 
-target 'CurrencyInfoTests' do
-  inherit! :search_paths
-
-  pod 'RxBlocking'
-  pod 'RxTest'
+    pod 'RxBlocking'
+    pod 'RxTest'
+  end
   
 end
 
