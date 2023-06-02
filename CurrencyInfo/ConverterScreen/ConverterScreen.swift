@@ -19,12 +19,12 @@ class ConverterScreen: UIViewController {
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .systemBackground
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didBecomeActiveThenRefresh),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(didBecomeActiveThenRefresh),
+//                                               name: UIApplication.didBecomeActiveNotification,
+//                                               object: nil)
                 
         let latestRatesService = LatestRates()
 
@@ -55,6 +55,24 @@ class ConverterScreen: UIViewController {
         
     }
 
+    // for labels
+    @IBOutlet weak var fromBtn: UIButton!
+    @IBOutlet weak var toBtn: UIButton!
+    
+    
+    
+    @IBAction func toCurrencyAction(_ sender: Any) {
+    }
+    
+    @IBAction func reverseAction(_ sender: Any) {
+    }
+    
+    @IBAction func fromCurrencyAction(_ sender: Any) {
+    }
+    
+    @IBAction func openDetailsAction(_ sender: Any) {
+        
+    }
 }
 
 

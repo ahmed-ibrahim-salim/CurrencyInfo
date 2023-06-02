@@ -11,7 +11,7 @@ import RxSwift
 
 @testable import CurrencyInfo
 
-final class CurrencyInfoTests: XCTestCase {
+final class ViewModelTests: XCTestCase {
 
     private var sut: ConverterScreenViewModel!
     private var latestRatesService: LatestRatesServiceMock!

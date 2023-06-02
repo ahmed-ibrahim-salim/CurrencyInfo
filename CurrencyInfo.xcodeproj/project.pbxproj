@@ -18,11 +18,12 @@
 		EF3B04BE2A269BCA003D45AB /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04BD2A269BCA003D45AB /* NetworkConstants.swift */; };
 		EF3B04C12A26A333003D45AB /* LatestRatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C02A26A333003D45AB /* LatestRatesModel.swift */; };
 		EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */; };
+		EF72DAF22A29D99E002F9CB1 /* StoryBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF72DAF12A29D99E002F9CB1 /* StoryBoardTests.swift */; };
 		EFD269592A273F17006BE880 /* LatestRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD269582A273F17006BE880 /* LatestRates.swift */; };
 		EFD2695B2A274A7D006BE880 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695A2A274A7D006BE880 /* Extensions.swift */; };
 		EFD2695E2A275905006BE880 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695D2A275905006BE880 /* Reachability.swift */; };
 		EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695F2A275A81006BE880 /* ErrorResult.swift */; };
-		EFD94C902A279ECA007DCF89 /* CurrencyInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD94C8F2A279ECA007DCF89 /* CurrencyInfoTests.swift */; };
+		EFD94C902A279ECA007DCF89 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD94C8F2A279ECA007DCF89 /* ViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,12 +54,13 @@
 		EF3B04BD2A269BCA003D45AB /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		EF3B04C02A26A333003D45AB /* LatestRatesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestRatesModel.swift; sourceTree = "<group>"; };
 		EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterScreenVM.swift; sourceTree = "<group>"; };
+		EF72DAF12A29D99E002F9CB1 /* StoryBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBoardTests.swift; sourceTree = "<group>"; };
 		EFD269582A273F17006BE880 /* LatestRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestRates.swift; sourceTree = "<group>"; };
 		EFD2695A2A274A7D006BE880 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		EFD2695D2A275905006BE880 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		EFD2695F2A275A81006BE880 /* ErrorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResult.swift; sourceTree = "<group>"; };
 		EFD94C8D2A279ECA007DCF89 /* CurrencyInfoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CurrencyInfoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EFD94C8F2A279ECA007DCF89 /* CurrencyInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInfoTests.swift; sourceTree = "<group>"; };
+		EFD94C8F2A279ECA007DCF89 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,7 +187,8 @@
 		EFD94C8E2A279ECA007DCF89 /* CurrencyInfoTests */ = {
 			isa = PBXGroup;
 			children = (
-				EFD94C8F2A279ECA007DCF89 /* CurrencyInfoTests.swift */,
+				EFD94C8F2A279ECA007DCF89 /* ViewModelTests.swift */,
+				EF72DAF12A29D99E002F9CB1 /* StoryBoardTests.swift */,
 			);
 			path = CurrencyInfoTests;
 			sourceTree = "<group>";
@@ -393,7 +396,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EFD94C902A279ECA007DCF89 /* CurrencyInfoTests.swift in Sources */,
+				EF72DAF22A29D99E002F9CB1 /* StoryBoardTests.swift in Sources */,
+				EFD94C902A279ECA007DCF89 /* ViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
