@@ -55,12 +55,23 @@ class ConverterScreen: UIViewController {
         
     }
 
+    // MARK: Outlets
     // for labels
     @IBOutlet weak var fromBtn: UIButton!
     @IBOutlet weak var toBtn: UIButton!
     
     
     
+    // for tests
+    @IBOutlet weak var detailsBtn: UIButton!
+    @IBOutlet weak var fromCurrencyArrow: UIButton!
+    @IBOutlet weak var toCurrencyArrow: UIButton!
+    @IBOutlet weak var reverseBtn: UIButton!
+    
+    @IBOutlet weak var fromCurrencyTxtFiled: UITextField!
+    @IBOutlet weak var toCurrencyTxtFiled: UITextField!
+    
+    // MARK: Actions
     @IBAction func toCurrencyAction(_ sender: Any) {
     }
     

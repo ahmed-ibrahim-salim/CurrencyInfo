@@ -16,7 +16,17 @@ class StoryboardTests: XCTestCase {
     
     override func tearDownWithError() throws {    }
     
-    func test_InitialViewController_IsItemListViewController() {
+    
+    func test_InitialNavigationController_IsNotNil() {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let navigationController =
+        storyboard.instantiateInitialViewController() as! UINavigationController
+        XCTAssertNotNil(navigationController)
+    }
+    
+    
+    func test_InitialViewController_IsConverterScreen() {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationController =

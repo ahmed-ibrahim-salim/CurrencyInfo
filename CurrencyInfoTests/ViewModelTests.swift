@@ -114,7 +114,7 @@ final class ViewModelTests: XCTestCase {
 }
 
 //MARK: Mock
-class LatestRatesServiceMock: LatestRatesService{
+fileprivate class LatestRatesServiceMock: LatestRatesService{
     
     
     var latestRatesModel: LatestRatesModel? = nil

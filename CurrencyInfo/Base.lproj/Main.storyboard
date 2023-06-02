@@ -129,8 +129,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="Ual-8W-gkZ"/>
                     <connections>
+                        <outlet property="detailsBtn" destination="m1Y-p6-av5" id="1rI-20-4u6"/>
                         <outlet property="fromBtn" destination="mg4-vT-HTD" id="sDI-qI-MJd"/>
+                        <outlet property="fromCurrencyArrow" destination="hcx-PG-MQk" id="hQj-k3-WU1"/>
+                        <outlet property="fromCurrencyTxtFiled" destination="3JR-U4-iRZ" id="28v-Qz-VI6"/>
+                        <outlet property="reverseBtn" destination="if5-3k-WOL" id="AQL-15-pR1"/>
                         <outlet property="toBtn" destination="8mJ-4b-vNb" id="3L5-p8-wAV"/>
+                        <outlet property="toCurrencyArrow" destination="3jA-71-fuK" id="SaA-sK-OsN"/>
+                        <outlet property="toCurrencyTxtFiled" destination="jeJ-EE-4f7" id="SUf-co-FkU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
