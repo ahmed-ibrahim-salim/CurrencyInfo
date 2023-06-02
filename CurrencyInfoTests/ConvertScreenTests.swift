@@ -81,23 +81,15 @@ final class ConverterScreenTests: XCTestCase {
     }
     
     func test_HasCurrenciesListTableViewFor_FromAction(){
-        let hasToCurrencyTxtFiled = sut.currenciesListTableViewForFromAction
+        let hasToCurrencyTxtFiled = sut.fromCurrencyTable
 //            .isDescendant(of: sut.view)
         XCTAssertNotNil(hasToCurrencyTxtFiled)
     }
     
-    func test_WhenPressedFromBtn_AddsTableViewToView(){
-        let fromBtn: UIButton = sut.fromBtn
-
-        fromBtn.sendActions(for: .touchUpInside)
-        
-        
-        let hasToCurrencyTxtFiled = sut.currenciesListTableViewForFromAction.isDescendant(of: sut.view)
-        XCTAssertNotNil(hasToCurrencyTxtFiled)
-    }
-    
-    
     // MARK: Actions
+
+    
+    
     func test_fromBtnHasFromAction(){
         let fromBtn: UIButton = sut.fromBtn
         
@@ -163,7 +155,34 @@ final class ConverterScreenTests: XCTestCase {
         print(actions)
         XCTAssertTrue(actions.contains("openDetailsAction:"))
     }
+    
+    func test_WhenPressedFromBtn_AddsTableViewToView(){
+        let fromBtn: UIButton = sut.fromBtn
 
+        fromBtn.sendActions(for: .touchUpInside)
+        
+        
+        let hasTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
+        XCTAssertNotNil(hasTableView)
+    }
+    
+    func test_WhenPressedTableViewCell_RemovesTableViewFromView(){
+        // given
+        let fromBtn: UIButton = sut.fromBtn
+
+        fromBtn.sendActions(for: .touchUpInside)
+        
+        let hasTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
+        XCTAssertNotNil(hasTableView)
+        
+        // when
+        sut.fromCurrencyTable.delegate?.tableView?(sut.fromCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
+
+        //then
+        let doesNotHaveTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
+        XCTAssertFalse(doesNotHaveTableView)
+        
+    }
     
 }
 
