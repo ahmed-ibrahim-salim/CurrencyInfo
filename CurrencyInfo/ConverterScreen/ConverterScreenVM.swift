@@ -71,28 +71,7 @@ class ConverterScreenViewModel {
                         error: errorRelay.asDriver(onErrorJustReturn: "An error happened"))
         
     }
-    func getNumberOfRows(table: UITableView)->Int{
-        
-        return 20
-    }
-    func getFromTableView_Cell(UITableView: UITableView, indexPath: IndexPath)->UITableViewCell{
-        
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = "mido"
-        cell.contentView.backgroundColor = .systemGray4
-        
-        return cell
-    }
-    func getToTableView_Cell(UITableView: UITableView, indexPath: IndexPath)->UITableViewCell{
-        
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = "ahmed"
-        cell.contentView.backgroundColor = .systemGray4
-        
-        return cell
-    }
+   
 //    private func getConversionResult(from: Currency,
 //                                 to: Currency,
 //                                 amount: Double) throws -> Double?{

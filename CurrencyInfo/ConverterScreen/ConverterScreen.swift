@@ -16,6 +16,8 @@ class ConverterScreen: UIViewController {
     let disposeBag = DisposeBag()
     
     
+    var tablesDataSource: TablesDataSource?
+    
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,19 +28,28 @@ class ConverterScreen: UIViewController {
         //                                               name: UIApplication.didBecomeActiveNotification,
         //                                               object: nil)
         
-        let latestRatesService = LatestRates()
+
+        setupTableViewDataSources()
         
+        let latestRatesService = LatestRates()
         
         viewModel = ConverterScreenViewModel(latestRatesService)
         
         bindViewModel()
+
         
-        fromCurrencyTable.delegate = self
-        fromCurrencyTable.dataSource = self
-     
+    }
+    func setupTableViewDataSources(){
+        tablesDataSource = TablesDataSource()
+        tablesDataSource!.converterScreen = self
         
-        toCurrencyTable.delegate = self
-        toCurrencyTable.dataSource = self
+        fromCurrencyTable.delegate = tablesDataSource
+        fromCurrencyTable.dataSource = tablesDataSource
+        
+        toCurrencyTable.delegate = tablesDataSource
+        toCurrencyTable.dataSource = tablesDataSource
+        
+        
     }
     
     
@@ -169,30 +180,3 @@ class ConverterScreen: UIViewController {
     }
 }
 
-
-extension ConverterScreen: UITableViewDataSource, UITableViewDelegate{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getNumberOfRows(table: tableView)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if tableView == fromCurrencyTable{
-            
-            return viewModel.getFromTableView_Cell(UITableView: tableView, indexPath: indexPath)
-        }else{
-            return viewModel.getToTableView_Cell(UITableView: tableView, indexPath: indexPath)
-
-        }
-        
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.removeFromSuperview()
-    }
-}
-
-enum ScreenTable: Int{
-    case fromCurrencyTable
-    case toCurrencyTable
-}
