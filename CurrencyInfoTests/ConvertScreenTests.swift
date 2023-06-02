@@ -8,7 +8,7 @@
 
 import XCTest
 import RxSwift
-
+import RxTest
 
 @testable import CurrencyInfo
 
@@ -18,8 +18,13 @@ final class ConverterScreenTests: XCTestCase {
     var navigationController: UINavigationController!
     var viewModel: ConverterScreenViewModel!
     private var latestRatesService: LatestRatesServiceMock!
+    var tablesDataSource: TablesDataSource?
 
+
+    
     override func setUpWithError() throws {
+
+        
         let storyboard = UIStoryboard(name: "Main",
                                       bundle: nil)
         navigationController = storyboard
@@ -27,11 +32,23 @@ final class ConverterScreenTests: XCTestCase {
         
         sut = navigationController.viewControllers[0] as? ConverterScreen
         
+        tablesDataSource = TablesDataSource()
+        tablesDataSource?.converterScreen = sut
+        
+        sut.tablesDataSource = tablesDataSource
+        
         sut.loadViewIfNeeded()
                 
         latestRatesService = LatestRatesServiceMock()
 
         viewModel = ConverterScreenViewModel(latestRatesService)
+        
+        sut.fromCurrencyTable.delegate = tablesDataSource
+        sut.fromCurrencyTable.dataSource = tablesDataSource
+        
+        sut.toCurrencyTable.delegate = tablesDataSource
+        sut.toCurrencyTable.dataSource = tablesDataSource
+
     }
     
     override func tearDownWithError() throws {
@@ -39,6 +56,7 @@ final class ConverterScreenTests: XCTestCase {
         viewModel = nil
         latestRatesService = nil
         navigationController = nil
+        tablesDataSource = nil
     }
     
     // MARK: Outlets
@@ -184,12 +202,18 @@ final class ConverterScreenTests: XCTestCase {
         
     }
     
+    
+
 }
 
 // MARK: Mock
 fileprivate class LatestRatesServiceMock: LatestRatesService{
-    func getLatestRates() -> RxSwift.Single<CurrencyInfo.LatestRatesModel> {
-        return Single.error(ErrorResult.custom(string: ""))
+    
+    
+    func getLatestRates() -> Single<LatestRatesModel> {
+        
+        return .error(ErrorResult.custom(string: ""))
+
     }
     
 }

@@ -8,7 +8,8 @@
 import UIKit
 import RxSwift
 
-class ConverterScreen: UIViewController {
+class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
+    
     
     // MARK: Vars
     var viewModel: ConverterScreenViewModel!
@@ -21,12 +22,12 @@ class ConverterScreen: UIViewController {
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGray5
         
-        //        NotificationCenter.default.addObserver(self,
-        //                                               selector: #selector(didBecomeActiveThenRefresh),
-        //                                               name: UIApplication.didBecomeActiveNotification,
-        //                                               object: nil)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(didBecomeActiveThenRefresh),
+                                                       name: UIApplication.didBecomeActiveNotification,
+                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -58,17 +59,21 @@ class ConverterScreen: UIViewController {
         
     }
     
+    var currencyList = [CurrencyRate]()
+    
     //  MARK: ViewModel Binding
-    private func bindViewModel() {
+    func bindViewModel() {
         
         // MARK: Inputs
-        
+//
         
         //MARK: outputs
-        viewModel.output.rates.drive()
-            .disposed(by: disposeBag)
-        //            .drive(humidityLabel.rx.text)
-        //            .disposed(by: disposeBag)
+        viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
+            self.currencyList = currencyList
+            toCurrencyTable.reloadData()
+            fromCurrencyTable.reloadData()
+            
+        }).disposed(by: disposeBag)
         
     }
 
@@ -96,17 +101,17 @@ class ConverterScreen: UIViewController {
     
     func addFromCurrencyTableToScreen(){
         
-        
-        view.addSubview(fromCurrencyTable)
-        
-        NSLayoutConstraint.activate([
-            fromCurrencyTable.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
-            fromCurrencyTable.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
-            //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
-            fromCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
-            fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2),
+            view.addSubview(fromCurrencyTable)
             
-        ])
+            NSLayoutConstraint.activate([
+                fromCurrencyTable.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
+                fromCurrencyTable.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
+                //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
+                fromCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
+                fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2),
+                
+            ])
+        
     }
     
     var toCurrencyTable: UITableView! = {
@@ -168,12 +173,16 @@ class ConverterScreen: UIViewController {
     }
     
     @IBAction func fromCurrencyAction(_ sender: Any) {
-        
-        addFromCurrencyTableToScreen()
+        if !currencyList.isEmpty{
+            
+            addFromCurrencyTableToScreen()
+        }
     }
     @IBAction func toCurrencyAction(_ sender: Any) {
-        addToCurrencyTableToScreen()
-
+        if !currencyList.isEmpty{
+            
+            addToCurrencyTableToScreen()
+        }
     }
     
     @IBAction func openDetailsAction(_ sender: Any) {

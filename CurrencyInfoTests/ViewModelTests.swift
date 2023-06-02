@@ -22,6 +22,7 @@ final class ViewModelTests: XCTestCase {
 
     override func setUpWithError() throws {
 
+
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
 
