@@ -10,58 +10,80 @@ import RxSwift
 
 protocol LatestRatesService{
     
-//    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void)
+    func getLatestRates()->Single<LatestRatesModel>
 }
 
 class LatestRates: LatestRatesService{
-    
-    private var network = GenericNetwork.shared
-
-//    var latestRatesRequest = LatestRatesRequest.constructURlRequest()
-    
-//    func getLatestRates(completion: @escaping (Result<Single<AvailableCurrenciesModel>,ErrorResult>)-> Void){
-//
-//
-//        network.performGet(request: latestRatesRequest,
-//                           LatestRatesModel.self){
-//             result in
-//
-//
-//            switch result{
-//            case .success(let data):
-////
-//                // Parsing
-//                let single = NetworkParser.parseReturnedData(data: data, AvailableCurrenciesModel.self)
-//
-//                completion(.success(single))
-//
-//            case .failure(let error):
-//                completion(.failure(.network(string: error.localizedDescription)))
-//
-//            }
-//        }
-//    }
+        
+    func getLatestRates()->Single<LatestRatesModel>{
+        
+        let getLatestRates = URLSession.shared.rx
+            .response(request: LatestRatesRequest.constructURlRequest())
+            .asSingle()
+            .catchNetworkRequestsErrors(LatestRatesModel.self)
+        
+        return getLatestRates
+    }
 }
 
+extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HTTPURLResponse, data: Data){
 
-//struct LatestRatesRequest{
-//
-//    static func constructURlRequest()->URLRequest{
-//        // should be
-//        // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
-//        var url = URL(string: GenericNetwork.baseUrl)!
-//
-//        url.append(path: "latest")
-//
+    func catchNetworkRequestsErrors<T:Codable>(_ type: T.Type) -> Single<T> {
+        return flatMap { response, data in
+
+            if 200..<300 ~= response.statusCode{
+                do{
+                    let decodedData = try JSONDecoder().decode(type.self, from: data)
+
+                    return .just(decodedData)
+                }catch{
+                    throw error
+                }
+
+            }else{
+                throw ErrorResult.network(string: response.debugDescription)
+            }
+        }
+    }
+
+}
+
+struct LatestRatesRequest{
+
+    static func constructURlRequest()->URLRequest{
+        // should be
+        // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
+        var url = URL(string: NetworkConstants.baseUrl)!
+
+        url.append(path: "latest")
+
 //        let symbols: String = ["USD", "AED"].joined(separator: ", ")
-//
-//        let queryItems = [URLQueryItem(name: "access_key", value: GenericNetwork.accessKey),
+
+        let queryItems = [URLQueryItem(name: "access_key", value: NetworkConstants.accessKey)]
+//                          ,
 //                          URLQueryItem(name: "symbols", value: symbols)]
-//
-//        url.append(queryItems: queryItems)
-//
-//        return RequestFactory.request(method: .GET, url: url)
-//
-//    }
+
+        url.append(queryItems: queryItems)
+
+        return RequestFactory.request(method: .GET, url: url)
+
+    }
     
-//}
+}
+
+final class RequestFactory {
+
+    enum Method: String {
+        case GET
+        case POST
+        case PUT
+        case DELETE
+        case PATCH
+    }
+
+    static func request(method: Method, url: URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        return request
+    }
+}
