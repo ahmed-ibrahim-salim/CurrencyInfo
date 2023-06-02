@@ -33,8 +33,8 @@ class ConverterScreen: UIViewController {
         
         bindViewModel()
         
-        currenciesListTableView.delegate = self
-        currenciesListTableView.dataSource = self
+        currenciesListTableViewForFromAction.delegate = self
+        currenciesListTableViewForFromAction.dataSource = self
 
     }
 
@@ -61,7 +61,7 @@ class ConverterScreen: UIViewController {
 //        super.viewDidAppear(animated)
 //        addTableViewToScreen()
 //    }
-    var currenciesListTableView: UITableView! = {
+    var currenciesListTableViewForFromAction: UITableView! = {
         
         let mainTableView = UITableView(frame: CGRectZero)
 
@@ -86,14 +86,14 @@ class ConverterScreen: UIViewController {
     func addTableViewToScreen(){
         
         
-        view.addSubview(currenciesListTableView)
+        view.addSubview(currenciesListTableViewForFromAction)
         
         NSLayoutConstraint.activate([
-            currenciesListTableView.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
-            currenciesListTableView.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
+            currenciesListTableViewForFromAction.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
+            currenciesListTableViewForFromAction.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
 //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
-            currenciesListTableView.heightAnchor.constraint(equalToConstant: 200),
-            currenciesListTableView.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2),
+            currenciesListTableViewForFromAction.heightAnchor.constraint(equalToConstant: 200),
+            currenciesListTableViewForFromAction.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2),
 
 //            currenciesListTableView.he.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
@@ -151,6 +151,6 @@ extension ConverterScreen: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currenciesListTableView.removeFromSuperview()
+        currenciesListTableViewForFromAction.removeFromSuperview()
     }
 }

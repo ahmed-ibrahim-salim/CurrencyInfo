@@ -80,6 +80,22 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertTrue(hasToCurrencyTxtFiled)
     }
     
+    func test_HasCurrenciesListTableViewFor_FromAction(){
+        let hasToCurrencyTxtFiled = sut.currenciesListTableViewForFromAction
+//            .isDescendant(of: sut.view)
+        XCTAssertNotNil(hasToCurrencyTxtFiled)
+    }
+    
+    func test_WhenPressedFromBtn_AddsTableViewToView(){
+        let fromBtn: UIButton = sut.fromBtn
+
+        fromBtn.sendActions(for: .touchUpInside)
+        
+        
+        let hasToCurrencyTxtFiled = sut.currenciesListTableViewForFromAction.isDescendant(of: sut.view)
+        XCTAssertNotNil(hasToCurrencyTxtFiled)
+    }
+    
     
     // MARK: Actions
     func test_fromBtnHasFromAction(){
