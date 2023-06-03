@@ -20,6 +20,9 @@ class ConverterScreenViewModel {
 
     struct Output{
         let rates: Driver<[CurrencyRate]>
+        let fromBtnName: Driver<String>
+        let toBtnName: Driver<String>
+
         // Loading
 //        let isLoading: Driver<Bool>
         // Error
@@ -31,6 +34,11 @@ class ConverterScreenViewModel {
     let input: Input
     struct Input {
         let reload: PublishRelay<Void>
+        
+        let changeFromBtnName: PublishSubject<String>
+
+        let changeToBtnName: PublishSubject<String>
+//        let
     }
 //    private let viewDidRefreshSubject = PublishSubject<Void>()
     
@@ -64,14 +72,45 @@ class ConverterScreenViewModel {
                 return Driver.just([])
             }
         
+        
+        changeFromBtnName = PublishSubject<String>()
+        changeToBtnName = PublishSubject<String>()
+
+        let fromBtnName = changeFromBtnName
+            .asDriver(onErrorJustReturn: "From")
+        
+        let toBtnName = changeToBtnName
+            .asDriver(onErrorJustReturn: "To")
+        
         // 1)
-        input = Input(reload: reloadRelay)
+        input = Input(reload: reloadRelay,
+                      changeFromBtnName: changeFromBtnName, changeToBtnName: changeToBtnName)
         
         output = Output(rates: rates,
+                        fromBtnName: fromBtnName,
+                        toBtnName: toBtnName,
+
                         error: errorRelay.asDriver(onErrorJustReturn: "An error happened"))
         
     }
-   
+    let changeFromBtnName: PublishSubject<String>
+    let changeToBtnName: PublishSubject<String>
+
+    
+    // MARK: TableHelper
+    
+    private func change_FromBtn_Name(_ name: String,
+                                     btn: UIButton){
+//        btn.setTitle(name, for: .normal)
+        
+        output.fromBtnName.asDriver{
+            error in
+            
+            return .just(name)
+        }
+    }
+
+
 //    private func getConversionResult(from: Currency,
 //                                 to: Currency,
 //                                 amount: Double) throws -> Double?{

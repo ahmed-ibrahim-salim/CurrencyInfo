@@ -61,11 +61,21 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
+    let changeFromBtnName = PublishSubject<String>()
+    let changeToBtnName = PublishSubject<String>()
+    
     //  MARK: ViewModel Binding
     func bindViewModel() {
         
         // MARK: Inputs
-//
+        
+        changeFromBtnName
+            .subscribe(viewModel.input.changeFromBtnName)
+            .disposed(by: disposeBag)
+        
+        changeToBtnName
+            .subscribe(viewModel.input.changeToBtnName)
+            .disposed(by: disposeBag)
         
         //MARK: outputs
         viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
@@ -75,6 +85,14 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             
         }).disposed(by: disposeBag)
         
+        
+        viewModel.output.fromBtnName
+            .drive(fromBtn.rx.title(for: .normal))
+            .disposed(by: disposeBag)
+
+        viewModel.output.toBtnName
+            .drive(toBtn.rx.title(for: .normal))
+            .disposed(by: disposeBag)
     }
 
     var fromCurrencyTable: UITableView! = {

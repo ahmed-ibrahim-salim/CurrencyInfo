@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol ConverterScreenControllerProtocol: AnyObject{
     var fromCurrencyTable: UITableView! { get }
@@ -13,8 +15,47 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     
     var fromBtn: UIButton! {get}
     var toBtn: UIButton! {get}
-
+    
     var currencyList: [CurrencyRate] { get set}
+    
+    
+    var changeFromBtnName: PublishSubject<String> {get}
+    var changeToBtnName: PublishSubject<String> {get}
+
+    
+    
+    func getNumberOfRows(table: UITableView)->Int
+
+    func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell
+    
+}
+
+extension ConverterScreenControllerProtocol{
+    func getNumberOfRows(table: UITableView)->Int{
+        
+        guard !currencyList.isEmpty else{
+            return 0
+        }
+        
+        return currencyList.count
+        
+    }
+    
+    func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell{
+        
+        let cell = UITableViewCell()
+        
+        if 0..<currencyList.count ~= indexPath.row{
+            
+            cell.textLabel?.text = currencyList[indexPath.row].iso
+            
+        }else{
+            cell.textLabel?.text = ""
+        }
+        cell.contentView.backgroundColor = .systemGray4
+        
+        return cell
+    }
 }
 
 class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
@@ -23,13 +64,13 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return getNumberOfRows(table: tableView)
+        return converterScreen.getNumberOfRows(table: tableView)
     }
     
     // MARK: CellForRow
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        return get_TableView_Cell(indexPath: indexPath)
+        return converterScreen.get_TableView_Cell(indexPath: indexPath)
         
     }
     
@@ -40,47 +81,18 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
             return
         }
         
-        let nameOfBtn = converterScreen.currencyList[indexPath.row].iso
-            if tableView == converterScreen!.fromCurrencyTable{
-                
-                change_FromBtn_Name(nameOfBtn, btn: converterScreen.fromBtn)
-            }else{
-                change_FromBtn_Name(nameOfBtn, btn: converterScreen.toBtn)
-            }
-        
-    }
-
-    // MARK: Helper Methods
-    
-    private func change_FromBtn_Name(_ name: String,
-                                     btn: UIButton){
-        btn.setTitle(name, for: .normal)
-    }
-
-    private func getNumberOfRows(table: UITableView)->Int{
-        
-        guard !converterScreen.currencyList.isEmpty else{
-            return 0
-        }
-        
-        return converterScreen.currencyList.count
-
-        
-    }
-    private func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell{
-        
-        let cell = UITableViewCell()
-        
-        if 0..<converterScreen.currencyList.count ~= indexPath.row{
+        let currencyForChosenBtn = converterScreen.currencyList[indexPath.row]
+        if tableView == converterScreen!.fromCurrencyTable{
             
-            cell.textLabel?.text = converterScreen.currencyList[indexPath.row].iso
-
+            converterScreen.changeFromBtnName.onNext(currencyForChosenBtn.iso)
         }else{
-            cell.textLabel?.text = ""
+
+            converterScreen.changeToBtnName.onNext(currencyForChosenBtn.iso)
         }
-        cell.contentView.backgroundColor = .systemGray4
         
-        return cell
     }
 
+    
+    
+    
 }

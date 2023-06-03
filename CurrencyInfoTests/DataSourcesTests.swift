@@ -6,6 +6,8 @@
 //
 
 import XCTest
+import RxSwift
+
 @testable import CurrencyInfo
 
 final class DataSourcesTests: XCTestCase {
@@ -80,6 +82,11 @@ final class DataSourcesTests: XCTestCase {
 // MARK: Mock
 
 fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol{
+
+    var changeFromBtnName = PublishSubject<String>()
+    
+    var changeToBtnName = PublishSubject<String>()
+    
     
     
     var fromBtn: UIButton!
