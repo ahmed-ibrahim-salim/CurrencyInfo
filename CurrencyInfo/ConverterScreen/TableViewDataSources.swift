@@ -10,6 +10,9 @@ import UIKit
 protocol ConverterScreenControllerProtocol: AnyObject{
     var fromCurrencyTable: UITableView! { get }
     var toCurrencyTable: UITableView! { get }
+    
+    var fromBtn: UIButton! {get}
+    var toBtn: UIButton! {get}
 
     var currencyList: [CurrencyRate] { get set}
 }
@@ -26,21 +29,34 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
     // MARK: CellForRow
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if tableView == converterScreen!.fromCurrencyTable{
-            
-            return getFromTableView_Cell(UITableView: tableView, indexPath: indexPath)
-        }else{
-            return getToTableView_Cell(UITableView: tableView, indexPath: indexPath)
-
-        }
+        return get_TableView_Cell(indexPath: indexPath)
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.removeFromSuperview()
+        
+        guard 0..<converterScreen.currencyList.count ~= indexPath.row else{
+            return
+        }
+        
+        let nameOfBtn = converterScreen.currencyList[indexPath.row].iso
+            if tableView == converterScreen!.fromCurrencyTable{
+                
+                change_FromBtn_Name(nameOfBtn, btn: converterScreen.fromBtn)
+            }else{
+                change_FromBtn_Name(nameOfBtn, btn: converterScreen.toBtn)
+            }
+        
     }
 
     // MARK: Helper Methods
+    
+    private func change_FromBtn_Name(_ name: String,
+                                     btn: UIButton){
+        btn.setTitle(name, for: .normal)
+    }
+
     private func getNumberOfRows(table: UITableView)->Int{
         
         guard !converterScreen.currencyList.isEmpty else{
@@ -51,7 +67,7 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
 
         
     }
-    private func getFromTableView_Cell(UITableView: UITableView, indexPath: IndexPath)->UITableViewCell{
+    private func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell{
         
         let cell = UITableViewCell()
         
@@ -66,19 +82,5 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
         
         return cell
     }
-    private func getToTableView_Cell(UITableView: UITableView, indexPath: IndexPath)->UITableViewCell{
-        
-        let cell = UITableViewCell()
-        
-        if 0..<converterScreen.currencyList.count ~= indexPath.row{
-            
-            cell.textLabel?.text = converterScreen.currencyList[indexPath.row].iso
 
-        }else{
-            cell.textLabel?.text = ""
-        }
-        cell.contentView.backgroundColor = .systemGray4
-        
-        return cell
-    }
 }

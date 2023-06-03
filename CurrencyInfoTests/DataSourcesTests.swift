@@ -81,6 +81,12 @@ final class DataSourcesTests: XCTestCase {
 
 fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol{
     
+    
+    var fromBtn: UIButton!
+    
+    var toBtn: UIButton!
+    
+    
     var fromCurrencyTable: UITableView!
     var toCurrencyTable: UITableView!
     

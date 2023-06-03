@@ -202,7 +202,46 @@ final class ConverterScreenTests: XCTestCase {
         
     }
     
-    
+    func test_WhenPressedTableViewCell_ChangesFromCurrencyBtnTitle(){
+        // given
+        sut.currencyList.append(CurrencyRate(iso: "USD", rate: 10.1))
+        
+        let fromBtn: UIButton = sut.fromBtn
+
+        fromBtn.sendActions(for: .touchUpInside)
+        
+        let hasTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
+        XCTAssertNotNil(hasTableView)
+        
+        // when
+        sut.fromCurrencyTable.delegate?.tableView?(sut.fromCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
+
+        //then
+        let fromBtnTitle = fromBtn.title(for: .normal)
+        
+        XCTAssertEqual(fromBtnTitle, "USD")
+        
+    }
+    func test_WhenPressedTableViewCell_ChangesToCurrencyBtnTitle(){
+        // given
+        sut.currencyList.append(CurrencyRate(iso: "EUR", rate: 10.1))
+        
+        let toBtn: UIButton = sut.toBtn
+
+        toBtn.sendActions(for: .touchUpInside)
+        
+        let hasTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
+        XCTAssertNotNil(hasTableView)
+        
+        // when
+        sut.toCurrencyTable.delegate?.tableView?(sut.toCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
+
+        //then
+        let toBtnTitle = toBtn.title(for: .normal)
+        
+        XCTAssertEqual(toBtnTitle, "EUR")
+        
+    }
 
 }
 
