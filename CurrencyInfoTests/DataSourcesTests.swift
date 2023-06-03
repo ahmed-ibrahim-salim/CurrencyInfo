@@ -11,20 +11,29 @@ import XCTest
 final class DataSourcesTests: XCTestCase {
 
     var sut: TablesDataSource!
-    
+    var fromCurrencyTable: UITableView!
+    var toCurrencyTable: UITableView!
+
     private var controllerMock: ConverterScreenViewControllerMock!
     
     override func setUpWithError() throws {
         
+        controllerMock = ConverterScreenViewControllerMock(fromCurrencyTable: UITableView(), toCurrencyTable: UITableView(),
+                                                           currencyList: [])
 
+        
         sut = TablesDataSource()
-        
-        controllerMock = ConverterScreenViewControllerMock(fromCurrencyTable: UITableView(), currencyList: [])
-        
         sut.converterScreen = controllerMock
         
-        sut.converterScreen.fromCurrencyTable.delegate = sut
-        sut.converterScreen.fromCurrencyTable.dataSource = sut
+        
+        fromCurrencyTable = controllerMock.fromCurrencyTable
+        toCurrencyTable = controllerMock.toCurrencyTable
+        
+        fromCurrencyTable.dataSource = sut
+        fromCurrencyTable.delegate = sut
+        
+        toCurrencyTable.dataSource = sut
+        toCurrencyTable.delegate = sut
     }
 
     override func tearDownWithError() throws {
@@ -36,29 +45,58 @@ final class DataSourcesTests: XCTestCase {
         
         XCTAssertNotNil(sut.converterScreen)
     }
-    func test_TableDataSource_WhenCurrencyListIsEmpty_ReturnsZeroRows(){
+    func test_NumberOfRows_CurrencyRatesCount(){
 
-
+        controllerMock.currencyList.append(CurrencyRate(iso: "", rate: 10.1))
         
-        sut.converterScreen.
+        XCTAssertEqual(fromCurrencyTable.numberOfRows(inSection: 0), 1)
+
+        XCTAssertEqual(toCurrencyTable.numberOfRows(inSection: 0), 1)
+
+    }
+    func test_CellForRow_ReturnsCurrencyRateCell(){
+        
+        controllerMock.currencyList.append(CurrencyRate(iso: "", rate: 10.1))
+        
+        fromCurrencyTable.reloadData()
+        
+        let cell = fromCurrencyTable.cellForRow(at: IndexPath(row: 0, section: 0))
+        
+        XCTAssertNotNil(cell)
     }
     
+    func test_ConfigCellWithCurrencyRate_CallsConfigCellWithPassedCurrencyItem(){
+
+        controllerMock.currencyList.append(CurrencyRate(iso: "USD", rate: 10.1))
+        fromCurrencyTable.reloadData()
+        
+        let cell = fromCurrencyTable.cellForRow(at: IndexPath(row: 0, section: 0))
+        
+        XCTAssertEqual(cell?.textLabel?.text, "USD")
+    }
+
 }
 
 // MARK: Mock
 
-
 fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol{
     
     var fromCurrencyTable: UITableView!
+    var toCurrencyTable: UITableView!
     
     var currencyList: [CurrencyRate]
-    
-    init(fromCurrencyTable: UITableView!, currencyList: [CurrencyRate]) {
+//    
+    init(fromCurrencyTable: UITableView!,
+         toCurrencyTable: UITableView!,
+         currencyList: [CurrencyRate]) {
+        
+        
         self.fromCurrencyTable = fromCurrencyTable
+        self.toCurrencyTable = toCurrencyTable
         self.currencyList = currencyList
-       
+        
 
+        
     }
     
 }

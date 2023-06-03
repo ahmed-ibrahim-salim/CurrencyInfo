@@ -9,6 +9,8 @@ import UIKit
 
 protocol ConverterScreenControllerProtocol: AnyObject{
     var fromCurrencyTable: UITableView! { get }
+    var toCurrencyTable: UITableView! { get }
+
     var currencyList: [CurrencyRate] { get set}
 }
 
