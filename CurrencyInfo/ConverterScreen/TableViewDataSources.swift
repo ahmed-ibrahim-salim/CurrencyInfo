@@ -30,6 +30,7 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     
 }
 
+// MARK: Default implem
 extension ConverterScreenControllerProtocol{
     func getNumberOfRows(table: UITableView)->Int{
         
@@ -58,6 +59,7 @@ extension ConverterScreenControllerProtocol{
     }
 }
 
+// MARK: DataSource
 class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
     
     weak var converterScreen: ConverterScreenControllerProtocol!
