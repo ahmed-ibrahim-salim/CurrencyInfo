@@ -82,8 +82,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
-    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "From", rate: 1))
-    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
+    let changeFromCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "From", rate: 1))
+    let changeToCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
     
     
     var from_TextFieldChanged = PublishSubject<String>()
@@ -94,7 +94,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         
         // MARK: Inputs
         
-        changeFromBtnName
+        changeFromCurrencyBtn
             .subscribe{
                 [unowned self] currencyRate in
                 self.viewModel.input.changeFromBtnName.on(currencyRate)
@@ -104,7 +104,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             }
             .disposed(by: disposeBag)
         
-        changeToBtnName
+        changeToCurrencyBtn
             .subscribe{
                 [unowned self] currencyRate in
                 self.viewModel.input.changeToBtnName.on(currencyRate)
@@ -115,14 +115,13 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .disposed(by: disposeBag)
         
         from_TextFieldChanged
-            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe{
              [unowned self] string in
                 
                 print(string)
                 do{
-                    let fromValue = try changeFromBtnName.value().rate
-                    let toValue = try changeToBtnName.value().rate
+                    let fromValue = try changeFromCurrencyBtn.value().rate
+                    let toValue = try changeToCurrencyBtn.value().rate
                     
                     let decimalNum = viewModel.getCurrencyBy(entry: string.element,
                                                              fromRate: fromValue,
@@ -145,8 +144,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 
                 print(string)
                 do{
-                    let fromValue = try changeToBtnName.value().rate
-                    let toValue = try changeFromBtnName.value().rate
+                    let fromValue = try changeToCurrencyBtn.value().rate
+                    let toValue = try changeFromCurrencyBtn.value().rate
                     
                     let decimalNum = viewModel.getCurrencyBy(entry: string.element,
                                                              fromRate: fromValue,
@@ -293,13 +292,13 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     // MARK: Actions
 
     func swapRates() throws{
-        let fromRate = try changeFromBtnName.value()
-        let toRate = try changeToBtnName.value()
+        let fromRate = try changeFromCurrencyBtn.value()
+        let toRate = try changeToCurrencyBtn.value()
         
         if fromRate.iso != "From" && toRate.iso != "To"{
-            changeFromBtnName.onNext(toRate)
+            changeFromCurrencyBtn.onNext(toRate)
             
-            changeToBtnName.onNext(fromRate)
+            changeToCurrencyBtn.onNext(fromRate)
             
             // updating
             updateRatesValues()

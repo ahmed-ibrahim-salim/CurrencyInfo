@@ -19,8 +19,8 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     var currencyList: [CurrencyRate] { get set}
     
     
-    var changeFromBtnName: BehaviorSubject<CurrencyRate> {get}
-    var changeToBtnName: BehaviorSubject<CurrencyRate> {get}
+    var changeFromCurrencyBtn: BehaviorSubject<CurrencyRate> {get}
+    var changeToCurrencyBtn: BehaviorSubject<CurrencyRate> {get}
 
     
     var from_TextFieldChanged: PublishSubject<String> {get}
@@ -88,10 +88,10 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
         let currencyForChosenBtn = converterScreen.currencyList[indexPath.row]
         if tableView == converterScreen!.fromCurrencyTable{
             
-            converterScreen.changeFromBtnName.onNext(currencyForChosenBtn)
+            converterScreen.changeFromCurrencyBtn.onNext(currencyForChosenBtn)
         }else{
 
-            converterScreen.changeToBtnName.onNext(currencyForChosenBtn)
+            converterScreen.changeToCurrencyBtn.onNext(currencyForChosenBtn)
         }
         
     }
