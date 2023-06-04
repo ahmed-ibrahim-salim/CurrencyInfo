@@ -120,53 +120,32 @@ class ConverterScreenViewModel {
                        fromRate: Double,
                        toRate: Double)->Decimal{
         
-        if let string = entry,
-            let decimal = Decimal(string: string){
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
 
+        if let string = entry,
+           let decimal = Decimal(string: string){
+            
             let fromRate = Decimal(fromRate)
             let toRate = Decimal(toRate)
-                        
-            return (decimal / fromRate) * toRate
-            //
+            
+            let result = (decimal / fromRate) * toRate
+            
+            let formattedString = formatter.string(from: NSDecimalNumber(decimal: result))!
+            
+            return Decimal(string: formattedString)!
             //        200 / 3.2 = 62.5
             //        62.5 * 1.5 = 93.75
             
-//            return decimal * 2
-
         }else{
             return Decimal()
         }
         
         
     }
-//    private func getConversionResult(from: Currency,
-//                                 to: Currency,
-//                                 amount: Double) throws -> Double?{
-//        var result = 0.0
-//
-//        if let rateForFirstCurrency = rates[from.rawValue],
-//            let rateForSecondCurrency = rates[from.rawValue]{
-//
-//              //  28.5       = 25     * 1.223
-//            let amountInEuro = amount * rateForFirstCurrency
-//
-//            //    1500                 =  28.5        * 32.90
-//            let amountInSecondCurrency = amountInEuro * rateForSecondCurrency
-//
-//            result = amountInSecondCurrency
-//        }else{
-//
-//            guard let _ = rates[from.rawValue] else{
-//                throw CurrencyRateError.firstCurrencyRateIsMissing
-//            }
-//
-//            guard let _ = rates[to.rawValue] else{
-//                throw CurrencyRateError.secondCurrencyRateIsMissing
-//            }
-//        }
-//
-//        return result
-//    }
+
     
 }
 

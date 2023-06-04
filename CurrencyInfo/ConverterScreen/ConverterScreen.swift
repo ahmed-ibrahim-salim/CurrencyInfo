@@ -82,8 +82,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
-    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 3.2))
-    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "KZC", rate: 1.5))
+    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 1))
+    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "KZC", rate: 1))
     
     
     var from_TextFieldChanged = PublishSubject<String>()
