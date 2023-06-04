@@ -137,8 +137,8 @@ final class ConverterScreenTests: XCTestCase {
         }
         
         
-        print(actions)
-        XCTAssertTrue(actions.contains("reverseAction:"))
+        print(actions, "my new action")
+        XCTAssertTrue(actions.contains("swapRatesAction:"))
     }
     func test_toBtnHasFromAction(){
         let toBtn: UIButton = sut.toBtn
@@ -361,7 +361,7 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertFalse(shouldNotAllowMoreThanOneDecimalPoint, "only one decimal point is allowed")
     }
     
-    func test_FromTextField_PushesEntryTONextField(){
+    func test_FromTextField_PushesCalculatedRateTo_TO_TextField(){
         guard let fromTextField = sut.fromCurrencyTxtFiled else{
             XCTFail()
             return
@@ -371,11 +371,8 @@ final class ConverterScreenTests: XCTestCase {
             return
         }
         
-        
-        
         sut.changeFromBtnName.onNext(CurrencyRate(iso: "USD", rate: 3.2))
         sut.changeToBtnName.onNext(CurrencyRate(iso: "KZC", rate: 1.5))
-
 //
 //        200 / 3.2 = 62.5
 //        62.5 * 1.5 = 93.75
@@ -389,6 +386,48 @@ final class ConverterScreenTests: XCTestCase {
         
     }
 
+    
+    func test_To_TextField_PushesCalculatedRateTO_From_TextField(){
+        guard let fromTextField = sut.fromCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        guard let toTextField = sut.toCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        
+        sut.changeFromBtnName.onNext(CurrencyRate(iso: "USD", rate: 3.2))
+        sut.changeToBtnName.onNext(CurrencyRate(iso: "KZC", rate: 1.5))
+//
+//        200 / 1.5 = 133.33
+        // 133.33 * 3.2 = 426.67
+
+        let entry = "200"
+        
+        toTextField.text = entry
+        toTextField.delegate?.textFieldDidChangeSelection!(toTextField)
+                
+        XCTAssertEqual(fromTextField.text, "426.67")
+        
+    }
+    
+    func test_CanSwapRates()throws{
+        // given
+        let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
+        let toCurrency = CurrencyRate(iso: "USD", rate: 3.2)
+
+        sut.changeFromBtnName.onNext(fromCurrency)
+        sut.changeToBtnName.onNext(toCurrency)
+
+        // when
+        sut.reverseBtn.sendActions(for: .touchUpInside)
+        
+        let fromValue = try sut.changeFromBtnName.value()
+       
+        XCTAssertEqual(fromValue.iso, "USD")
+//        sut.swapRates()
+    }
 }
 
 // MARK: Mock

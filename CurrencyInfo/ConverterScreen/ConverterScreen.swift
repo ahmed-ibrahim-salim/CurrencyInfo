@@ -29,10 +29,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(didBecomeActiveThenRefresh),
-                                                       name: UIApplication.didBecomeActiveNotification,
-                                                       object: nil)
+//                NotificationCenter.default.addObserver(self,
+//                                                       selector: #selector(didBecomeActiveThenRefresh),
+//                                                       name: UIApplication.didBecomeActiveNotification,
+//                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -88,6 +88,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var from_TextFieldChanged = PublishSubject<String>()
     
+    var to_TextFieldChanged = PublishSubject<String>()
+    
     //  MARK: ViewModel Binding
     func bindViewModel() {
         
@@ -125,6 +127,32 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .disposed(by: disposeBag)
         
         
+        
+        
+        to_TextFieldChanged
+            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+            .subscribe{
+             [unowned self] string in
+                
+                print(string)
+                do{
+                    let fromValue = try changeToBtnName.value().rate
+                    let toValue = try changeFromBtnName.value().rate
+                    
+                    let decimalNum = viewModel.getCurrencyBy(entry: string.element,
+                                                             fromRate: fromValue,
+                                                             toRate: toValue)
+                    
+                    viewModel.input.to_TextFieldChanged.onNext(decimalNum)
+                }catch{
+                    print(error)
+                }
+                
+                
+            }
+            .disposed(by: disposeBag)
+        
+        
         //MARK: outputs
         viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
             self.currencyList = currencyList
@@ -153,6 +181,15 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 toCurrencyTxtFiled.text = decimal.description
             }.disposed(by: disposeBag)
 
+        
+        viewModel.output.to_TextFieldChanged
+            .drive{
+                [unowned self] decimal in
+                
+                fromCurrencyTxtFiled.text = decimal.description
+            }.disposed(by: disposeBag)
+        
+//        to_TextFieldChangedDriver
     }
 
     var fromCurrencyTable: UITableView! = {
@@ -248,7 +285,21 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     // MARK: Actions
 
-    @IBAction func reverseAction(_ sender: Any) {
+    func swapRates() throws{
+        let fromRate = try changeFromBtnName.value()
+        let toRate = try changeToBtnName.value()
+        
+        changeFromBtnName.onNext(toRate)
+
+        changeToBtnName.onNext(fromRate)
+    }
+    
+    @IBAction func swapRatesAction(_ sender: Any) {
+        do{
+            try swapRates()
+        }catch{
+            print(error)
+        }
     }
     
     @IBAction func fromCurrencyAction(_ sender: Any) {

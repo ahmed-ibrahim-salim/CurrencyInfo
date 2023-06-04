@@ -99,6 +99,13 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
         return false
 
     }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField){
+        if let text = textField.text{
+//            to_TextFieldChanged
+            converterScreen.to_TextFieldChanged.onNext(text)
+        }
+    }
 }
 
 

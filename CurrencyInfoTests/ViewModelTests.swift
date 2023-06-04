@@ -111,6 +111,23 @@ final class ViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(rates.events, [.next(10, [currencyRate])])
     }
+    
+    func test_getCurrencyValue_ReturnsCorrectValue(){
+        // given
+        let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
+        let toCurrency = CurrencyRate(iso: "USD", rate: 3.2)
+
+//        200 / 1.5 = 133.33
+//        133.33 * 3.2 = 426.67
+
+        let entry = "200"
+        
+        // when
+        let reult = sut.getCurrencyBy(entry: entry, fromRate: fromCurrency.rate, toRate: toCurrency.rate)
+
+        // then
+        XCTAssertEqual(reult, 426.67)
+    }
 
 }
 

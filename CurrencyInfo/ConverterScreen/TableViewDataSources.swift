@@ -24,7 +24,7 @@ protocol ConverterScreenControllerProtocol: AnyObject{
 
     
     var from_TextFieldChanged: PublishSubject<String> {get}
-
+    var to_TextFieldChanged: PublishSubject<String> {get}
     
     func getNumberOfRows(table: UITableView)->Int
 
