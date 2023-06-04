@@ -411,7 +411,19 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertEqual(fromTextField.text, "426.67")
         
     }
-    
+    func test_SwapActionOnlyWorks_WhenBothRatesAreChosen()throws{
+        // given
+        let fromCurrency = CurrencyRate(iso: "From", rate: 1.5)
+
+        sut.changeFromBtnName.onNext(fromCurrency)
+
+        // when
+        sut.reverseBtn.sendActions(for: .touchUpInside)
+        let fromValue = try sut.changeFromBtnName.value()
+       
+        // Then
+        XCTAssertTrue(fromValue.iso == "From")
+    }
     func test_CanSwapRates()throws{
         // given
         let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)

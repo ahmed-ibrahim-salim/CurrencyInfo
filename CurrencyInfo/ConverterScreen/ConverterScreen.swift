@@ -29,10 +29,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-//                NotificationCenter.default.addObserver(self,
-//                                                       selector: #selector(didBecomeActiveThenRefresh),
-//                                                       name: UIApplication.didBecomeActiveNotification,
-//                                                       object: nil)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(didBecomeActiveThenRefresh),
+                                                       name: UIApplication.didBecomeActiveNotification,
+                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -82,25 +82,36 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
-    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 1))
-    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "KZC", rate: 1))
+    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "From", rate: 1))
+    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
     
     
     var from_TextFieldChanged = PublishSubject<String>()
     
     var to_TextFieldChanged = PublishSubject<String>()
     
-    //  MARK: ViewModel Binding
     func bindViewModel() {
         
         // MARK: Inputs
         
         changeFromBtnName
-            .subscribe(viewModel.input.changeFromBtnName)
+            .subscribe{
+                [unowned self] currencyRate in
+                self.viewModel.input.changeFromBtnName.on(currencyRate)
+                
+                self.updateRatesValues()
+                
+            }
             .disposed(by: disposeBag)
         
         changeToBtnName
-            .subscribe(viewModel.input.changeToBtnName)
+            .subscribe{
+                [unowned self] currencyRate in
+                self.viewModel.input.changeToBtnName.on(currencyRate)
+                
+                self.updateRatesValues()
+                
+            }
             .disposed(by: disposeBag)
         
         from_TextFieldChanged
@@ -125,9 +136,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 
             }
             .disposed(by: disposeBag)
-        
-        
-        
+                
         
         to_TextFieldChanged
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
@@ -147,8 +156,6 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 }catch{
                     print(error)
                 }
-                
-                
             }
             .disposed(by: disposeBag)
         
@@ -289,9 +296,23 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         let fromRate = try changeFromBtnName.value()
         let toRate = try changeToBtnName.value()
         
-        changeFromBtnName.onNext(toRate)
+        if fromRate.iso != "From" && toRate.iso != "To"{
+            changeFromBtnName.onNext(toRate)
+            
+            changeToBtnName.onNext(fromRate)
+            
+            // updating
+            updateRatesValues()
+        }
 
-        changeToBtnName.onNext(fromRate)
+    }
+    
+    private func updateRatesValues(){
+        guard let fromText = fromCurrencyTxtFiled.text else{
+            return
+        }
+        
+        from_TextFieldChanged.onNext(fromText)
     }
     
     @IBAction func swapRatesAction(_ sender: Any) {
