@@ -82,6 +82,10 @@ final class DataSourcesTests: XCTestCase {
 // MARK: Mock
 
 fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol{
+    
+    
+    var from_TextFieldChanged = PublishSubject<String>()
+    
 
     var changeFromBtnName = PublishSubject<CurrencyRate>()
     

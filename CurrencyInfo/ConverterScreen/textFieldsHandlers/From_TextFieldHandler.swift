@@ -21,6 +21,12 @@ class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerPro
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
         
+        // only allow one decimal point, when adding another decimal
+        if let text = textField.text,
+           text.filter({ $0 == "." }).count == 1 && string == "."{
+            return false
+        }
+        
         let returnKeyChar = CharacterSet(charactersIn: "\n")
         
         //      allowing check if char passed is return key, so i can dismiss keyboard
@@ -29,17 +35,29 @@ class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerPro
         }
         
         let allowedNumbers = CharacterSet.decimalDigits
-
+        
         // allowing only numbers
         if let replacementTextIsNumber = string.rangeOfCharacter(from: allowedNumbers){
+            
             return true
-        }else if string != ""{
-            return false
+        }
+        
+        
+        if string == "." || string == ""{
+            return true
         }
             
-        return true
+        
+        return false
         
     }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField){
+        if let text = textField.text{
+            converterScreen.from_TextFieldChanged.onNext(text)
+        }
+    }
+
 }
 
 class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProtocol{
@@ -50,6 +68,13 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
         
+        
+        // only allow one decimal point, when adding another decimal
+        if let text = textField.text,
+           text.filter({ $0 == "." }).count == 1 && string == "."{
+            return false
+        }
+        
         let returnKeyChar = CharacterSet(charactersIn: "\n")
         
         //      allowing check if char passed is return key, so i can dismiss keyboard
@@ -58,15 +83,20 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
         }
         
         let allowedNumbers = CharacterSet.decimalDigits
-
+        
         // allowing only numbers
         if let replacementTextIsNumber = string.rangeOfCharacter(from: allowedNumbers){
+            
             return true
-        }else if string != ""{
-            return false
+        }
+        
+        
+        if string == "." || string == ""{
+            return true
         }
             
-        return true
+        
+        return false
 
     }
 }

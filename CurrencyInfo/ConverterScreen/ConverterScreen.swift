@@ -85,6 +85,9 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     let changeFromBtnName = PublishSubject<CurrencyRate>()
     let changeToBtnName = PublishSubject<CurrencyRate>()
     
+    
+    var from_TextFieldChanged = PublishSubject<String>()
+    
     //  MARK: ViewModel Binding
     func bindViewModel() {
         
@@ -98,6 +101,18 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .subscribe(viewModel.input.changeToBtnName)
             .disposed(by: disposeBag)
         
+        from_TextFieldChanged
+            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+            .subscribe{
+             [unowned self] string in
+                
+                print(string)
+                
+                let decimalNum = viewModel.numberIn2(str: string.element)
+                
+                viewModel.input.from_TextFieldChanged.onNext(decimalNum)
+            }
+            .disposed(by: disposeBag)
         
         
         //MARK: outputs
@@ -119,6 +134,15 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .drive{[unowned self] currencyRate in
             self.toBtn.setTitle(currencyRate.iso, for: .normal)
             }.disposed(by: disposeBag)
+        
+        
+        viewModel.output.from_TextFieldChanged
+            .drive{
+                [unowned self] decimal in
+                
+                toCurrencyTxtFiled.text = decimal.description
+            }.disposed(by: disposeBag)
+
     }
 
     var fromCurrencyTable: UITableView! = {

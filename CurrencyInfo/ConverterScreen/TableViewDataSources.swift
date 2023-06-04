@@ -23,6 +23,8 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     var changeToBtnName: PublishSubject<CurrencyRate> {get}
 
     
+    var from_TextFieldChanged: PublishSubject<String> {get}
+
     
     func getNumberOfRows(table: UITableView)->Int
 
