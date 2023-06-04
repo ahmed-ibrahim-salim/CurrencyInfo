@@ -110,28 +110,31 @@ class ConverterScreenViewModel {
     
     let from_TextFieldChanged: PublishSubject<Decimal>
     
-    // MARK: TableHelper
     
-//    private func change_FromBtn_Name(_ name: String,
-//                                     btn: UIButton){
-////        btn.setTitle(name, for: .normal)
-//        
-//        output.fromBtnName.asDriver{
-//            error in
-//            
-//            return .just(name)
-//        }
-//    }
+    let baseCurrency = CurrencyRate(iso: "EUR", rate: 1.0)
 
-    func numberIn2(str: String?)->Decimal{
+    // MARK: TableHelper
+
+    
+    func getCurrencyBy(entry: String?,
+                       fromRate: Double,
+                       toRate: Double)->Decimal{
         
-        if let string = str,
+        if let string = entry,
             let decimal = Decimal(string: string){
-            return decimal * 2
+
+            let fromRate = Decimal(fromRate)
+            let toRate = Decimal(toRate)
+                        
+            return (decimal / fromRate) * toRate
+            //
+            //        200 / 3.2 = 62.5
+            //        62.5 * 1.5 = 93.75
+            
+//            return decimal * 2
 
         }else{
             return Decimal()
-//            showAlert
         }
         
         

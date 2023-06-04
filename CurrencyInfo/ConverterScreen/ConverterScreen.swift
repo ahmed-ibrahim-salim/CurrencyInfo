@@ -82,8 +82,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
-    let changeFromBtnName = PublishSubject<CurrencyRate>()
-    let changeToBtnName = PublishSubject<CurrencyRate>()
+    let changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 3.2))
+    let changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "KZC", rate: 1.5))
     
     
     var from_TextFieldChanged = PublishSubject<String>()
@@ -107,10 +107,20 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
              [unowned self] string in
                 
                 print(string)
+                do{
+                    let fromValue = try changeFromBtnName.value().rate
+                    let toValue = try changeToBtnName.value().rate
+                    
+                    let decimalNum = viewModel.getCurrencyBy(entry: string.element,
+                                                             fromRate: fromValue,
+                                                             toRate: toValue)
+                    
+                    viewModel.input.from_TextFieldChanged.onNext(decimalNum)
+                }catch{
+                    print(error)
+                }
                 
-                let decimalNum = viewModel.numberIn2(str: string.element)
                 
-                viewModel.input.from_TextFieldChanged.onNext(decimalNum)
             }
             .disposed(by: disposeBag)
         

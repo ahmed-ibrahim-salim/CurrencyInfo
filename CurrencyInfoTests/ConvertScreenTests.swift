@@ -339,6 +339,28 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertFalse(shouldNotAllowWhiteSpaceSecondTextField, "Return key should be allowed")
     }
     
+    func test_TextFiledsOnlyAcceptsOneDecimalPoint(){
+        guard let fromTextField = sut.fromCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        guard let toTextField = sut.toCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+
+        fromTextField.text = "1.00"
+        
+        let decimalPoint = "."
+        
+        guard let shouldNotAllowMoreThanOneDecimalPoint = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: decimalPoint) else{
+            
+            XCTFail()
+            return
+        }
+        XCTAssertFalse(shouldNotAllowMoreThanOneDecimalPoint, "only one decimal point is allowed")
+    }
+    
     func test_FromTextField_PushesEntryTONextField(){
         guard let fromTextField = sut.fromCurrencyTxtFiled else{
             XCTFail()
@@ -349,18 +371,21 @@ final class ConverterScreenTests: XCTestCase {
             return
         }
         
-        let baseCurrency = CurrencyRate(iso: "EUR", rate: 1.0)
+        
         
         sut.changeFromBtnName.onNext(CurrencyRate(iso: "USD", rate: 3.2))
         sut.changeToBtnName.onNext(CurrencyRate(iso: "KZC", rate: 1.5))
 
+//
+//        200 / 3.2 = 62.5
+//        62.5 * 1.5 = 93.75
         
-        let entry = "1"
+        let entry = "200"
         
         fromTextField.text = entry
         fromTextField.delegate?.textFieldDidChangeSelection!(fromTextField)
                 
-        XCTAssertEqual(toTextField.text, entry)
+        XCTAssertEqual(toTextField.text, "93.75")
         
     }
 

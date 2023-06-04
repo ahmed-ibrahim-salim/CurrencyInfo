@@ -87,9 +87,9 @@ fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerPr
     var from_TextFieldChanged = PublishSubject<String>()
     
 
-    var changeFromBtnName = PublishSubject<CurrencyRate>()
+    var changeFromBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 1))
     
-    var changeToBtnName = PublishSubject<CurrencyRate>()
+    var changeToBtnName = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "USD", rate: 1))
     
     
     

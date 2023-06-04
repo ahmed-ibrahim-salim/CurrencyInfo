@@ -19,8 +19,8 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     var currencyList: [CurrencyRate] { get set}
     
     
-    var changeFromBtnName: PublishSubject<CurrencyRate> {get}
-    var changeToBtnName: PublishSubject<CurrencyRate> {get}
+    var changeFromBtnName: BehaviorSubject<CurrencyRate> {get}
+    var changeToBtnName: BehaviorSubject<CurrencyRate> {get}
 
     
     var from_TextFieldChanged: PublishSubject<String> {get}
