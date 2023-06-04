@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0265AEE2B906956AB3548B71 /* Pods_CurrencyInfo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F696883F0C485DA2C38DD9E /* Pods_CurrencyInfo.framework */; };
 		284C2E08523504F4CA7B63B2 /* Pods_CurrencyInfoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C68525378799EB23D3B88E77 /* Pods_CurrencyInfoTests.framework */; };
+		EF3AE9D32A2D211400FBC88A /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */; };
+		EF3AE9D52A2D224500FBC88A /* HistoricalDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D42A2D224500FBC88A /* HistoricalDataService.swift */; };
+		EF3AE9D72A2D24F900FBC88A /* HistoricalDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D62A2D24F900FBC88A /* HistoricalDataModel.swift */; };
+		EF3AE9D92A2D280700FBC88A /* NertworkCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D82A2D280700FBC88A /* NertworkCaller.swift */; };
 		EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04A92A269B71003D45AB /* AppDelegate.swift */; };
 		EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */; };
 		EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04AD2A269B71003D45AB /* ConverterScreen.swift */; };
@@ -50,6 +54,10 @@
 		B28A997C5F064822FFCB27B6 /* Pods-CurrencyInfoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyInfoTests.debug.xcconfig"; path = "Target Support Files/Pods-CurrencyInfoTests/Pods-CurrencyInfoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C4E418051A1453CDD075CA5E /* Pods-CurrencyInfoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyInfoTests.release.xcconfig"; path = "Target Support Files/Pods-CurrencyInfoTests/Pods-CurrencyInfoTests.release.xcconfig"; sourceTree = "<group>"; };
 		C68525378799EB23D3B88E77 /* Pods_CurrencyInfoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CurrencyInfoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		EF3AE9D42A2D224500FBC88A /* HistoricalDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataService.swift; sourceTree = "<group>"; };
+		EF3AE9D62A2D24F900FBC88A /* HistoricalDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataModel.swift; sourceTree = "<group>"; };
+		EF3AE9D82A2D280700FBC88A /* NertworkCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NertworkCaller.swift; sourceTree = "<group>"; };
 		EF3B04A62A269B71003D45AB /* CurrencyInfo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyInfo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF3B04A92A269B71003D45AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,7 +151,7 @@
 				EFD2695A2A274A7D006BE880 /* Extensions.swift */,
 				EFD2695C2A2758F2006BE880 /* Reachability */,
 				EF3B04BF2A26A319003D45AB /* Networking */,
-				EF3B04C42A26AAFA003D45AB /* ConverterScreen */,
+				EF3B04C42A26AAFA003D45AB /* Screens */,
 				EF3B04A92A269B71003D45AB /* AppDelegate.swift */,
 				EF3B04AB2A269B71003D45AB /* SceneDelegate.swift */,
 				EF3B04AF2A269B71003D45AB /* Main.storyboard */,
@@ -161,23 +169,25 @@
 				EFD269572A273EED006BE880 /* Requests */,
 				EF3B04BD2A269BCA003D45AB /* NetworkConstants.swift */,
 				EFD2695F2A275A81006BE880 /* ErrorResult.swift */,
+				EF3AE9D82A2D280700FBC88A /* NertworkCaller.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		EF3B04C42A26AAFA003D45AB /* ConverterScreen */ = {
+		EF3B04C42A26AAFA003D45AB /* Screens */ = {
 			isa = PBXGroup;
 			children = (
 				EFD91A9B2A2CD2BB00E7DC13 /* DetailsScreen */,
 				EFD91A9A2A2CD2A900E7DC13 /* HomeScreen */,
 			);
-			path = ConverterScreen;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		EF3B04C72A26B47F003D45AB /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				EF3B04C02A26A333003D45AB /* LatestRatesModel.swift */,
+				EF3AE9D62A2D24F900FBC88A /* HistoricalDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -194,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				EFD269582A273F17006BE880 /* LatestRates.swift */,
+				EF3AE9D42A2D224500FBC88A /* HistoricalDataService.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -221,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				EFD91A9C2A2CD2D400E7DC13 /* DetailViewController.swift */,
+				EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */,
 			);
 			path = DetailsScreen;
 			sourceTree = "<group>";
@@ -441,7 +453,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFD91A9D2A2CD2D400E7DC13 /* DetailViewController.swift in Sources */,
+				EF3AE9D92A2D280700FBC88A /* NertworkCaller.swift in Sources */,
+				EF3AE9D72A2D24F900FBC88A /* HistoricalDataModel.swift in Sources */,
 				EF3B04C12A26A333003D45AB /* LatestRatesModel.swift in Sources */,
+				EF3AE9D52A2D224500FBC88A /* HistoricalDataService.swift in Sources */,
 				EF3B04AE2A269B71003D45AB /* ConverterScreen.swift in Sources */,
 				EF3B04AA2A269B71003D45AB /* AppDelegate.swift in Sources */,
 				EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */,
@@ -449,6 +464,7 @@
 				EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */,
 				EFD269592A273F17006BE880 /* LatestRates.swift in Sources */,
 				EFD2695B2A274A7D006BE880 /* Extensions.swift in Sources */,
+				EF3AE9D32A2D211400FBC88A /* DetailViewModel.swift in Sources */,
 				EFD2695E2A275905006BE880 /* Reachability.swift in Sources */,
 				EF3B04BE2A269BCA003D45AB /* NetworkConstants.swift in Sources */,
 				EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */,

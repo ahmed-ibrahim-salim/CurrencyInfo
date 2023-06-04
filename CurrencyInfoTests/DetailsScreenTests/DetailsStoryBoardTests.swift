@@ -9,15 +9,47 @@ import XCTest
 @testable import CurrencyInfo
 
 final class StoryBoardTests: XCTestCase {
-
+    
+    var navigationController: UINavigationController!
+    var converterScreen: ConverterScreen!
+    var sut: DetailViewController!
+    
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        let storyboard = UIStoryboard(name: "Main",
+                                      bundle: nil)
+        navigationController = storyboard
+            .instantiateInitialViewController() as? UINavigationController
+        
+        converterScreen = navigationController.viewControllers[0] as? ConverterScreen
+        converterScreen.loadViewIfNeeded()
+        
+        converterScreen.detailsBtn.sendActions(for: .touchUpInside)
+        
+        RunLoop.current.run(until: Date())
+
+        sut = navigationController.viewControllers[1] as? DetailViewController
+        
+        sut.loadViewIfNeeded()
+        
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
+    func test_HasOtherCurrenciesTableView(){
+        let HasOtherCurrenciesTableView = sut.otherCurrenciesTableView.isDescendant(of: sut.view)
+        XCTAssertTrue(HasOtherCurrenciesTableView)
+    }
+    func test_HasHistoricalTableView(){
+        let HasHistoricalTableView = sut.historicalTableView.isDescendant(of: sut.view)
+        XCTAssertTrue(HasHistoricalTableView)
+    }
+    func test_HasCharView(){
+        let HasChartView = sut.charView.isDescendant(of: sut.view)
+        XCTAssertTrue(HasChartView)
+    }
 
 
 
