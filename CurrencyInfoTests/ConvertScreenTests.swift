@@ -242,6 +242,103 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertEqual(toBtnTitle, "EUR")
         
     }
+    
+    func test_TextFieldsKeyboardType_NumberPad(){
+        let fromTextFieldKeyboardType = sut.fromCurrencyTxtFiled.keyboardType
+        
+        XCTAssertEqual(fromTextFieldKeyboardType, .numberPad)
+
+        
+    }
+    func test_From_TextFieldDefaultEntry_isOne(){
+        let fromTextFieldTXT: String? = sut.fromCurrencyTxtFiled.text
+        
+        XCTAssertEqual(fromTextFieldTXT, "1")
+
+        
+    }
+    func test_TextFiledsOnlyAcceptNumbers(){
+        guard let fromTextField = sut.fromCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        guard let toTextField = sut.toCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+
+        let returnChar = "11"
+        
+        
+        let shouldAllowNumbers = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: returnChar)
+        
+        
+        let shouldAllowNumbersSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: returnChar)
+        
+        XCTAssertTrue(shouldAllowNumbers == true, "Return key should be allowed")
+        XCTAssertTrue(shouldAllowNumbersSecondTextField == true, "Return key should be allowed")
+
+    }
+    func test_TextFiledsDoesNotAcceptSpecialChar(){
+        guard let fromTextField = sut.fromCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        guard let toTextField = sut.toCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+
+        let specialChar = ",,,,"
+        
+        
+        guard let shouldNotAllowSpecialChar = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else{
+            
+            XCTFail()
+            return
+        }
+        
+        
+        guard let shouldNotAllowSpecialCharSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else{
+            
+            XCTFail()
+            return
+        }
+        
+        XCTAssertFalse(shouldNotAllowSpecialChar, "Return key should be allowed")
+        XCTAssertFalse(shouldNotAllowSpecialCharSecondTextField, "Return key should be allowed")
+
+    }
+    func test_TextFiledsDoesNotAcceptWhiteSpace(){
+        guard let fromTextField = sut.fromCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+        guard let toTextField = sut.toCurrencyTxtFiled else{
+            XCTFail()
+            return
+        }
+
+        let whiteSpace = " "
+        
+        
+        guard let shouldNotAllowWhiteSpace = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else{
+            
+            XCTFail()
+            return
+        }
+        
+        
+        guard let shouldNotAllowWhiteSpaceSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else{
+            
+            XCTFail()
+            return
+        }
+        
+        XCTAssertFalse(shouldNotAllowWhiteSpace, "Return key should be allowed")
+        XCTAssertFalse(shouldNotAllowWhiteSpaceSecondTextField, "Return key should be allowed")
+
+    }
 
 }
 

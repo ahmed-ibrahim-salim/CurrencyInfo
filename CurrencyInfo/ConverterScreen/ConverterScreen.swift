@@ -19,15 +19,20 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var tablesDataSource: TablesDataSource?
     
+    var from_TextFieldHandler: From_TextFieldHandler?
+    
+    var to_TextFieldHandler: To_TextFieldHandler?
+    
+    
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(didBecomeActiveThenRefresh),
-                                                       name: UIApplication.didBecomeActiveNotification,
-                                                       object: nil)
+//                NotificationCenter.default.addObserver(self,
+//                                                       selector: #selector(didBecomeActiveThenRefresh),
+//                                                       name: UIApplication.didBecomeActiveNotification,
+//                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -37,6 +42,22 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         viewModel = ConverterScreenViewModel(latestRatesService)
         
         bindViewModel()
+
+        setTextFieldsDelegates()
+    }
+    
+    func setTextFieldsDelegates(){
+        from_TextFieldHandler = From_TextFieldHandler()
+        to_TextFieldHandler =  To_TextFieldHandler()
+        
+        from_TextFieldHandler?.converterScreen = self
+        to_TextFieldHandler?.converterScreen = self
+        
+        
+        fromCurrencyTxtFiled.text = "1"
+        
+        fromCurrencyTxtFiled.delegate = from_TextFieldHandler
+        toCurrencyTxtFiled.delegate = to_TextFieldHandler
 
         
     }
@@ -61,8 +82,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var currencyList = [CurrencyRate]()
     
-    let changeFromBtnName = PublishSubject<String>()
-    let changeToBtnName = PublishSubject<String>()
+    let changeFromBtnName = PublishSubject<CurrencyRate>()
+    let changeToBtnName = PublishSubject<CurrencyRate>()
     
     //  MARK: ViewModel Binding
     func bindViewModel() {
@@ -77,6 +98,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .subscribe(viewModel.input.changeToBtnName)
             .disposed(by: disposeBag)
         
+        
+        
         //MARK: outputs
         viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
             self.currencyList = currencyList
@@ -87,12 +110,15 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         
         
         viewModel.output.fromBtnName
-            .drive(fromBtn.rx.title(for: .normal))
+            .drive{ [unowned self] currencyRate in
+                self.fromBtn.setTitle(currencyRate.iso, for: .normal)
+            }
             .disposed(by: disposeBag)
 
         viewModel.output.toBtnName
-            .drive(toBtn.rx.title(for: .normal))
-            .disposed(by: disposeBag)
+            .drive{[unowned self] currencyRate in
+            self.toBtn.setTitle(currencyRate.iso, for: .normal)
+            }.disposed(by: disposeBag)
     }
 
     var fromCurrencyTable: UITableView! = {
@@ -180,6 +206,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     @IBOutlet weak var detailsBtn: UIButton!
     @IBOutlet weak var fromCurrencyArrow: UIButton!
     @IBOutlet weak var toCurrencyArrow: UIButton!
+
     @IBOutlet weak var reverseBtn: UIButton!
     
     @IBOutlet weak var fromCurrencyTxtFiled: UITextField!

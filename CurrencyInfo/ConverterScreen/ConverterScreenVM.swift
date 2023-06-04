@@ -20,8 +20,8 @@ class ConverterScreenViewModel {
 
     struct Output{
         let rates: Driver<[CurrencyRate]>
-        let fromBtnName: Driver<String>
-        let toBtnName: Driver<String>
+        let fromBtnName: Driver<CurrencyRate>
+        let toBtnName: Driver<CurrencyRate>
 
         // Loading
 //        let isLoading: Driver<Bool>
@@ -35,9 +35,9 @@ class ConverterScreenViewModel {
     struct Input {
         let reload: PublishRelay<Void>
         
-        let changeFromBtnName: PublishSubject<String>
+        let changeFromBtnName: PublishSubject<CurrencyRate>
 
-        let changeToBtnName: PublishSubject<String>
+        let changeToBtnName: PublishSubject<CurrencyRate>
 //        let
     }
 //    private let viewDidRefreshSubject = PublishSubject<Void>()
@@ -73,14 +73,14 @@ class ConverterScreenViewModel {
             }
         
         
-        changeFromBtnName = PublishSubject<String>()
-        changeToBtnName = PublishSubject<String>()
+        changeFromBtnName = PublishSubject<CurrencyRate>()
+        changeToBtnName = PublishSubject<CurrencyRate>()
 
         let fromBtnName = changeFromBtnName
-            .asDriver(onErrorJustReturn: "From")
+            .asDriver(onErrorJustReturn: CurrencyRate(iso: "From", rate: 0.0))
         
         let toBtnName = changeToBtnName
-            .asDriver(onErrorJustReturn: "To")
+            .asDriver(onErrorJustReturn: CurrencyRate(iso: "From", rate: 0.0))
         
         // 1)
         input = Input(reload: reloadRelay,
@@ -93,22 +93,22 @@ class ConverterScreenViewModel {
                         error: errorRelay.asDriver(onErrorJustReturn: "An error happened"))
         
     }
-    let changeFromBtnName: PublishSubject<String>
-    let changeToBtnName: PublishSubject<String>
+    let changeFromBtnName: PublishSubject<CurrencyRate>
+    let changeToBtnName: PublishSubject<CurrencyRate>
 
     
     // MARK: TableHelper
     
-    private func change_FromBtn_Name(_ name: String,
-                                     btn: UIButton){
-//        btn.setTitle(name, for: .normal)
-        
-        output.fromBtnName.asDriver{
-            error in
-            
-            return .just(name)
-        }
-    }
+//    private func change_FromBtn_Name(_ name: String,
+//                                     btn: UIButton){
+////        btn.setTitle(name, for: .normal)
+//        
+//        output.fromBtnName.asDriver{
+//            error in
+//            
+//            return .just(name)
+//        }
+//    }
 
 
 //    private func getConversionResult(from: Currency,
