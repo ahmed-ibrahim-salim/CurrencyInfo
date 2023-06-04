@@ -119,11 +119,6 @@ class ConverterScreenViewModel {
     func getCurrencyBy(entry: String?,
                        fromRate: Double,
                        toRate: Double)->Decimal{
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
 
         if let string = entry,
            let decimal = Decimal(string: string){
@@ -131,11 +126,12 @@ class ConverterScreenViewModel {
             let fromRate = Decimal(fromRate)
             let toRate = Decimal(toRate)
             
-            let result = (decimal / fromRate) * toRate
+            var result = (decimal / fromRate) * toRate
             
-            let formattedString = formatter.string(from: NSDecimalNumber(decimal: result))!
+            var roundedResult = Decimal()
+            NSDecimalRound(&roundedResult, &result, 2, .bankers)
             
-            return Decimal(string: formattedString)!
+            return roundedResult
             //        200 / 3.2 = 62.5
             //        62.5 * 1.5 = 93.75
             

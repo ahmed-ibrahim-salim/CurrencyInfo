@@ -29,10 +29,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-//                NotificationCenter.default.addObserver(self,
-//                                                       selector: #selector(didBecomeActiveThenRefresh),
-//                                                       name: UIApplication.didBecomeActiveNotification,
-//                                                       object: nil)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(didBecomeActiveThenRefresh),
+                                                       name: UIApplication.didBecomeActiveNotification,
+                                                       object: nil)
         
 
         setupTableViewDataSources()
