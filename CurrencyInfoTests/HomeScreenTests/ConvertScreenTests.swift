@@ -415,6 +415,16 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertEqual(fromValue.iso, "USD")
 //        sut.swapRates()
     }
+    func test_PushDetailsViewController_IsPushed() {
+        
+        sut.detailsBtn.sendActions(for: .touchUpInside)
+        
+        RunLoop.current.run(until: Date())
+                
+        XCTAssertTrue(navigationController.viewControllers.count == 2)
+        
+    }
+    
 }
 
 // MARK: Mock

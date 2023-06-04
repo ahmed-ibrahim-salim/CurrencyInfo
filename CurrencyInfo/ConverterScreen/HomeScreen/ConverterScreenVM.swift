@@ -50,7 +50,7 @@ class ConverterScreenViewModel {
     }
 //    private let viewDidRefreshSubject = PublishSubject<Void>()
     
-    //MARK: Initialise
+    //MARK: Initializer
     init(
          _ latestRatesService: LatestRatesService
     ) {
@@ -154,17 +154,3 @@ class ConverterScreenViewModel {
     
 }
 
-
-extension Observable where Element: Any {
-    func startLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
-        return self.do(onNext: { _ in
-            loadingSubject.onNext(true)
-        })
-    }
-
-    func stopLoading(loadingSubject: PublishSubject<Bool>) -> Observable<Element> {
-        return self.do(onNext: { _ in
-            loadingSubject.onNext(false)
-        })
-    }
-}

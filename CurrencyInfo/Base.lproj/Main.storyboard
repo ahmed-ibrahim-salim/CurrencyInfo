@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bem-X9-2zZ">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -148,6 +149,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="667.93893129770993" y="0.0"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="Nmv-pT-hNR">
+            <objects>
+                <viewController storyboardIdentifier="DetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="GPN-la-Rgl" customClass="DetailViewController" customModule="CurrencyInfo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OnJ-Nq-XKf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dVf-v8-BkX">
+                                <rect key="frame" x="16" y="184" width="176" height="641"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LWq-Dk-ETJ">
+                                <rect key="frame" x="20" y="48" width="353" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="feB-i1-rDI">
+                                <rect key="frame" x="200" y="184" width="177" height="641"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="52h-bP-udR"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="LWq-Dk-ETJ" firstAttribute="top" secondItem="OnJ-Nq-XKf" secondAttribute="top" constant="48" id="8W0-nf-Qto"/>
+                            <constraint firstItem="52h-bP-udR" firstAttribute="trailing" secondItem="feB-i1-rDI" secondAttribute="trailing" constant="16" id="CYC-Qq-10N"/>
+                            <constraint firstItem="feB-i1-rDI" firstAttribute="top" secondItem="dVf-v8-BkX" secondAttribute="top" id="DMH-dK-VeS"/>
+                            <constraint firstItem="feB-i1-rDI" firstAttribute="bottom" secondItem="dVf-v8-BkX" secondAttribute="bottom" id="EQe-Hq-rzQ"/>
+                            <constraint firstItem="LWq-Dk-ETJ" firstAttribute="leading" secondItem="52h-bP-udR" secondAttribute="leading" constant="20" id="Rw6-T6-cHP"/>
+                            <constraint firstItem="dVf-v8-BkX" firstAttribute="top" secondItem="LWq-Dk-ETJ" secondAttribute="bottom" constant="8" symbolic="YES" id="Saf-KT-f2T"/>
+                            <constraint firstItem="feB-i1-rDI" firstAttribute="leading" secondItem="dVf-v8-BkX" secondAttribute="trailing" constant="8" symbolic="YES" id="Wju-kU-Mqa"/>
+                            <constraint firstItem="dVf-v8-BkX" firstAttribute="width" secondItem="OnJ-Nq-XKf" secondAttribute="width" multiplier="0.447837" id="WvG-ba-kNn"/>
+                            <constraint firstItem="feB-i1-rDI" firstAttribute="leading" secondItem="dVf-v8-BkX" secondAttribute="trailing" constant="8" symbolic="YES" id="a0i-3e-O3g"/>
+                            <constraint firstAttribute="bottom" secondItem="dVf-v8-BkX" secondAttribute="bottom" constant="27" id="agN-ID-for"/>
+                            <constraint firstItem="52h-bP-udR" firstAttribute="trailing" secondItem="LWq-Dk-ETJ" secondAttribute="trailing" constant="20" id="ryO-Rl-Rhc"/>
+                            <constraint firstItem="dVf-v8-BkX" firstAttribute="leading" secondItem="52h-bP-udR" secondAttribute="leading" constant="16" id="szb-gu-T3J"/>
+                            <constraint firstItem="LWq-Dk-ETJ" firstAttribute="height" secondItem="OnJ-Nq-XKf" secondAttribute="height" multiplier="0.150235" id="tmC-nV-Wbr"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="charView" destination="LWq-Dk-ETJ" id="R3C-fj-V2a"/>
+                        <outlet property="historicalTableView" destination="dVf-v8-BkX" id="tbV-kj-6Hw"/>
+                        <outlet property="otherCurrenciesTableView" destination="feB-i1-rDI" id="Gbr-wa-76I"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pfs-V0-wNb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1327.4809160305342" y="3.5211267605633805"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Zw9-uK-PI2">

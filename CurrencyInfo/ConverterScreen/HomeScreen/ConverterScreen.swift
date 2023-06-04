@@ -29,10 +29,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(didBecomeActiveThenRefresh),
-                                                       name: UIApplication.didBecomeActiveNotification,
-                                                       object: nil)
+//                NotificationCenter.default.addObserver(self,
+//                                                       selector: #selector(didBecomeActiveThenRefresh),
+//                                                       name: UIApplication.didBecomeActiveNotification,
+//                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -195,9 +195,9 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 fromCurrencyTxtFiled.text = decimal.description
             }.disposed(by: disposeBag)
         
-//        to_TextFieldChangedDriver
     }
 
+    // MARK: UIElements
     var fromCurrencyTable: UITableView! = {
         
         let mainTableView = UITableView(frame: CGRectZero)
@@ -290,7 +290,6 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     @IBOutlet weak var toCurrencyTxtFiled: UITextField!
     
     // MARK: Actions
-
     func swapRates() throws{
         let fromRate = try changeFromCurrencyBtn.value()
         let toRate = try changeToCurrencyBtn.value()
@@ -336,6 +335,9 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     }
     
     @IBAction func openDetailsAction(_ sender: Any) {
+        let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController")
+        
+        navigationController?.pushViewController(detailsVc, animated: true)
     }
 }
 
