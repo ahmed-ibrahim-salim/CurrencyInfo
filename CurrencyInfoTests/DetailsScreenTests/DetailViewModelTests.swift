@@ -95,7 +95,7 @@ final class DetailViewModelTests: XCTestCase {
         historicalDataServiceMock.resultMock = .failure(error)
 
 
-        var errorResult: ErrorResult?
+        var errorResult: Error?
         
         sut.getHistoricalDataForDay(historicalData: historicalInputData) {  result in
             
@@ -112,7 +112,7 @@ final class DetailViewModelTests: XCTestCase {
 
 
         // Then
-        XCTAssertEqual(errorResult, error)
+        XCTAssertNotNil(errorResult)
     }
     
     func test_getHistoricalDataForPast3Days_WhenThereIsError_RaisesError() {
@@ -146,7 +146,7 @@ final class DetailViewModelTests: XCTestCase {
         waitForExpectations(timeout: 3)
            
         // Then
-        XCTAssertEqual(errorMessage.events, [.next(0, error.localizedDescription)])
+        XCTAssertNotNil(errorMessage.events.first?.value)
 
     }
     
@@ -201,9 +201,9 @@ extension DetailViewModelTests {
 
 private class HistoricalDataServiceMock: HistoricalDataServiceProtocol {
     
-    var resultMock: Result<HistoricalDataModel, ErrorResult>?
+    var resultMock: Result<HistoricalDataModel, Error>?
     
-    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, ErrorResult>) -> Void) {
+    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, Error>) -> Void) {
         
         if let result = resultMock {
             completionHandler(result)

@@ -148,5 +148,17 @@ class ConverterScreenViewModel {
         
     }
 
-    
+    func getDecimalRatesFrom(_ fromRate: CurrencyRate,
+                             currencyList: [CurrencyRate]) -> [DecimalResult] {
+        
+        let decimalResults = currencyList.map {[unowned self, fromRate] currencyRate in
+            
+            let resultValue = getCurrencyBy(entry: "1",
+                                                      fromRate: fromRate.rate, toRate: currencyRate.rate)
+            
+            return DecimalResult(orginalISO: currencyRate.iso, result: resultValue)
+        }
+        
+        return decimalResults
+    }
 }

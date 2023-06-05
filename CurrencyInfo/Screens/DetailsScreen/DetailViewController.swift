@@ -30,6 +30,7 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
         
         callApi()
         
+        fromCurrencyLbl.text = "From \(fromCurrency.iso)"
         
                 
     }
@@ -41,15 +42,29 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
         }
     }
     
+    var decimalRatesFrom = [DecimalResult]() {
+        didSet {
+            if let otherCurrenciesTableView = otherCurrenciesTableView {
+                otherCurrenciesTableView.reloadData()
+            }
+
+        }
+    }
+    
+    var otherCurrenciesTableDataSource: OtherCurrenciesTableDataSource!
+    
     func setupTableViewDataSources() {
         historicalDataTableDataSource = HistoricalDataTableDataSource()
         historicalDataTableDataSource!.detailsScreen = self
         
+        otherCurrenciesTableDataSource = OtherCurrenciesTableDataSource()
+        otherCurrenciesTableDataSource.detailsScreen = self
+        
         historicalTableView.delegate = historicalDataTableDataSource
         historicalTableView.dataSource = historicalDataTableDataSource
         
-//        otherCurrenciesTableView.delegate = tablesDataSource
-//        otherCurrenciesTableView.dataSource = tablesDataSource
+        otherCurrenciesTableView.delegate = otherCurrenciesTableDataSource
+        otherCurrenciesTableView.dataSource = otherCurrenciesTableDataSource
         
     }
     
@@ -100,6 +115,7 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
         
     }
 
+    @IBOutlet weak var fromCurrencyLbl: UILabel!
     let disposeBag = DisposeBag()
     @IBOutlet weak var otherCurrenciesTableView: UITableView!
     
@@ -112,9 +128,10 @@ protocol DetailViewControllerProtocol: AnyObject {
     var historicalData: [HistoryDataItem] {get}
     var fromCurrency: CurrencyRate! {get}
     var toCurrency: CurrencyRate! {get}
-    
+    var decimalRatesFrom: [DecimalResult] {get}
 }
 
+// MARK: Data sources
 class HistoricalDataTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     weak var detailsScreen: DetailViewControllerProtocol!
@@ -140,6 +157,52 @@ class HistoricalDataTableDataSource: NSObject, UITableViewDelegate, UITableViewD
             let roundedto = round(num: toRate)
             
             cell.textLabel?.text = "\(fromCurrncyIso): \(roundedFro) \(toCurrncyIso): \(roundedto)"
+
+        }
+        
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+    func round(num: Double) -> Decimal {
+        
+        var fromRate = Decimal(num)
+        var roundedResult = Decimal()
+        NSDecimalRound(&roundedResult, &fromRate, 2, .bankers)
+        
+        return roundedResult
+    }
+}
+
+
+// MARK: Data sources
+class OtherCurrenciesTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var detailsScreen: DetailViewControllerProtocol!
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return detailsScreen.decimalRatesFrom.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        let cell = UITableViewCell()
+        
+        if 0..<detailsScreen.decimalRatesFrom.count ~= indexPath.row {
+            
+            let iso = detailsScreen.decimalRatesFrom[indexPath.row].orginalISO
+            let decimalResult = detailsScreen.decimalRatesFrom[indexPath.row].result
+            
+//            let fromRate = detailsScreen.decimalRatesFrom[indexPath.row].fromCurrency.rate
+//            let toRate = detailsScreen.decimalRatesFrom[indexPath.row].toCurrencyRate.rate
+//
+
+            
+            cell.textLabel?.text = "\(iso): \(decimalResult)"
+//            "\(fromCurrncyIso): \(roundedFro) \(toCurrncyIso): \(roundedto)"
 
         }
         

@@ -352,11 +352,14 @@ extension ConverterScreen {
         }
         
         do {
-            let fromRate = CurrencyRate(iso: "EUR", rate: 1.0)
-            let toRate = CurrencyRate(iso: "AED", rate: 1.2)
             
-//            let fromRate = try changeFromCurrencyBtn.value()
-//            let toRate = try changeToCurrencyBtn.value()
+//            let fromRate = CurrencyRate(iso: "KZC", rate: 2.0)
+//            let toRate = CurrencyRate(iso: "AED", rate: 1.2)
+//
+
+            
+            let fromRate = try changeFromCurrencyBtn.value()
+            let toRate = try changeToCurrencyBtn.value()
 //            
             guard fromRate.iso != "From" && toRate.iso != "To" else {
                 self.showAlert(message: "Please choose currencies to see details")
@@ -367,12 +370,23 @@ extension ConverterScreen {
                 return
             }
             
+            
             detailsVc.fromCurrency = fromRate
             detailsVc.toCurrency = toRate
+            
+            detailsVc.decimalRatesFrom = viewModel.getDecimalRatesFrom(fromRate, currencyList: currencyList)
+            
             navigationController?.pushViewController(detailsVc, animated: true)
             
         } catch {
             self.showAlert(message: "Please choose currencies to see details")
         }
     }
+    
+    
+}
+
+struct DecimalResult {
+    let orginalISO: String
+    let result: Decimal
 }
