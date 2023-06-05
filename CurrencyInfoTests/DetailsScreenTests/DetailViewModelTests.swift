@@ -100,7 +100,7 @@ final class DetailViewModelTests: XCTestCase {
         sut.getHistoricalDataForDay(historicalData: historicalInputData) {  result in
             
             switch result {
-            case .success(let data):
+            case .success:
                break
             case .failure(let innerError):
                 errorResult = innerError
@@ -185,17 +185,23 @@ final class DetailViewModelTests: XCTestCase {
 extension DetailViewModelTests {
     func getHistoryDataItems() -> [HistoryDataItem] {
         var currenciesRates = [CurrencyRate]()
-        for (key, value) in historicalOutputData.rates {
-            let currenctRate = CurrencyRate(iso: key, rate: value)
-            currenciesRates.append(currenctRate)
+        
+        if let rates = historicalOutputData.rates {
+            for (key, value) in rates {
+                let currenctRate = CurrencyRate(iso: key, rate: value)
+                currenciesRates.append(currenctRate)
+            }
+            
+            let historyDataItem = HistoryDataItem(date: historicalOutputData.date ?? "",
+                                                  toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
+            let historyDataItems = Array(repeating: historyDataItem, count: 3)
+
+            return historyDataItems
+
+        } else {
+            return []
         }
         
-        let historyDataItem = HistoryDataItem(date: historicalOutputData.date,
-                                              toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
-        
-        let historyDataItems = Array(repeating: historyDataItem, count: 3)
-        
-        return historyDataItems
     }
 }
 

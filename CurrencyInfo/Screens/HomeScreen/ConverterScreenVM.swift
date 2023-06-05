@@ -11,6 +11,7 @@ import RxRelay
 import RxCocoa
 
 class ConverterScreenViewModel {
+    weak var controller: ConverterScreen!
     
     let latestRatesService: LatestRatesService
     let disposeBag = DisposeBag()
@@ -26,9 +27,6 @@ class ConverterScreenViewModel {
         let fromTextFieldChanged: Driver<Decimal>
         let toTextFieldChanged: Driver<Decimal>
         
-        // Loading
-//        let isLoading: Driver<Bool>
-        // Error
         let error: Driver<String>
 
     }
@@ -46,9 +44,7 @@ class ConverterScreenViewModel {
         
         let toTextFieldChanged: PublishSubject<Decimal>
         
-//        let
     }
-//    private let viewDidRefreshSubject = PublishSubject<Void>()
     
     // MARK: Initializer
     init(
@@ -123,6 +119,7 @@ class ConverterScreenViewModel {
     
     let baseCurrency = CurrencyRate(iso: "EUR", rate: 1.0)
 
+    // MARK: Helpers
     
     func getCurrencyBy(entry: String?,
                        fromRate: Double,
@@ -160,5 +157,24 @@ class ConverterScreenViewModel {
         }
         
         return decimalResults
+    }
+    func shouldNavigateToDetailsScreen(fromRate: CurrencyRate,
+                                       toRate: CurrencyRate,
+                                       detailsVc: DetailViewController, currencyList: [CurrencyRate]) -> Bool {
+        guard fromRate.iso != "From" && toRate.iso != "To" else {
+            controller.showAlert(message: "Please choose currencies to see details")
+            return false
+        }
+        guard fromRate.iso != toRate.iso else {
+            controller.showAlert(message: "Please choose different currencies to see details")
+            return false
+        }
+        
+        detailsVc.fromCurrency = fromRate
+        detailsVc.toCurrency = toRate
+        
+        detailsVc.decimalRatesFrom = getDecimalRatesFrom(fromRate, currencyList: currencyList)
+        
+        return true
     }
 }

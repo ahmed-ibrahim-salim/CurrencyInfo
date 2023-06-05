@@ -22,7 +22,7 @@ class DetailViewModel: NSObject {
     
     let errorMessage = PublishSubject<String>()
     
-    
+    // MARK: Dispatch group
     private let group = DispatchGroup()
 
     func getHistoricalDataLast3Days(_ historicalRequestData: HistoricalRequestData,
@@ -72,31 +72,29 @@ class DetailViewModel: NSObject {
         
         group.notify(queue: .main) {
             historyDataItems = collection.map {historicalDataModel in
-//                date
-//                [rate, rate]
+
                 
                 var currenciesRates = [CurrencyRate]()
-                for (key, value) in historicalDataModel.rates {
-                    let currenctRate = CurrencyRate(iso: key, rate: value)
-                    currenciesRates.append(currenctRate)
+                
+                if let rates = historicalDataModel.rates {
+                    for (key, value) in rates {
+                        let currenctRate = CurrencyRate(iso: key, rate: value)
+                        currenciesRates.append(currenctRate)
+                    }
+                    
+                    let historyDataItem = HistoryDataItem(date: historicalDataModel.date ?? "no date", toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
+                    
+                    return historyDataItem
+                } else {
+                  return nil
                 }
-                
-                let first = currenciesRates.first!
-                
-                let secod = currenciesRates[1]
-                
-                
-                let historyDataItem = HistoryDataItem(date: historicalDataModel.date, toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
-                
-                return historyDataItem
             }.compactMap {$0}
             
-            
-            refresh()
+            refreshView()
            
         }
         
-        func refresh() {
+        func refreshView() {
             isLoading.onNext(false)
 
             if !errors.isEmpty {
@@ -110,6 +108,7 @@ class DetailViewModel: NSObject {
 
     }
     
+    // MARK: Helpers
     private func getHistoricalDataWithDay(dayValue: Int,
                                           _ historicalRequestData: HistoricalRequestData) -> HistoricalRequestData {
         

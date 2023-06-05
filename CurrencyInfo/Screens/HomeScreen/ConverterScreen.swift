@@ -10,12 +10,10 @@ import RxSwift
 
 class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
-    
     // MARK: Vars
     var viewModel: ConverterScreenViewModel!
     var availableCurrencies: [CurrencyRate] = []
     let disposeBag = DisposeBag()
-    
     
     var tablesDataSource: TablesDataSource?
     
@@ -23,29 +21,169 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var toTextFieldHandler: ToTextFieldHandler?
     
-    
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(didBecomeActiveThenRefresh),
-                                                       name: UIApplication.didBecomeActiveNotification,
-                                                       object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didBecomeActiveThenRefresh),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
         
-
         setupTableViewDataSources()
         
         let latestRatesService = LatestRates()
         
         viewModel = ConverterScreenViewModel(latestRatesService)
         
-        bindViewModel()
+        viewModel.controller = self
+        
+        bindInputs()
 
+        bindOutputs()
+        
         setTextFieldsDelegates()
     }
     
+    @objc private func didBecomeActiveThenRefresh() {
+        viewModel.input.reload.accept(())
+    }
+    
+    var currencyList = [CurrencyRate]()
+    
+    let changeFromCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "From", rate: 1))
+    let changeToCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
+    
+    var fromTextFieldChanged = PublishSubject<String>()
+    
+    var toTextFieldChanged = PublishSubject<String>()
+    
+    
+    // MARK: UIElements
+    var fromCurrencyTable: UITableView! = {
+        
+        let mainTableView = UITableView(frame: CGRectZero)
+        mainTableView.backgroundColor = UIColor.clear
+        mainTableView.translatesAutoresizingMaskIntoConstraints = false
+        mainTableView.tableFooterView = UIView()
+        mainTableView.separatorStyle = .none
+        mainTableView.estimatedRowHeight = 20.0
+        mainTableView.rowHeight = UITableView.automaticDimension
+        mainTableView.layer.cornerRadius = 10
+        mainTableView.clipsToBounds = true
+        
+        return mainTableView
+        
+    }()
+    
+    func addFromCurrencyTableToScreen() {
+        
+        view.addSubview(fromCurrencyTable)
+        
+        NSLayoutConstraint.activate([
+            fromCurrencyTable.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
+            fromCurrencyTable.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
+            fromCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
+            fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2)
+            
+        ])
+        
+    }
+    
+    var toCurrencyTable: UITableView! = {
+        
+        let mainTableView = UITableView(frame: CGRectZero)
+        mainTableView.backgroundColor = UIColor.clear
+        mainTableView.translatesAutoresizingMaskIntoConstraints = false
+        mainTableView.tableFooterView = UIView()
+        mainTableView.separatorStyle = .none
+        mainTableView.estimatedRowHeight = 20.0
+        mainTableView.rowHeight = UITableView.automaticDimension
+        mainTableView.layer.cornerRadius = 10
+        mainTableView.clipsToBounds = true
+        return mainTableView
+        
+    }()
+    
+    func addToCurrencyTableToScreen() {
+        
+        view.addSubview(toCurrencyTable)
+        
+        NSLayoutConstraint.activate([
+            toCurrencyTable.topAnchor.constraint(equalTo: toBtn.bottomAnchor),
+            toCurrencyTable.leftAnchor.constraint(equalTo: toBtn.leftAnchor),
+            toCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
+            toCurrencyTable.widthAnchor.constraint(equalToConstant: toBtn.frame.width * 2)
+            
+        ])
+    }
+    
+    // MARK: Outlets
+    // for labels
+    @IBOutlet weak var fromBtn: UIButton!
+    @IBOutlet weak var toBtn: UIButton!
+    
+    
+    // for tests
+    @IBOutlet weak var detailsBtn: UIButton!
+    @IBOutlet weak var fromCurrencyArrow: UIButton!
+    @IBOutlet weak var toCurrencyArrow: UIButton!
+
+    @IBOutlet weak var reverseBtn: UIButton!
+    
+    @IBOutlet weak var fromCurrencyTxtFiled: UITextField!
+    @IBOutlet weak var toCurrencyTxtFiled: UITextField!
+    
+    // MARK: Actions
+    private func updateRatesValues() {
+        guard let fromText = fromCurrencyTxtFiled.text else { return }
+        
+        fromTextFieldChanged.onNext(fromText)
+    }
+    
+    @IBAction func swapRatesAction(_ sender: Any) {
+        do {
+            try swapRates()
+        } catch {
+            print(error)
+        }
+    }
+    
+    @IBAction func fromCurrencyAction(_ sender: Any) {
+        if !currencyList.isEmpty {
+            addFromCurrencyTableToScreen()
+        }
+    }
+    @IBAction func toCurrencyAction(_ sender: Any) {
+        if !currencyList.isEmpty {
+            addToCurrencyTableToScreen()
+        }
+    }
+    
+    @IBAction func openDetailsAction(_ sender: Any) {
+        openDetailsScreen()
+    }
+
+}
+
+// MARK: Helpers
+extension ConverterScreen {
+    
+    func swapRates() throws {
+        let fromRate = try changeFromCurrencyBtn.value()
+        let toRate = try changeToCurrencyBtn.value()
+        
+        if fromRate.iso != "From" && toRate.iso != "To"{
+            changeFromCurrencyBtn.onNext(toRate)
+            
+            changeToCurrencyBtn.onNext(fromRate)
+            
+            // updating
+            updateRatesValues()
+        }
+
+    }
     func setTextFieldsDelegates() {
         fromTextFieldHandler = FromTextFieldHandler()
         toTextFieldHandler =  ToTextFieldHandler()
@@ -53,14 +191,13 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         fromTextFieldHandler?.converterScreen = self
         toTextFieldHandler?.converterScreen = self
         
-        
         fromCurrencyTxtFiled.text = "1"
         
         fromCurrencyTxtFiled.delegate = fromTextFieldHandler
         toCurrencyTxtFiled.delegate = toTextFieldHandler
-
         
     }
+    
     func setupTableViewDataSources() {
         tablesDataSource = TablesDataSource()
         tablesDataSource!.converterScreen = self
@@ -71,29 +208,38 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         toCurrencyTable.delegate = tablesDataSource
         toCurrencyTable.dataSource = tablesDataSource
         
-        
     }
     
-    
-    @objc private func didBecomeActiveThenRefresh() {
-        viewModel.input.reload.accept(())
+    func openDetailsScreen() {
+        guard let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
+            
+            self.showAlert(message: "could not load controller")
+            return
+        }
         
+        do {
+       
+            let fromRate = try changeFromCurrencyBtn.value()
+            let toRate = try changeToCurrencyBtn.value()
+            
+            if viewModel.shouldNavigateToDetailsScreen(fromRate: fromRate,
+                                                       toRate: toRate,
+                                                       detailsVc: detailsVc,
+                                                       currencyList: currencyList) {
+                
+                navigationController?.pushViewController(detailsVc, animated: true)
+
+            }
+            
+            
+        } catch {
+            self.showAlert(message: "Please choose currencies to see details")
+        }
     }
-    
-    var currencyList = [CurrencyRate]()
-    
-    let changeFromCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "From", rate: 1))
-    let changeToCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
-    
-    
-    var fromTextFieldChanged = PublishSubject<String>()
-    
-    var toTextFieldChanged = PublishSubject<String>()
-    
-    func bindViewModel() {
-        
-        bindInputs()
-        
+}
+
+extension ConverterScreen {
+    func bindOutputs() {
         // MARK: outputs
         viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
             self.currencyList = currencyList
@@ -200,191 +346,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .disposed(by: disposeBag)
         
     }
-    // MARK: UIElements
-    var fromCurrencyTable: UITableView! = {
-        
-        let mainTableView = UITableView(frame: CGRectZero)
-        
-        mainTableView.backgroundColor = UIColor.clear
-        mainTableView.translatesAutoresizingMaskIntoConstraints = false
-        mainTableView.tableFooterView = UIView()
-        
-        //        mainTableView.contentInsetAdjustmentBehavior = .never
-        //        mainTableView.showsVerticalScrollIndicator = false
-        mainTableView.separatorStyle = .none
-        
-        mainTableView.estimatedRowHeight = 20.0
-        mainTableView.rowHeight = UITableView.automaticDimension
-        
-        mainTableView.layer.cornerRadius = 10
-        mainTableView.clipsToBounds = true
-        
-        return mainTableView
-        
-    }()
-    
-    func addFromCurrencyTableToScreen() {
-        
-            view.addSubview(fromCurrencyTable)
-            
-            NSLayoutConstraint.activate([
-                fromCurrencyTable.topAnchor.constraint(equalTo: fromBtn.bottomAnchor),
-                fromCurrencyTable.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
-                //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
-                fromCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
-                fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2)
-                
-            ])
-        
-    }
-    
-    var toCurrencyTable: UITableView! = {
-        
-        let mainTableView = UITableView(frame: CGRectZero)
-        
-        mainTableView.backgroundColor = UIColor.clear
-        mainTableView.translatesAutoresizingMaskIntoConstraints = false
-        mainTableView.tableFooterView = UIView()
-        
-        //        mainTableView.contentInsetAdjustmentBehavior = .never
-        //        mainTableView.showsVerticalScrollIndicator = false
-        mainTableView.separatorStyle = .none
-        
-        mainTableView.estimatedRowHeight = 20.0
-        mainTableView.rowHeight = UITableView.automaticDimension
-        
-        mainTableView.layer.cornerRadius = 10
-        mainTableView.clipsToBounds = true
-        
-        return mainTableView
-        
-    }()
-    
-    func addToCurrencyTableToScreen() {
-        
-        
-        view.addSubview(toCurrencyTable)
-        
-        NSLayoutConstraint.activate([
-            toCurrencyTable.topAnchor.constraint(equalTo: toBtn.bottomAnchor),
-            toCurrencyTable.leftAnchor.constraint(equalTo: toBtn.leftAnchor),
-            //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
-            toCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
-            toCurrencyTable.widthAnchor.constraint(equalToConstant: toBtn.frame.width * 2)
-            
-        ])
-    }
-    
-    // MARK: Outlets
-    // for labels
-    @IBOutlet weak var fromBtn: UIButton!
-    @IBOutlet weak var toBtn: UIButton!
-    
-    
-    
-    // for tests
-    @IBOutlet weak var detailsBtn: UIButton!
-    @IBOutlet weak var fromCurrencyArrow: UIButton!
-    @IBOutlet weak var toCurrencyArrow: UIButton!
-
-    @IBOutlet weak var reverseBtn: UIButton!
-    
-    @IBOutlet weak var fromCurrencyTxtFiled: UITextField!
-    @IBOutlet weak var toCurrencyTxtFiled: UITextField!
-    
-    // MARK: Actions
-    func swapRates() throws {
-        let fromRate = try changeFromCurrencyBtn.value()
-        let toRate = try changeToCurrencyBtn.value()
-        
-        if fromRate.iso != "From" && toRate.iso != "To"{
-            changeFromCurrencyBtn.onNext(toRate)
-            
-            changeToCurrencyBtn.onNext(fromRate)
-            
-            // updating
-            updateRatesValues()
-        }
-
-    }
-    
-    private func updateRatesValues() {
-        guard let fromText = fromCurrencyTxtFiled.text else { return }
-        
-        fromTextFieldChanged.onNext(fromText)
-    }
-    
-    @IBAction func swapRatesAction(_ sender: Any) {
-        do {
-            try swapRates()
-        } catch {
-            print(error)
-        }
-    }
-    
-    @IBAction func fromCurrencyAction(_ sender: Any) {
-        if !currencyList.isEmpty {
-            
-            addFromCurrencyTableToScreen()
-        }
-    }
-    @IBAction func toCurrencyAction(_ sender: Any) {
-        if !currencyList.isEmpty {
-            
-            addToCurrencyTableToScreen()
-        }
-    }
-    
-    @IBAction func openDetailsAction(_ sender: Any) {
-        
-        openDetailsScreen()
-    }
-    
-
 }
 
-extension ConverterScreen {
-    func openDetailsScreen() {
-        guard let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
-            
-            self.showAlert(message: "could not load controller")
-            return
-        }
-        
-        do {
-            
-//            let fromRate = CurrencyRate(iso: "KZC", rate: 2.0)
-//            let toRate = CurrencyRate(iso: "AED", rate: 1.2)
-//
-
-            
-            let fromRate = try changeFromCurrencyBtn.value()
-            let toRate = try changeToCurrencyBtn.value()
-//            
-            guard fromRate.iso != "From" && toRate.iso != "To" else {
-                self.showAlert(message: "Please choose currencies to see details")
-                return
-            }
-            guard fromRate.iso != toRate.iso else {
-                self.showAlert(message: "Please choose different currencies to see details")
-                return
-            }
-            
-            
-            detailsVc.fromCurrency = fromRate
-            detailsVc.toCurrency = toRate
-            
-            detailsVc.decimalRatesFrom = viewModel.getDecimalRatesFrom(fromRate, currencyList: currencyList)
-            
-            navigationController?.pushViewController(detailsVc, animated: true)
-            
-        } catch {
-            self.showAlert(message: "Please choose currencies to see details")
-        }
-    }
-    
-    
-}
 
 struct DecimalResult {
     let orginalISO: String

@@ -25,7 +25,7 @@ struct NetworkCaller {
     //        }
     //
     //    }
-    private func parseReturnedData<T: Codable>(data: Data, _ type: T.Type, completionHandler: @escaping ((Result<T, ErrorResult>) -> Void)) {
+    private func parseReturnedData<T: Codable>(data: Data, _ type: T.Type, completionHandler: @escaping ((Result<T, Error>) -> Void)) {
         
         do {
             let model = try JSONDecoder().decode(type.self, from: data)
@@ -34,12 +34,14 @@ struct NetworkCaller {
             
             print(model)
         } catch {
-            do {
-                let decodedError = try JSONDecoder().decode(ErrorModel.self, from: data)
-                completionHandler(.failure(ErrorResult.custom(string: decodedError.error.info)))
-            } catch {
-                
-            }
+//            do {
+//                let decodedError = try JSONDecoder().decode(ErrorModel.self, from: data)
+//                completionHandler(.failure(ErrorResult.custom(string: decodedError.error.info)))
+//            } catch {
+//                
+//            }
+            completionHandler(.failure(error))
+//            throw error
             
         }
     }

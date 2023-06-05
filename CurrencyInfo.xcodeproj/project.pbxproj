@@ -25,13 +25,13 @@
 		EF3B04C62A26AB15003D45AB /* ConverterScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */; };
 		EF5940752A2A94FB00D67557 /* DataSourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5940742A2A94FB00D67557 /* DataSourcesTests.swift */; };
 		EF6874482A2E57C00091C7E5 /* ApiErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6874472A2E57C00091C7E5 /* ApiErrorModel.swift */; };
+		EF68744A2A2E825C0091C7E5 /* TablesDataSources.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6874492A2E825C0091C7E5 /* TablesDataSources.swift */; };
 		EF72DAF22A29D99E002F9CB1 /* StoryBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF72DAF12A29D99E002F9CB1 /* StoryBoardTests.swift */; };
 		EF72DAF62A29DA74002F9CB1 /* ConvertScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF72DAF52A29DA74002F9CB1 /* ConvertScreenTests.swift */; };
 		EF72DAFA2A29F4E6002F9CB1 /* TableViewDataSources.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF72DAF92A29F4E6002F9CB1 /* TableViewDataSources.swift */; };
 		EF9C58CF2A2C80E500D29DC6 /* FromTextFieldHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9C58CE2A2C80E500D29DC6 /* FromTextFieldHandler.swift */; };
 		EFD269592A273F17006BE880 /* LatestRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD269582A273F17006BE880 /* LatestRates.swift */; };
 		EFD2695B2A274A7D006BE880 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695A2A274A7D006BE880 /* Extensions.swift */; };
-		EFD2695E2A275905006BE880 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695D2A275905006BE880 /* Reachability.swift */; };
 		EFD269602A275A81006BE880 /* ErrorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD2695F2A275A81006BE880 /* ErrorResult.swift */; };
 		EFD91A9D2A2CD2D400E7DC13 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD91A9C2A2CD2D400E7DC13 /* DetailViewController.swift */; };
 		EFD91AA12A2CD35A00E7DC13 /* DetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD91AA02A2CD35A00E7DC13 /* DetailsViewControllerTests.swift */; };
@@ -73,13 +73,13 @@
 		EF3B04C52A26AB15003D45AB /* ConverterScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterScreenVM.swift; sourceTree = "<group>"; };
 		EF5940742A2A94FB00D67557 /* DataSourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourcesTests.swift; sourceTree = "<group>"; };
 		EF6874472A2E57C00091C7E5 /* ApiErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiErrorModel.swift; sourceTree = "<group>"; };
+		EF6874492A2E825C0091C7E5 /* TablesDataSources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TablesDataSources.swift; sourceTree = "<group>"; };
 		EF72DAF12A29D99E002F9CB1 /* StoryBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBoardTests.swift; sourceTree = "<group>"; };
 		EF72DAF52A29DA74002F9CB1 /* ConvertScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertScreenTests.swift; sourceTree = "<group>"; };
 		EF72DAF92A29F4E6002F9CB1 /* TableViewDataSources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSources.swift; sourceTree = "<group>"; };
 		EF9C58CE2A2C80E500D29DC6 /* FromTextFieldHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromTextFieldHandler.swift; sourceTree = "<group>"; };
 		EFD269582A273F17006BE880 /* LatestRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestRates.swift; sourceTree = "<group>"; };
 		EFD2695A2A274A7D006BE880 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		EFD2695D2A275905006BE880 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		EFD2695F2A275A81006BE880 /* ErrorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResult.swift; sourceTree = "<group>"; };
 		EFD91A9C2A2CD2D400E7DC13 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		EFD91AA02A2CD35A00E7DC13 /* DetailsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewControllerTests.swift; sourceTree = "<group>"; };
@@ -153,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				EFD2695A2A274A7D006BE880 /* Extensions.swift */,
-				EFD2695C2A2758F2006BE880 /* Reachability */,
 				EF3B04BF2A26A319003D45AB /* Networking */,
 				EF3B04C42A26AAFA003D45AB /* Screens */,
 				EF3B04A92A269B71003D45AB /* AppDelegate.swift */,
@@ -214,14 +213,6 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		EFD2695C2A2758F2006BE880 /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				EFD2695D2A275905006BE880 /* Reachability.swift */,
-			);
-			path = Reachability;
-			sourceTree = "<group>";
-		};
 		EFD91A9A2A2CD2A900E7DC13 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +227,7 @@
 		EFD91A9B2A2CD2BB00E7DC13 /* DetailsScreen */ = {
 			isa = PBXGroup;
 			children = (
+				EF6874492A2E825C0091C7E5 /* TablesDataSources.swift */,
 				EFD91A9C2A2CD2D400E7DC13 /* DetailViewController.swift */,
 				EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */,
 			);
@@ -491,7 +483,7 @@
 				EFD2695B2A274A7D006BE880 /* Extensions.swift in Sources */,
 				EF3AE9D32A2D211400FBC88A /* DetailViewModel.swift in Sources */,
 				EF6874482A2E57C00091C7E5 /* ApiErrorModel.swift in Sources */,
-				EFD2695E2A275905006BE880 /* Reachability.swift in Sources */,
+				EF68744A2A2E825C0091C7E5 /* TablesDataSources.swift in Sources */,
 				EF3B04BE2A269BCA003D45AB /* NetworkConstants.swift in Sources */,
 				EF3B04AC2A269B71003D45AB /* SceneDelegate.swift in Sources */,
 				EF72DAFA2A29F4E6002F9CB1 /* TableViewDataSources.swift in Sources */,

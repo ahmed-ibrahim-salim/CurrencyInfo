@@ -17,8 +17,9 @@ struct HistoricalDataModel: Codable, Equatable {
     let success: Bool
     let timestamp: Int?
     let historical: Bool?
-    let base, date: String
-    let rates: [String: Double]
+    let base: String?
+    let date: String?
+    let rates: [String: Double]?
     
     let errorModel: ErrorModel?
 
