@@ -18,7 +18,7 @@ class DetailViewModel: NSObject {
     
     let isLoading = PublishSubject<Bool>()
     
-    let historicalDataLast3Days = PublishSubject<[CurrencyRate]>()
+    let historicalDataLast3Days = PublishSubject<[HistoryDataItem]>()
     
     let errorMessage = PublishSubject<ErrorResult>()
     
@@ -26,9 +26,9 @@ class DetailViewModel: NSObject {
     private let group = DispatchGroup()
 
     func getHistoricalDataLast3Days(_ historicalRequestData: HistoricalRequestData,
-                                    completion: @escaping (Result<[CurrencyRate], ErrorResult>) -> Void) {
+                                    completion: @escaping (Result<[HistoryDataItem], ErrorResult>) -> Void) {
         var collection = [HistoricalDataModel]()
-        var rates = [CurrencyRate]()
+        var historyDataItems = [HistoryDataItem]()
         var errors = [ErrorResult]()
         
         isLoading.onNext(true)
@@ -71,9 +71,23 @@ class DetailViewModel: NSObject {
         }
         
         group.notify(queue: .main) {
-            rates = collection.map {historicalDataModel in
-                guard let rate = historicalDataModel.rates.first else {return nil}
-                return CurrencyRate(iso: rate.key, rate: rate.value)
+            historyDataItems = collection.map {historicalDataModel in
+//                date
+//                [rate, rate]
+                
+                var currenciesRates = [CurrencyRate]()
+                for (key, value) in historicalDataModel.rates {
+                    let currenctRate = CurrencyRate(iso: key, rate: value)
+                    currenciesRates.append(currenctRate)
+                }
+                
+                let first = currenciesRates.first!
+                let secod = currenciesRates[1]
+                
+                
+                let historyDataItem = HistoryDataItem(date: historicalDataModel.date, toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
+                
+                return historyDataItem
             }.compactMap {$0}
             
             
@@ -88,8 +102,8 @@ class DetailViewModel: NSObject {
                 errorMessage.onNext(errors[0])
                 completion(.failure(errors[0]))
             } else {
-                historicalDataLast3Days.onNext(rates)
-                completion(.success(rates))
+                historicalDataLast3Days.onNext(historyDataItems)
+                completion(.success(historyDataItems))
             }
         }
 
@@ -132,4 +146,10 @@ class DetailViewModel: NSObject {
         print(dayDate)
         return dayDate
     }
+}
+
+struct HistoryDataItem{
+    var date: String
+    var toCurrencyRate: CurrencyRate
+    var fromCurrency: CurrencyRate
 }

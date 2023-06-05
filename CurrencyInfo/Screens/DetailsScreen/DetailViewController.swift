@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, DetailViewControllerProtocol {
 
     var viewModel: DetailViewModel!
 
@@ -21,6 +21,8 @@ class DetailViewController: UIViewController {
         
         viewModel = DetailViewModel(historicalDataService: historicalDataService)
 
+        setupTableViewDataSources()
+        
         bindViewModel()
         
         callApi()
@@ -28,12 +30,34 @@ class DetailViewController: UIViewController {
         
                 
     }
+    
+    var historicalDataTableDataSource: HistoricalDataTableDataSource!
+    var historicalData: [HistoryDataItem] = [] {
+        didSet {
+            historicalTableView.reloadData()
+        }
+    }
+    
+    func setupTableViewDataSources() {
+        historicalDataTableDataSource = HistoricalDataTableDataSource()
+        historicalDataTableDataSource!.detailsScreen = self
+        
+        historicalTableView.delegate = historicalDataTableDataSource
+        historicalTableView.dataSource = historicalDataTableDataSource
+        
+//        otherCurrenciesTableView.delegate = tablesDataSource
+//        otherCurrenciesTableView.dataSource = tablesDataSource
+        
+    }
+    
+    
+    
+    
+    
     var fromCurrency: CurrencyRate!
     var toCurrency: CurrencyRate!
     
     func callApi() {
-//        guard let fromCurrency = fromCurrency, let toCurrency = toCurrency else {return}
-        
         let historicalData = HistoricalRequestData(date: viewModel.getDate(value: -1),
                                         fromCurrency: fromCurrency,
                                         toCurrencyRate: toCurrency)
@@ -53,7 +77,8 @@ class DetailViewController: UIViewController {
         viewModel.historicalDataLast3Days
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [unowned self] currencyRates in
-                print(currencyRates)
+                self.historicalData = currencyRates
+//                print(currencyRates)
             }).disposed(by: disposeBag)
         
         viewModel.isLoading
@@ -69,4 +94,49 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var historicalTableView: UITableView!
     @IBOutlet weak var charView: UIView!
+}
+
+
+protocol DetailViewControllerProtocol: AnyObject {
+    var historicalData: [HistoryDataItem] {get}
+    var fromCurrency: CurrencyRate! {get}
+    var toCurrency: CurrencyRate! {get}
+    
+}
+
+class HistoricalDataTableDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var detailsScreen: DetailViewControllerProtocol!
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return detailsScreen.historicalData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        let cell = UITableViewCell()
+        
+        if 0..<detailsScreen.historicalData.count ~= indexPath.row {
+            let fromRate = detailsScreen.historicalData[indexPath.row].fromCurrency.rate
+            let toRate = detailsScreen.historicalData[indexPath.row].toCurrencyRate.rate
+            
+            let roundedFro = round(num: fromRate)
+            let roundedto = round(num: toRate)
+            
+            cell.textLabel?.text = "\(roundedFro) --> \(roundedto)"
+
+        }
+        
+        return cell
+    }
+    
+    func round(num: Double) -> Decimal {
+        
+        var fromRate = Decimal(num)
+        var roundedResult = Decimal()
+        NSDecimalRound(&roundedResult, &fromRate, 2, .bankers)
+        
+        return roundedResult
+    }
 }
