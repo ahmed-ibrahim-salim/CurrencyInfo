@@ -12,6 +12,8 @@ struct LatestRatesModel: Codable {
     let timestamp: Int
     let base, date: String
     let rates: [String: Double]
+    
+    let errorModel: ErrorModel?
 }
 
 struct CurrencyRate: Equatable {

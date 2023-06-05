@@ -2,7 +2,7 @@
 //  DetailViewController.swift
 //  CurrencyInfo
 //
-//  Created by magdy khalifa on 04/06/2023.
+//  Created by Ahmed medo on 04/06/2023.
 //
 
 import UIKit
@@ -12,7 +12,10 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
 
     var viewModel: DetailViewModel!
 
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+    let indicatorView = UIView(frame: UIScreen.main.bounds)
     
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -84,6 +87,14 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
         viewModel.isLoading
             .asDriver(onErrorJustReturn: false)
             .drive(onNext: { [unowned self] isLoading in
+                
+                if isLoading{
+                    self.showActivityIndicator(view: self.indicatorView,
+                                               indicator: self.activityIndicator)
+                } else {
+                    self.hideActivityIndicator(view: self.indicatorView,
+                                               indicator: self.activityIndicator)
+                }
                 print(isLoading, "is loading")
             }).disposed(by: disposeBag)
         

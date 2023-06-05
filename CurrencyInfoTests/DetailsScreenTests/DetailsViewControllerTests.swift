@@ -2,7 +2,7 @@
 //  DetailsViewControllerTests.swift
 //  CurrencyInfoTests
 //
-//  Created by magdy khalifa on 04/06/2023.
+//  Created by Ahmed medo on 04/06/2023.
 //
 
 import XCTest

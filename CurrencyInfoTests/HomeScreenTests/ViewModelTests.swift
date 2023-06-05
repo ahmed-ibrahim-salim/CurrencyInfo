@@ -2,7 +2,7 @@
 //  CurrencyInfoTests.swift
 //  CurrencyInfoTests
 //
-//  Created by magdy khalifa on 31/05/2023.
+//  Created by Ahmed medo on 31/05/2023.
 //
 
 import XCTest
@@ -91,7 +91,7 @@ final class ViewModelTests: XCTestCase {
                                                         timestamp: 1321312,
                                                         base: "EUR",
                                                         date: "23-05-14",
-                                                        rates: [currencyRate.iso: currencyRate.rate])
+                                                rates: [currencyRate.iso: currencyRate.rate], errorModel: nil)
 
         latestRatesService.latestRatesModel = latestRatesModel
 

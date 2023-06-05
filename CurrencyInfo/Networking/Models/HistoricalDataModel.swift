@@ -9,9 +9,17 @@ import Foundation
 
 // MARK: - HistoricalDataModel
 struct HistoricalDataModel: Codable, Equatable {
+    static func == (lhs: HistoricalDataModel, rhs: HistoricalDataModel) -> Bool {
+        lhs.timestamp == rhs.timestamp
+    }
+    
+
     let success: Bool
     let timestamp: Int?
     let historical: Bool?
     let base, date: String
     let rates: [String: Double]
+    
+    let errorModel: ErrorModel?
+
 }

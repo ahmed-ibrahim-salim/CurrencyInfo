@@ -2,7 +2,7 @@
 //  DetailViewModelTests.swift
 //  CurrencyInfoTests
 //
-//  Created by magdy khalifa on 05/06/2023.
+//  Created by Ahmed medo on 05/06/2023.
 //
 
 import XCTest
@@ -43,7 +43,7 @@ final class DetailViewModelTests: XCTestCase {
                                                    date: "2020",
                                                    rates: ["USD": 1.2,
                                                            "EUR": 1.2,
-                                                           "KZC": 1.2])
+                                                           "KZC": 1.2], errorModel: nil)
     }
 
     override func tearDownWithError() throws {

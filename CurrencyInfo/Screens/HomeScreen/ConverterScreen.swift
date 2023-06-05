@@ -103,6 +103,12 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         }).disposed(by: disposeBag)
         
         
+        viewModel.output.error.drive(onNext: { [unowned self] error in
+            self.showAlert(message: error)
+            
+        }).disposed(by: disposeBag)
+        
+        
         viewModel.output.fromBtnName
             .drive {[unowned self] currencyRate in
                 self.fromBtn.setTitle(currencyRate.iso, for: .normal)
@@ -331,6 +337,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     @IBAction func openDetailsAction(_ sender: Any) {
         
+        openDetailsScreen()
+    }
+    
+    func openDetailsScreen() {
         guard let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             
             self.showAlert(message: "could not load controller")
@@ -359,4 +369,3 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         }
     }
 }
-

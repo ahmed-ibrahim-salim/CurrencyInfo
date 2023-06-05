@@ -2,7 +2,7 @@
 //  Extenstions.swift
 //  CurrencyInfo
 //
-//  Created by magdy khalifa on 31/05/2023.
+//  Created by Ahmed medo on 31/05/2023.
 //
 
 import UIKit
@@ -29,5 +29,25 @@ extension UIViewController {
                 alert.dismiss(animated: true)
             }
         }
+    }
+    
+    func showActivityIndicator(view: UIView, indicator: UIActivityIndicatorView) {
+//        view = UIView(frame: UIScreen.main.bounds)
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.35)
+        
+//        indicator = UIActivityIndicatorView(style: .whiteLarge)
+        indicator.frame = CGRect(x: 0, y: 0, width: indicator.bounds.size.width, height: indicator.bounds.size.height)
+        
+        indicator.center = view.center
+        view.addSubview(indicator)
+        view.center = self.view.center
+        self.view.addSubview(view)
+        
+        indicator.startAnimating()
+    }
+    
+    func hideActivityIndicator(view: UIView, indicator: UIActivityIndicatorView) {
+        indicator.stopAnimating()
+        view.removeFromSuperview()
     }
 }

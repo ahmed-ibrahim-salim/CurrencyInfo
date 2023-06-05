@@ -2,16 +2,16 @@
 //  Errors.swift
 //  CurrencyInfo
 //
-//  Created by magdy khalifa on 31/05/2023.
+//  Created by Ahmed medo on 31/05/2023.
 //
 
 import Foundation
 
-enum ErrorResult: Error, Codable, Equatable {
+enum ErrorResult: Error, Equatable, Codable {
     case network(string: String)
     case parser(string: String)
     case custom(string: String)
-    
+
     var localizedDescription: String {
         switch self {
         case .network(let value):   return value
