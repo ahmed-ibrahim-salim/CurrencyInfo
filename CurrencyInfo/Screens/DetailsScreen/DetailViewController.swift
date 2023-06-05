@@ -118,17 +118,24 @@ class HistoricalDataTableDataSource: NSObject, UITableViewDelegate, UITableViewD
         let cell = UITableViewCell()
         
         if 0..<detailsScreen.historicalData.count ~= indexPath.row {
+            
+            let fromCurrncyIso = detailsScreen.historicalData[indexPath.row].fromCurrency.iso
+            let toCurrncyIso = detailsScreen.historicalData[indexPath.row].toCurrencyRate.iso
+            
             let fromRate = detailsScreen.historicalData[indexPath.row].fromCurrency.rate
             let toRate = detailsScreen.historicalData[indexPath.row].toCurrencyRate.rate
             
             let roundedFro = round(num: fromRate)
             let roundedto = round(num: toRate)
             
-            cell.textLabel?.text = "\(roundedFro) --> \(roundedto)"
+            cell.textLabel?.text = "\(fromCurrncyIso): \(roundedFro) \(toCurrncyIso): \(roundedto)"
 
         }
         
         return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
     
     func round(num: Double) -> Decimal {
