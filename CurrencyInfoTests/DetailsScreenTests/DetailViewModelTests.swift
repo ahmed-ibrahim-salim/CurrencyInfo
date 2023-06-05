@@ -41,7 +41,9 @@ final class DetailViewModelTests: XCTestCase {
                                                    historical: false,
                                                    base: "EUR",
                                                    date: "2020",
-                                                   rates: ["USD": 1.2])
+                                                   rates: ["USD": 1.2,
+                                                           "EUR": 1.2,
+                                                           "KZC": 1.2])
     }
 
     override func tearDownWithError() throws {
@@ -116,7 +118,7 @@ final class DetailViewModelTests: XCTestCase {
     func test_getHistoricalDataForPast3Days_WhenThereIsError_RaisesError() {
         
 
-        let historyData = scheduler.createObserver([CurrencyRate].self)
+        let historyData = scheduler.createObserver([HistoryDataItem].self)
         let errorMessage = scheduler.createObserver(ErrorResult.self)
         
         let error = ErrorResult.network(string: "network error")
@@ -151,7 +153,7 @@ final class DetailViewModelTests: XCTestCase {
     func test_getHistoricalDataForPast3Days_ReturnsData() {
         
 
-        let historyData = scheduler.createObserver([CurrencyRate].self)
+        let historyData = scheduler.createObserver([HistoryDataItem].self)
         
         let exp = expectation(description: "Loading Historical data")
 
@@ -172,14 +174,28 @@ final class DetailViewModelTests: XCTestCase {
         waitForExpectations(timeout: 3)
         
         
-        guard let rateDictItem = historicalOutputData.rates.first else {return}
-        let rate = CurrencyRate(iso: rateDictItem.key, rate: rateDictItem.value)
-        let rates = Array(repeating: rate, count: 3)
+        let historyDataItems = getHistoryDataItems()
 
-        
         // Then
-        XCTAssertEqual(historyData.events, [.next(0, rates)])
+        XCTAssertEqual(historyData.events, [.next(0, historyDataItems)])
 
+    }
+}
+
+extension DetailViewModelTests {
+    func getHistoryDataItems() -> [HistoryDataItem] {
+        var currenciesRates = [CurrencyRate]()
+        for (key, value) in historicalOutputData.rates {
+            let currenctRate = CurrencyRate(iso: key, rate: value)
+            currenciesRates.append(currenctRate)
+        }
+        
+        let historyDataItem = HistoryDataItem(date: historicalOutputData.date,
+                                              toCurrencyRate: currenciesRates[0], fromCurrency: currenciesRates[1])
+        
+        let historyDataItems = Array(repeating: historyDataItem, count: 3)
+        
+        return historyDataItems
     }
 }
 

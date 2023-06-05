@@ -82,6 +82,7 @@ class DetailViewModel: NSObject {
                 }
                 
                 let first = currenciesRates.first!
+                
                 let secod = currenciesRates[1]
                 
                 
@@ -148,7 +149,7 @@ class DetailViewModel: NSObject {
     }
 }
 
-struct HistoryDataItem{
+struct HistoryDataItem: Equatable {
     var date: String
     var toCurrencyRate: CurrencyRate
     var fromCurrency: CurrencyRate
