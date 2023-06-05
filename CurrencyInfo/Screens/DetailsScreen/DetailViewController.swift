@@ -21,7 +21,8 @@ class DetailViewController: UIViewController {
         viewModel = DetailViewModel(historicalDataService: historicalDataService)
 
         
-        viewModel.getHistoricalDataForPast3Days()
+        viewModel.getHistoricalDataLast3Days()
+                
     }
     
 

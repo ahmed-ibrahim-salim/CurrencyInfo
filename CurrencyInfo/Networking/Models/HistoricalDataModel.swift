@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - HistoricalDataModel
-struct HistoricalDataModel: Codable {
+struct HistoricalDataModel: Codable, Equatable {
     let success: Bool
     let timestamp: Int?
     let historical: Bool?

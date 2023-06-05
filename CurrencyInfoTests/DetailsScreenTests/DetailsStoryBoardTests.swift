@@ -36,6 +36,9 @@ final class StoryBoardTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        navigationController = nil
+        converterScreen = nil
+        sut = nil
     }
     
     func test_HasOtherCurrenciesTableView() {

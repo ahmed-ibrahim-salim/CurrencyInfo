@@ -10,13 +10,15 @@ import RxSwift
 
 protocol HistoricalDataServiceProtocol {
     
-    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, Error>) -> Void) }
+    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, ErrorResult>) -> Void)
+    
+}
 
 class HistoricalDataService: HistoricalDataServiceProtocol {
     
     private var network = NetworkCaller.shared
     
-    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, Error>) -> Void) {
+    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, ErrorResult>) -> Void) {
         
         let getHistoricalDataRequest = HistoricalDataRequest.constructURlRequest(historicalRequestData)
         
@@ -30,7 +32,7 @@ class HistoricalDataService: HistoricalDataServiceProtocol {
                 completionHandler(.success(data))
                 
             case .failure(let error):
-                completionHandler(.failure(error))
+                completionHandler(.failure(ErrorResult.network(string: error.localizedDescription)))
                 
             }
         }

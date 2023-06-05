@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5408F9360D9CDBB8233C53F0 /* Pods_CurrencyInfo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86B8D06A2D686C0461A1AD27 /* Pods_CurrencyInfo.framework */; };
 		9ACC4E1D3FC4415C4F3E8C8F /* Pods_CurrencyInfoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092DB4A775BD4FDBE0F4E31A /* Pods_CurrencyInfoTests.framework */; };
+		EF17180F2A2DDC0B00CA2A29 /* DetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF17180E2A2DDC0B00CA2A29 /* DetailViewModelTests.swift */; };
 		EF3AE9D32A2D211400FBC88A /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */; };
 		EF3AE9D52A2D224500FBC88A /* HistoricalDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D42A2D224500FBC88A /* HistoricalDataService.swift */; };
 		EF3AE9D72A2D24F900FBC88A /* HistoricalDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3AE9D62A2D24F900FBC88A /* HistoricalDataModel.swift */; };
@@ -53,6 +54,7 @@
 		86B8D06A2D686C0461A1AD27 /* Pods_CurrencyInfo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CurrencyInfo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E9CD4F837528AA4FF31A3E /* Pods-CurrencyInfoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyInfoTests.debug.xcconfig"; path = "Target Support Files/Pods-CurrencyInfoTests/Pods-CurrencyInfoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EECB2AC7CCC3DDD900BC1472 /* Pods-CurrencyInfo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyInfo.release.xcconfig"; path = "Target Support Files/Pods-CurrencyInfo/Pods-CurrencyInfo.release.xcconfig"; sourceTree = "<group>"; };
+		EF17180E2A2DDC0B00CA2A29 /* DetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelTests.swift; sourceTree = "<group>"; };
 		EF3AE9D22A2D211400FBC88A /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		EF3AE9D42A2D224500FBC88A /* HistoricalDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataService.swift; sourceTree = "<group>"; };
 		EF3AE9D62A2D24F900FBC88A /* HistoricalDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataModel.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 			children = (
 				EFD91AA02A2CD35A00E7DC13 /* DetailsViewControllerTests.swift */,
 				EFD91AA32A2CD38700E7DC13 /* DetailsStoryBoardTests.swift */,
+				EF17180E2A2DDC0B00CA2A29 /* DetailViewModelTests.swift */,
 			);
 			path = DetailsScreenTests;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				EF72DAF62A29DA74002F9CB1 /* ConvertScreenTests.swift in Sources */,
 				EFD91AA12A2CD35A00E7DC13 /* DetailsViewControllerTests.swift in Sources */,
 				EFD91AA42A2CD38700E7DC13 /* DetailsStoryBoardTests.swift in Sources */,
+				EF17180F2A2DDC0B00CA2A29 /* DetailViewModelTests.swift in Sources */,
 				EF72DAF22A29D99E002F9CB1 /* StoryBoardTests.swift in Sources */,
 				EF5940752A2A94FB00D67557 /* DataSourcesTests.swift in Sources */,
 				EFD94C902A279ECA007DCF89 /* ViewModelTests.swift in Sources */,
