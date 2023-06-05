@@ -43,11 +43,11 @@ final class DataSourcesTests: XCTestCase {
         controllerMock = nil
     }
     
-    func test_sutHasController(){
+    func test_sutHasController() {
         
         XCTAssertNotNil(sut.converterScreen)
     }
-    func test_NumberOfRows_CurrencyRatesCount(){
+    func test_NumberOfRows_CurrencyRatesCount() {
 
         controllerMock.currencyList.append(CurrencyRate(iso: "", rate: 10.1))
         
@@ -56,7 +56,7 @@ final class DataSourcesTests: XCTestCase {
         XCTAssertEqual(toCurrencyTable.numberOfRows(inSection: 0), 1)
 
     }
-    func test_CellForRow_ReturnsCurrencyRateCell(){
+    func test_CellForRow_ReturnsCurrencyRateCell() {
         
         controllerMock.currencyList.append(CurrencyRate(iso: "", rate: 10.1))
         
@@ -67,7 +67,7 @@ final class DataSourcesTests: XCTestCase {
         XCTAssertNotNil(cell)
     }
     
-    func test_ConfigCellWithCurrencyRate_CallsConfigCellWithPassedCurrencyItem(){
+    func test_ConfigCellWithCurrencyRate_CallsConfigCellWithPassedCurrencyItem() {
 
         controllerMock.currencyList.append(CurrencyRate(iso: "USD", rate: 10.1))
         fromCurrencyTable.reloadData()
@@ -81,7 +81,7 @@ final class DataSourcesTests: XCTestCase {
 
 // MARK: Mock
 
-fileprivate class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol{
+private class ConverterScreenViewControllerMock: ConverterScreenControllerProtocol {
     
     
     

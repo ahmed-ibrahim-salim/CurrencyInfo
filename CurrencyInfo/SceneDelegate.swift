@@ -19,10 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
 //        let vc = ConverterScreen()
 //        let navController = UINavigationController(rootViewController: vc)
-        window?.rootViewController = vc
+        window?.rootViewController = viewController
         window?.makeKeyAndVisible()
     }
     
@@ -56,4 +56,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
 }
-

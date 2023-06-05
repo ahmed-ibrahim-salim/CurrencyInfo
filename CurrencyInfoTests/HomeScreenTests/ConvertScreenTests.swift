@@ -122,17 +122,17 @@ final class ConverterScreenTests: XCTestCase {
         
         let fromCurrencyArrow: UIButton = sut.fromCurrencyArrow
         
-        guard let arrowActions = fromCurrencyArrow.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail(); return
+        guard let arrowActions = fromCurrencyArrow.actions(forTarget: sut, forControlEvent: .touchUpInside)else {
+            XCTFail("arrow has now action"); return
         }
         
         XCTAssertTrue(arrowActions.contains("fromCurrencyAction:"))
     }
-    func test_reverseBtnHasFromAction(){
+    func test_reverseBtnHasFromAction() {
         let reverseBtn: UIButton = sut.reverseBtn
         
-        guard let actions = reverseBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail()
+        guard let actions = reverseBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else {
+            XCTFail("swap btn has no actions")
             return
         }
         
@@ -140,11 +140,11 @@ final class ConverterScreenTests: XCTestCase {
         print(actions, "my new action")
         XCTAssertTrue(actions.contains("swapRatesAction:"))
     }
-    func test_toBtnHasFromAction(){
+    func test_toBtnHasFromAction() {
         let toBtn: UIButton = sut.toBtn
         
-        guard let actions = toBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail()
+        guard let actions = toBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else {
+            XCTFail("to btn has no actions")
             return
         }
         
@@ -155,17 +155,17 @@ final class ConverterScreenTests: XCTestCase {
         
         let toCurrencyArrow: UIButton = sut.toCurrencyArrow
         
-        guard let arrowActions = toCurrencyArrow.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail(); return
+        guard let arrowActions = toCurrencyArrow.actions(forTarget: sut, forControlEvent: .touchUpInside)else {
+            XCTFail("arrow has no actions"); return
         }
         
         XCTAssertTrue(arrowActions.contains("toCurrencyAction:"))
     }
-    func test_detailsBtnHasFromAction(){
+    func test_detailsBtnHasFromAction() {
         let detailsBtn: UIButton = sut.detailsBtn
         
-        guard let actions = detailsBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail()
+        guard let actions = detailsBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else {
+            XCTFail("details btn has no actions")
             return
         }
         
@@ -174,7 +174,7 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertTrue(actions.contains("openDetailsAction:"))
     }
     
-    func test_WhenPressedFromBtn_AddsTableViewToView(){
+    func test_WhenPressedFromBtn_AddsTableViewToView() {
         let fromBtn: UIButton = sut.fromBtn
 
         fromBtn.sendActions(for: .touchUpInside)
@@ -184,7 +184,7 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertNotNil(hasTableView)
     }
     
-    func test_WhenPressedTableViewCell_RemovesTableViewFromView(){
+    func test_WhenPressedTableViewCell_RemovesTableViewFromView() {
         // given
         let fromBtn: UIButton = sut.fromBtn
 
@@ -196,13 +196,13 @@ final class ConverterScreenTests: XCTestCase {
         // when
         sut.fromCurrencyTable.delegate?.tableView?(sut.fromCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
 
-        //then
+        // then
         let doesNotHaveTableView = sut.fromCurrencyTable.isDescendant(of: sut.view)
         XCTAssertFalse(doesNotHaveTableView)
         
     }
     
-    func test_WhenPressedTableViewCell_ChangesFromCurrencyBtnTitle(){
+    func test_WhenPressedTableViewCell_ChangesFromCurrencyBtnTitle() {
         // given
         sut.currencyList.append(CurrencyRate(iso: "USD", rate: 10.1))
         
@@ -216,13 +216,13 @@ final class ConverterScreenTests: XCTestCase {
         // when
         sut.fromCurrencyTable.delegate?.tableView?(sut.fromCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
 
-        //then
+        // then
         let fromBtnTitle = fromBtn.title(for: .normal)
         
         XCTAssertEqual(fromBtnTitle, "USD")
         
     }
-    func test_WhenPressedTableViewCell_ChangesToCurrencyBtnTitle(){
+    func test_WhenPressedTableViewCell_ChangesToCurrencyBtnTitle() {
         // given
         sut.currencyList.append(CurrencyRate(iso: "EUR", rate: 10.1))
         
@@ -236,35 +236,35 @@ final class ConverterScreenTests: XCTestCase {
         // when
         sut.toCurrencyTable.delegate?.tableView?(sut.toCurrencyTable, didSelectRowAt: IndexPath(row: 0, section: 0))
 
-        //then
+        // then
         let toBtnTitle = toBtn.title(for: .normal)
         
         XCTAssertEqual(toBtnTitle, "EUR")
         
     }
     
-    func test_TextFieldsKeyboardType_NumberPad(){
+    func test_TextFieldsKeyboardType_NumberPad() {
         let fromTextFieldKeyboardType = sut.fromCurrencyTxtFiled.keyboardType
         
         XCTAssertEqual(fromTextFieldKeyboardType, .decimalPad)
 
         
     }
-    func test_From_TextFieldDefaultEntry_isOne(){
+    func test_From_TextFieldDefaultEntry_isOne() {
         let fromTextFieldTXT: String? = sut.fromCurrencyTxtFiled.text
         
         XCTAssertEqual(fromTextFieldTXT, "1")
 
         
     }
-    func test_TextFiledsOnlyAcceptNumbers(){
+    func test_TextFiledsOnlyAcceptNumbers() {
         // Given
-        guard let fromTextField = sut.fromCurrencyTxtFiled else{
-            XCTFail()
+        guard let fromTextField = sut.fromCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
-        guard let toTextField = sut.toCurrencyTxtFiled else{
-            XCTFail()
+        guard let toTextField = sut.toCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
 
@@ -282,27 +282,27 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertTrue(shouldAllowNumbersSecondTextField == true, "Return key should be allowed")
 
     }
-    func test_TextFiledsDoesNotAcceptSpecialChar(){
-        guard let fromTextField = sut.fromCurrencyTxtFiled else{
-            XCTFail()
+    func test_TextFiledsDoesNotAcceptSpecialChar() {
+        guard let fromTextField = sut.fromCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
-        guard let toTextField = sut.toCurrencyTxtFiled else{
-            XCTFail()
+        guard let toTextField = sut.toCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
 
         let specialChar = ",,,,"
         
-        guard let shouldNotAllowSpecialChar = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else{
+        guard let shouldNotAllowSpecialChar = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else {
             
-            XCTFail()
+            XCTFail("textfield delegate is nil")
             return
         }
         
-        guard let shouldNotAllowSpecialCharSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else{
+        guard let shouldNotAllowSpecialCharSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: specialChar) else {
             
-            XCTFail()
+            XCTFail("textfield delegate is nil")
             return
         }
         
@@ -310,28 +310,28 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertFalse(shouldNotAllowSpecialCharSecondTextField, "Return key should be allowed")
 
     }
-    func test_TextFiledsDoesNotAcceptWhiteSpace(){
-        guard let fromTextField = sut.fromCurrencyTxtFiled else{
-            XCTFail()
+    func test_TextFiledsDoesNotAcceptWhiteSpace() {
+        guard let fromTextField = sut.fromCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
-        guard let toTextField = sut.toCurrencyTxtFiled else{
-            XCTFail()
+        guard let toTextField = sut.toCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
 
         let whiteSpace = " "
         
-        guard let shouldNotAllowWhiteSpace = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else{
+        guard let shouldNotAllowWhiteSpace = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else {
             
-            XCTFail()
+            XCTFail("textfield delegate is nil")
             return
         }
         
         
-        guard let shouldNotAllowWhiteSpaceSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else{
+        guard let shouldNotAllowWhiteSpaceSecondTextField = toTextField.delegate?.textField?(toTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: whiteSpace) else {
             
-            XCTFail()
+            XCTFail("textfield delegate is nil")
             return
         }
         
@@ -339,13 +339,13 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertFalse(shouldNotAllowWhiteSpaceSecondTextField, "Return key should be allowed")
     }
     
-    func test_TextFiledsOnlyAcceptsOneDecimalPoint(){
-        guard let fromTextField = sut.fromCurrencyTxtFiled else{
-            XCTFail()
+    func test_TextFiledsOnlyAcceptsOneDecimalPoint() {
+        guard let fromTextField = sut.fromCurrencyTxtFiled else {
+            XCTFail("textfield delegate is nil")
             return
         }
-        guard let toTextField = sut.toCurrencyTxtFiled else{
-            XCTFail()
+        guard sut.toCurrencyTxtFiled != nil else {
+            XCTFail("textfield delegate is nil")
             return
         }
 
@@ -353,22 +353,22 @@ final class ConverterScreenTests: XCTestCase {
         
         let decimalPoint = "."
         
-        guard let shouldNotAllowMoreThanOneDecimalPoint = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: decimalPoint) else{
+        guard let shouldNotAllowMoreThanOneDecimalPoint = fromTextField.delegate?.textField?(fromTextField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: decimalPoint) else {
             
-            XCTFail()
+            XCTFail("textfield delegate is nil")
             return
         }
         XCTAssertFalse(shouldNotAllowMoreThanOneDecimalPoint, "only one decimal point is allowed")
     }
     
     
-    func test_To_TextField_PushesCalculatedRateTO_From_TextField(){
-        guard let fromTextField = sut.fromCurrencyTxtFiled else{
-            XCTFail()
+    func test_To_TextField_PushesCalculatedRateTO_From_TextField() {
+        guard let fromTextField = sut.fromCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
-        guard let toTextField = sut.toCurrencyTxtFiled else{
-            XCTFail()
+        guard let toTextField = sut.toCurrencyTxtFiled else {
+            XCTFail("textfield is nil")
             return
         }
         
@@ -386,7 +386,7 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertEqual(fromTextField.text, "426.67")
         
     }
-    func test_SwapActionOnlyWorks_WhenBothRatesAreChosen()throws{
+    func test_SwapActionOnlyWorks_WhenBothRatesAreChosen() throws {
         // given
         let fromCurrency = CurrencyRate(iso: "From", rate: 1.5)
 
@@ -399,7 +399,7 @@ final class ConverterScreenTests: XCTestCase {
         // Then
         XCTAssertTrue(fromValue.iso == "From")
     }
-    func test_CanSwapRates()throws{
+    func test_CanSwapRates() throws {
         // given
         let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
         let toCurrency = CurrencyRate(iso: "USD", rate: 3.2)
@@ -428,7 +428,7 @@ final class ConverterScreenTests: XCTestCase {
 }
 
 // MARK: Mock
-fileprivate class LatestRatesServiceMock: LatestRatesService{
+private class LatestRatesServiceMock: LatestRatesService {
     
     
     func getLatestRates() -> Single<LatestRatesModel> {

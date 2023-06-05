@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class DetailViewModel: NSObject{
+class DetailViewModel: NSObject {
     
     let historicalDataService: HistoricalDataService
     
@@ -23,9 +23,9 @@ class DetailViewModel: NSObject{
     let error = PublishSubject<Error>()
     
     
-    private var historicalDataHolder: HistoricalDataModel?{
-        didSet{
-            if let historicalData = historicalDataHolder, historicalData.rates.count > 2{
+    private var historicalDataHolder: HistoricalDataModel? {
+        didSet {
+            if let historicalData = historicalDataHolder, historicalData.rates.count > 2 {
                 
                 let rates = historicalData.rates.map({CurrencyRate(iso: $0.key, rate: $0.value)})
                 
@@ -39,7 +39,7 @@ class DetailViewModel: NSObject{
     }
 
 
-    func getHistoricalDataForPast3Days(){
+    func getHistoricalDataForPast3Days() {
         
         isLoading.onNext(true)
         
@@ -47,10 +47,9 @@ class DetailViewModel: NSObject{
                                                    fromCurrency: CurrencyRate(iso: "USD", rate: 1.3),
                                                    toCurrencyRate: CurrencyRate(iso: "AED", rate: 2.5))
         
-        historicalDataService.getHistoricalData(historicalData){
-            [unowned self] result in
+        historicalDataService.getHistoricalData(historicalData) {[unowned self] result in
             
-            switch result{
+            switch result {
             case .success(let historicalData):
                 
                 print(historicalData)
@@ -67,7 +66,7 @@ class DetailViewModel: NSObject{
             }
         }
     }
-    private func getDate(value: Int)->String{
+    private func getDate(value: Int) -> String {
         let calendar = Calendar.current
         let day = calendar.date(byAdding: .day, value: value, to: Date())
         

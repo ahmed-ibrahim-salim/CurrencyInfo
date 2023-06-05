@@ -8,31 +8,26 @@
 import Foundation
 import RxSwift
 
-protocol HistoricalDataServiceProtocol{
+protocol HistoricalDataServiceProtocol {
     
-    func getHistoricalData(_ historicalRequestData: HistoricalRequestData,
-                            completionHandler: @escaping (Result<HistoricalDataModel, Error>)->Void)
-}
+    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, Error>) -> Void) }
 
-class HistoricalDataService: HistoricalDataServiceProtocol{
+class HistoricalDataService: HistoricalDataServiceProtocol {
     
     private var network = NetworkCaller.shared
     
-    func getHistoricalData(_ historicalRequestData: HistoricalRequestData,
-                            completionHandler: @escaping (Result<HistoricalDataModel, Error>)->Void){
+    func getHistoricalData(_ historicalRequestData: HistoricalRequestData, completionHandler: @escaping (Result<HistoricalDataModel, Error>) -> Void) {
         
         let getHistoricalDataRequest = HistoricalDataRequest.constructURlRequest(historicalRequestData)
         
         
         network.performGet(url: getHistoricalDataRequest,
-                           HistoricalDataModel.self){
-            result in
+                           HistoricalDataModel.self) {result in
             
-            switch result{
+            switch result {
             case .success(let data):
                 
                 completionHandler(.success(data))
-                break
                 
             case .failure(let error):
                 completionHandler(.failure(error))
@@ -43,11 +38,11 @@ class HistoricalDataService: HistoricalDataServiceProtocol{
 
 }
 
-struct HistoricalDataRequest{
+struct HistoricalDataRequest {
 
-    static func constructURlRequest(_ historicalRequestData: HistoricalRequestData)->URLRequest{
+    static func constructURlRequest(_ historicalRequestData: HistoricalRequestData) -> URLRequest {
         // should be
-        //{{base-url}}/2023-05-13?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
+        // {{base-url}}/2023-05-13?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
         
         var url = URL(string: NetworkConstants.baseUrl)!
 
@@ -68,7 +63,7 @@ struct HistoricalDataRequest{
     
 }
 
-struct HistoricalRequestData{
+struct HistoricalRequestData {
     let date: String
     let fromCurrency: CurrencyRate
     let toCurrencyRate: CurrencyRate

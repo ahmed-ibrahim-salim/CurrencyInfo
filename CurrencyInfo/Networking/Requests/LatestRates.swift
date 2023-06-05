@@ -8,14 +8,14 @@
 import Foundation
 import RxSwift
 
-protocol LatestRatesService{
+protocol LatestRatesService {
     
-    func getLatestRates()->Single<LatestRatesModel>
+    func getLatestRates() -> Single<LatestRatesModel>
 }
 
-class LatestRates: LatestRatesService{
+class LatestRates: LatestRatesService {
         
-    func getLatestRates()->Single<LatestRatesModel>{
+    func getLatestRates() -> Single<LatestRatesModel> {
         
         let getLatestRates = URLSession.shared.rx
             .response(request: LatestRatesRequest.constructURlRequest())
@@ -26,21 +26,21 @@ class LatestRates: LatestRatesService{
     }
 }
 
-extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HTTPURLResponse, data: Data){
+extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HTTPURLResponse, data: Data) {
 
-    func catchNetworkRequestsErrors<T:Codable>(_ type: T.Type) -> Single<T> {
+    func catchNetworkRequestsErrors<T: Codable>(_ type: T.Type) -> Single<T> {
         return flatMap { response, data in
 
-            if 200..<300 ~= response.statusCode{
-                do{
+            if 200..<300 ~= response.statusCode {
+                do {
                     let decodedData = try JSONDecoder().decode(type.self, from: data)
 
                     return .just(decodedData)
-                }catch{
+                } catch {
                     throw error
                 }
 
-            }else{
+            } else {
                 throw ErrorResult.network(string: response.debugDescription)
             }
         }
@@ -48,9 +48,9 @@ extension PrimitiveSequence where Trait == SingleTrait, Element == (response: HT
 
 }
 
-struct LatestRatesRequest{
+struct LatestRatesRequest {
 
-    static func constructURlRequest()->URLRequest{
+    static func constructURlRequest() -> URLRequest {
         // should be
         // {{base-url}}/latest?access_key=9717e66194da9954443497f08ac17ec5&symbols=USD,AED
         var url = URL(string: NetworkConstants.baseUrl)!

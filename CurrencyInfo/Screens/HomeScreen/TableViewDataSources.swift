@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol ConverterScreenControllerProtocol: AnyObject{
+protocol ConverterScreenControllerProtocol: AnyObject {
     var fromCurrencyTable: UITableView! { get }
     var toCurrencyTable: UITableView! { get }
     
@@ -26,17 +26,17 @@ protocol ConverterScreenControllerProtocol: AnyObject{
     var fromTextFieldChanged: PublishSubject<String> {get}
     var toTextFieldChanged: PublishSubject<String> {get}
     
-    func getNumberOfRows(table: UITableView)->Int
+    func getNumberOfRows(table: UITableView) -> Int
 
-    func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell
+    func get_TableView_Cell(indexPath: IndexPath) -> UITableViewCell
     
 }
 
 // MARK: Default implem
-extension ConverterScreenControllerProtocol{
-    func getNumberOfRows(table: UITableView)->Int{
+extension ConverterScreenControllerProtocol {
+    func getNumberOfRows(table: UITableView) -> Int {
         
-        guard !currencyList.isEmpty else{
+        guard !currencyList.isEmpty else {
             return 0
         }
         
@@ -44,15 +44,15 @@ extension ConverterScreenControllerProtocol{
         
     }
     
-    func get_TableView_Cell(indexPath: IndexPath)->UITableViewCell{
+    func get_TableView_Cell(indexPath: IndexPath) -> UITableViewCell {
         
         let cell = UITableViewCell()
         
-        if 0..<currencyList.count ~= indexPath.row{
+        if 0..<currencyList.count ~= indexPath.row {
             
             cell.textLabel?.text = currencyList[indexPath.row].iso
             
-        }else{
+        } else {
             cell.textLabel?.text = ""
         }
         cell.contentView.backgroundColor = .systemGray4
@@ -62,7 +62,7 @@ extension ConverterScreenControllerProtocol{
 }
 
 // MARK: DataSource
-class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
+class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     weak var converterScreen: ConverterScreenControllerProtocol!
     
@@ -81,15 +81,15 @@ class TablesDataSource: NSObject, UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.removeFromSuperview()
         
-        guard 0..<converterScreen.currencyList.count ~= indexPath.row else{
+        guard 0..<converterScreen.currencyList.count ~= indexPath.row else {
             return
         }
         
         let currencyForChosenBtn = converterScreen.currencyList[indexPath.row]
-        if tableView == converterScreen!.fromCurrencyTable{
+        if tableView == converterScreen!.fromCurrencyTable {
             
             converterScreen.changeFromCurrencyBtn.onNext(currencyForChosenBtn)
-        }else{
+        } else {
 
             converterScreen.changeToCurrencyBtn.onNext(currencyForChosenBtn)
         }

@@ -11,10 +11,10 @@ struct LatestRatesModel: Codable {
     let success: Bool
     let timestamp: Int
     let base, date: String
-    let rates: [String : Double]
+    let rates: [String: Double]
 }
 
-struct CurrencyRate: Equatable{
+struct CurrencyRate: Equatable {
     let iso: String
     let rate: Double
 }

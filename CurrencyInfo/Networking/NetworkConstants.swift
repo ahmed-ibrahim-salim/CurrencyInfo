@@ -9,10 +9,9 @@
 import UIKit
 import RxSwift
 
-struct NetworkConstants{
+struct NetworkConstants {
         
     static let accessKey = "9717e66194da9954443497f08ac17ec5"
     static let baseUrl = "http://data.fixer.io/api"
     
 }
-

@@ -37,7 +37,7 @@ final class ViewModelTests: XCTestCase {
         latestRatesService = nil
     }
 
-    func test_WhenCallGetAvailableCurrencies_WithError_ReturnsError(){
+    func test_WhenCallGetAvailableCurrencies_WithError_ReturnsError() {
         // given
         let rates = scheduler.createObserver([CurrencyRate].self)
         let errorMessage = scheduler.createObserver(String.self)
@@ -91,7 +91,7 @@ final class ViewModelTests: XCTestCase {
                                                         timestamp: 1321312,
                                                         base: "EUR",
                                                         date: "23-05-14",
-                                                        rates: [currencyRate.iso : currencyRate.rate])
+                                                        rates: [currencyRate.iso: currencyRate.rate])
 
         latestRatesService.latestRatesModel = latestRatesModel
 
@@ -112,7 +112,7 @@ final class ViewModelTests: XCTestCase {
         XCTAssertEqual(rates.events, [.next(10, [currencyRate])])
     }
     
-    func test_getCurrencyValue_ReturnsCorrectValue(){
+    func test_getCurrencyValue_ReturnsCorrectValue() {
         // given
         let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
         let toCurrency = CurrencyRate(iso: "USD", rate: 3.2)
@@ -131,11 +131,11 @@ final class ViewModelTests: XCTestCase {
 
 }
 
-//MARK: Mock
-fileprivate class LatestRatesServiceMock: LatestRatesService{
+// MARK: Mock
+private class LatestRatesServiceMock: LatestRatesService {
     
     
-    var latestRatesModel: LatestRatesModel? = nil
+    var latestRatesModel: LatestRatesModel?
     
     func getLatestRates() -> Single<LatestRatesModel> {
         
@@ -149,4 +149,3 @@ fileprivate class LatestRatesServiceMock: LatestRatesService{
         }
     }
 }
-

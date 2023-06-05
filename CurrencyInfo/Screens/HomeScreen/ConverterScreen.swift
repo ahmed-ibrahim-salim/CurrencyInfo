@@ -92,8 +92,46 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     func bindViewModel() {
         
-        // MARK: Inputs
+        bindInputs()
         
+        // MARK: outputs
+        viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
+            self.currencyList = currencyList
+            toCurrencyTable.reloadData()
+            fromCurrencyTable.reloadData()
+            
+        }).disposed(by: disposeBag)
+        
+        
+        viewModel.output.fromBtnName
+            .drive {[unowned self] currencyRate in
+                self.fromBtn.setTitle(currencyRate.iso, for: .normal)
+            }
+            .disposed(by: disposeBag)
+
+        viewModel.output.toBtnName
+            .drive {[unowned self] currencyRate in
+            self.toBtn.setTitle(currencyRate.iso, for: .normal)
+            }.disposed(by: disposeBag)
+        
+        
+        viewModel.output.fromTextFieldChanged
+            .drive {[unowned self] decimal in
+                
+                toCurrencyTxtFiled.text = decimal.description
+            }.disposed(by: disposeBag)
+
+        
+        viewModel.output.toTextFieldChanged
+            .drive {[unowned self] decimal in
+                
+                fromCurrencyTxtFiled.text = decimal.description
+            }.disposed(by: disposeBag)
+        
+    }
+
+    private func bindInputs() {
+        // MARK: Inputs
         changeFromCurrencyBtn
             .subscribe {[unowned self] currencyRate in
                 self.viewModel.input.changeFromBtnName.on(currencyRate)
@@ -155,43 +193,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             }
             .disposed(by: disposeBag)
         
-        
-        // MARK: outputs
-        viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
-            self.currencyList = currencyList
-            toCurrencyTable.reloadData()
-            fromCurrencyTable.reloadData()
-            
-        }).disposed(by: disposeBag)
-        
-        
-        viewModel.output.fromBtnName
-            .drive {[unowned self] currencyRate in
-                self.fromBtn.setTitle(currencyRate.iso, for: .normal)
-            }
-            .disposed(by: disposeBag)
-
-        viewModel.output.toBtnName
-            .drive {[unowned self] currencyRate in
-            self.toBtn.setTitle(currencyRate.iso, for: .normal)
-            }.disposed(by: disposeBag)
-        
-        
-        viewModel.output.fromTextFieldChanged
-            .drive {[unowned self] decimal in
-                
-                toCurrencyTxtFiled.text = decimal.description
-            }.disposed(by: disposeBag)
-
-        
-        viewModel.output.toTextFieldChanged
-            .drive {[unowned self] decimal in
-                
-                fromCurrencyTxtFiled.text = decimal.description
-            }.disposed(by: disposeBag)
-        
     }
-
     // MARK: UIElements
     var fromCurrencyTable: UITableView! = {
         

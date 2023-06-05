@@ -7,43 +7,36 @@
 
 import Foundation
 
-struct NetworkCaller{
+struct NetworkCaller {
     
     static let shared = NetworkCaller()
         
-    private func parseReturnedData<T:Codable>(data: Data,
-                                              _ type: T.Type,
-                                              completionHandler: @escaping ((Result<T, Error>) -> Void)){
+    private func parseReturnedData<T: Codable>(data: Data, _ type: T.Type, completionHandler: @escaping ((Result<T, Error>) -> Void)) {
         
-        do{
+        do {
             let model = try JSONDecoder().decode(type.self, from: data)
             
             completionHandler(.success(model))
             
             print(model)
-        }catch{
+        } catch {
             completionHandler(.failure(error))
             print(ErrorResult.parser(string: error.localizedDescription))
         }
     }
     
-    func performGet<T:Codable>(url: URLRequest,
-                               _ type: T.Type,
-                               completionHandler: @escaping ((Result<T, Error>) -> Void)){
+    func performGet<T: Codable>(url: URLRequest, _ type: T.Type, completionHandler: @escaping ((Result<T, Error>) -> Void)) {
         
-        URLSession.shared.dataTask(with: url) {
-            
-            data, response, error in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             
             //            print(response)
             
             if let data = data {
                 
                 // parsing
-                self.parseReturnedData(data: data, type){
-                    result in
+                self.parseReturnedData(data: data, type) {result in
                     
-                    switch result{
+                    switch result {
                     case .success(let data):
                         
                         completionHandler(.success(data))
