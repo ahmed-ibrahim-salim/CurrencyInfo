@@ -119,7 +119,7 @@ final class DetailViewModelTests: XCTestCase {
         
 
         let historyData = scheduler.createObserver([HistoryDataItem].self)
-        let errorMessage = scheduler.createObserver(ErrorResult.self)
+        let errorMessage = scheduler.createObserver(String.self)
         
         let error = ErrorResult.network(string: "network error")
         let exp = expectation(description: "Loading Historical data")
@@ -146,7 +146,7 @@ final class DetailViewModelTests: XCTestCase {
         waitForExpectations(timeout: 3)
            
         // Then
-        XCTAssertEqual(errorMessage.events, [.next(0, error)])
+        XCTAssertEqual(errorMessage.events, [.next(0, error.localizedDescription)])
 
     }
     

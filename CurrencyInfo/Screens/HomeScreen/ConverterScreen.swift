@@ -340,6 +340,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         openDetailsScreen()
     }
     
+
+}
+
+extension ConverterScreen {
     func openDetailsScreen() {
         guard let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
             
@@ -348,9 +352,12 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         }
         
         do {
-            let fromRate = try changeFromCurrencyBtn.value()
-            let toRate = try changeToCurrencyBtn.value()
+            let fromRate = CurrencyRate(iso: "EUR", rate: 1.0)
+            let toRate = CurrencyRate(iso: "AED", rate: 1.2)
             
+//            let fromRate = try changeFromCurrencyBtn.value()
+//            let toRate = try changeToCurrencyBtn.value()
+//            
             guard fromRate.iso != "From" && toRate.iso != "To" else {
                 self.showAlert(message: "Please choose currencies to see details")
                 return

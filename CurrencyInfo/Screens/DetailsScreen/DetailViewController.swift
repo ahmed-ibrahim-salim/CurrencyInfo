@@ -71,9 +71,9 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
     func bindViewModel() {
         
         viewModel.errorMessage
-            .asDriver(onErrorJustReturn: ErrorResult.custom(string: "unknown error"))
+            .asDriver(onErrorJustReturn: "unknown error")
             .drive(onNext: { [unowned self] errorMessage in
-                self.showAlert(message: errorMessage.localizedDescription)
+                self.showAlert(message: errorMessage)
             }).disposed(by: disposeBag)
         
         
@@ -88,7 +88,7 @@ class DetailViewController: UIViewController, DetailViewControllerProtocol {
             .asDriver(onErrorJustReturn: false)
             .drive(onNext: { [unowned self] isLoading in
                 
-                if isLoading{
+                if isLoading {
                     self.showActivityIndicator(view: self.indicatorView,
                                                indicator: self.activityIndicator)
                 } else {

@@ -20,16 +20,16 @@ class DetailViewModel: NSObject {
     
     let historicalDataLast3Days = PublishSubject<[HistoryDataItem]>()
     
-    let errorMessage = PublishSubject<ErrorResult>()
+    let errorMessage = PublishSubject<String>()
     
     
     private let group = DispatchGroup()
 
     func getHistoricalDataLast3Days(_ historicalRequestData: HistoricalRequestData,
-                                    completion: @escaping (Result<[HistoryDataItem], ErrorResult>) -> Void) {
+                                    completion: @escaping (Result<[HistoryDataItem], Error>) -> Void) {
         var collection = [HistoricalDataModel]()
         var historyDataItems = [HistoryDataItem]()
-        var errors = [ErrorResult]()
+        var errors = [Error]()
         
         isLoading.onNext(true)
 
@@ -100,7 +100,7 @@ class DetailViewModel: NSObject {
             isLoading.onNext(false)
 
             if !errors.isEmpty {
-                errorMessage.onNext(errors[0])
+                errorMessage.onNext(errors[0].localizedDescription)
                 completion(.failure(errors[0]))
             } else {
                 historicalDataLast3Days.onNext(historyDataItems)
@@ -119,7 +119,7 @@ class DetailViewModel: NSObject {
         return innerHistoricalRequestData
     }
     
-    func getHistoricalDataForDay(historicalData: HistoricalRequestData, completion: @escaping (Result<HistoricalDataModel, ErrorResult>) -> Void) {
+    func getHistoricalDataForDay(historicalData: HistoricalRequestData, completion: @escaping (Result<HistoricalDataModel, Error>) -> Void) {
         
         historicalDataService.getHistoricalData(historicalData) {result in
             
