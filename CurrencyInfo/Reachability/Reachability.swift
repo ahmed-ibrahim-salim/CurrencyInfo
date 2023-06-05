@@ -9,15 +9,15 @@ import SystemConfiguration
 import Foundation
 
 public enum ReachabilityError: Error {
-    case FailedToCreateWithAddress(sockaddr_in)
-    case FailedToCreateWithHostname(String)
-    case UnableToSetCallback
-    case UnableToSetDispatchQueue
+    case failedToCreateWithAddress(sockaddr_in)
+    case failedToCreateWithHostname(String)
+    case unableToSetCallback
+    case unableToSetDispatchQueue
 }
 
-public let ReachabilityChangedNotification = NSNotification.Name("ReachabilityChangedNotification")
+public let reachabilityChangedNotification = NSNotification.Name("ReachabilityChangedNotification")
 
-func callback(reachability:SCNetworkReachability, flags: SCNetworkReachabilityFlags, info: UnsafeMutableRawPointer?) {
+func callback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, info: UnsafeMutableRawPointer?) {
     
     guard let info = info else { return }
     
@@ -30,8 +30,8 @@ func callback(reachability:SCNetworkReachability, flags: SCNetworkReachabilityFl
 
 public class Reachability {
     
-    public typealias NetworkReachable = (Reachability) -> ()
-    public typealias NetworkUnreachable = (Reachability) -> ()
+    public typealias NetworkReachable = (Reachability) -> Void
+    public typealias NetworkUnreachable = (Reachability) -> Void
     
     public enum NetworkStatus: CustomStringConvertible {
         
@@ -130,12 +130,12 @@ public extension Reachability {
         context.info = UnsafeMutableRawPointer(Unmanaged<Reachability>.passUnretained(self).toOpaque())
         if !SCNetworkReachabilitySetCallback(reachabilityRef, callback, &context) {
             stopNotifier()
-            throw ReachabilityError.UnableToSetCallback
+            throw ReachabilityError.unableToSetCallback
         }
         
         if !SCNetworkReachabilitySetDispatchQueue(reachabilityRef, reachabilitySerialQueue) {
             stopNotifier()
-            throw ReachabilityError.UnableToSetDispatchQueue
+            throw ReachabilityError.unableToSetDispatchQueue
         }
         
         // Perform an intial check
@@ -192,17 +192,17 @@ public extension Reachability {
     
     var description: String {
         
-        let W = isRunningOnDevice ? (isOnWWANFlagSet ? "W" : "-") : "X"
-        let R = isReachableFlagSet ? "R" : "-"
-        let c = isConnectionRequiredFlagSet ? "c" : "-"
-        let t = isTransientConnectionFlagSet ? "t" : "-"
-        let i = isInterventionRequiredFlagSet ? "i" : "-"
-        let C = isConnectionOnTrafficFlagSet ? "C" : "-"
-        let D = isConnectionOnDemandFlagSet ? "D" : "-"
-        let l = isLocalAddressFlagSet ? "l" : "-"
-        let d = isDirectFlagSet ? "d" : "-"
+        let wan = isRunningOnDevice ? (isOnWWANFlagSet ? "W" : "-") : "X"
+        let isReachable = isReachableFlagSet ? "R" : "-"
+        let isConnectionRequired = isConnectionRequiredFlagSet ? "c" : "-"
+        let isTransientConnection = isTransientConnectionFlagSet ? "t" : "-"
+        let isInterventionRequired = isInterventionRequiredFlagSet ? "i" : "-"
+        let isConnectionOnTraffic = isConnectionOnTrafficFlagSet ? "C" : "-"
+        let isConnectionOnDemand = isConnectionOnDemandFlagSet ? "D" : "-"
+        let isLocalAddress = isLocalAddressFlagSet ? "l" : "-"
+        let isDirect = isDirectFlagSet ? "d" : "-"
         
-        return "\(W)\(R) \(c)\(t)\(i)\(C)\(D)\(l)\(d)"
+        return "\(wan)\(isReachable) \(isConnectionRequired)\(isTransientConnection)\(isInterventionRequired)\(isConnectionOnTraffic)\(isConnectionOnDemand)\(isLocalAddress)\(isDirect)"
     }
 }
 
@@ -217,7 +217,7 @@ fileprivate extension Reachability {
         let block = isReachable ? whenReachable : whenUnreachable
         block?(self)
         
-        self.notificationCenter.post(name: ReachabilityChangedNotification, object:self)
+        self.notificationCenter.post(name: reachabilityChangedNotification, object: self)
         
         previousFlags = flags
     }
@@ -245,7 +245,10 @@ fileprivate extension Reachability {
         return reachabilityFlags.contains(.connectionOnDemand)
     }
     var isConnectionOnTrafficOrDemandFlagSet: Bool {
-        return !reachabilityFlags.intersection([.connectionOnTraffic, .connectionOnDemand]).isEmpty
+//        return !reachabilityFlags.intersection([.connectionOnTraffic, .connectionOnDemand]).isEmpty
+        
+        return !reachabilityFlags.isDisjoint(with: [.connectionOnTraffic, .connectionOnDemand])
+        
     }
     var isTransientConnectionFlagSet: Bool {
         return reachabilityFlags.contains(.transientConnection)

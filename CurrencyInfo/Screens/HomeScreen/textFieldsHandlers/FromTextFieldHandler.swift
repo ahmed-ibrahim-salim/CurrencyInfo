@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol TextfieldsHandlerProtocol{
+protocol TextfieldsHandlerProtocol {
     var converterScreen: ConverterScreenControllerProtocol! {get}
   
 }
 
 
-class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProtocol{
+class FromTextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProtocol {
     
     weak var converterScreen: ConverterScreenControllerProtocol!
     
@@ -30,17 +30,12 @@ class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerPro
         let returnKeyChar = CharacterSet(charactersIn: "\n")
         
         //      allowing check if char passed is return key, so i can dismiss keyboard
-        if let replacementTextIsReturnKeyBtn = string.rangeOfCharacter(from: returnKeyChar){
-            return true
-        }
+        if string.rangeOfCharacter(from: returnKeyChar) != nil { return true }
         
         let allowedNumbers = CharacterSet.decimalDigits
         
         // allowing only numbers
-        if let replacementTextIsNumber = string.rangeOfCharacter(from: allowedNumbers){
-            
-            return true
-        }
+        if string.rangeOfCharacter(from: allowedNumbers) != nil { return true }
         
         
         if string == "." || string == ""{
@@ -52,15 +47,15 @@ class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerPro
         
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField){
-        if let text = textField.text{
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if let text = textField.text {
             converterScreen.fromTextFieldChanged.onNext(text)
         }
     }
 
 }
 
-class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProtocol{
+class ToTextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProtocol {
     
     weak var converterScreen: ConverterScreenControllerProtocol!
 
@@ -78,17 +73,11 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
         let returnKeyChar = CharacterSet(charactersIn: "\n")
         
         //      allowing check if char passed is return key, so i can dismiss keyboard
-        if let replacementTextIsReturnKeyBtn = string.rangeOfCharacter(from: returnKeyChar){
-            return true
-        }
-        
+        if string.rangeOfCharacter(from: returnKeyChar) != nil { return true }
         let allowedNumbers = CharacterSet.decimalDigits
         
         // allowing only numbers
-        if let replacementTextIsNumber = string.rangeOfCharacter(from: allowedNumbers){
-            
-            return true
-        }
+        if string.rangeOfCharacter(from: allowedNumbers) != nil { return true }
         
         
         if string == "." || string == ""{
@@ -100,12 +89,10 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
 
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField){
-        if let text = textField.text{
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if let text = textField.text {
 //            to_TextFieldChanged
             converterScreen.toTextFieldChanged.onNext(text)
         }
     }
 }
-
-

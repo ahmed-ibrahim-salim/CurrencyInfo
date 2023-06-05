@@ -19,9 +19,9 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var tablesDataSource: TablesDataSource?
     
-    var fromTextFieldHandler: From_TextFieldHandler?
+    var fromTextFieldHandler: FromTextFieldHandler?
     
-    var toTextFieldHandler: To_TextFieldHandler?
+    var toTextFieldHandler: ToTextFieldHandler?
     
     
     // MARK: Life cycle
@@ -47,8 +47,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     }
     
     func setTextFieldsDelegates() {
-        fromTextFieldHandler = From_TextFieldHandler()
-        toTextFieldHandler =  To_TextFieldHandler()
+        fromTextFieldHandler = FromTextFieldHandler()
+        toTextFieldHandler =  ToTextFieldHandler()
         
         fromTextFieldHandler?.converterScreen = self
         toTextFieldHandler?.converterScreen = self

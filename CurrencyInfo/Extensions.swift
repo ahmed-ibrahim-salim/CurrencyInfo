@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController{
+extension UIViewController {
     func showAlert(_ title: String? = "",
                    message: String?,
                    selfDismissing: Bool = true,
@@ -24,8 +24,8 @@ extension UIViewController{
         present(alert, animated: true)
         
         if selfDismissing {
-            Timer.scheduledTimer(withTimeInterval: time, repeats: false) { t in
-                t.invalidate()
+            Timer.scheduledTimer(withTimeInterval: time, repeats: false) { timer in
+                timer.invalidate()
                 alert.dismiss(animated: true)
             }
         }
