@@ -60,45 +60,45 @@ final class ConverterScreenTests: XCTestCase {
     }
     
     // MARK: Outlets
-    func test_HasDetailsButton(){
+    func test_HasDetailsButton() {
         let hasDetailsBtn = sut.detailsBtn.isDescendant(of: sut.view)
         XCTAssertTrue(hasDetailsBtn)
     }
-    func test_HasReverseBtn(){
-        let HasReverseBtn = sut.reverseBtn.isDescendant(of: sut.view)
-        XCTAssertTrue(HasReverseBtn)
+    func test_HasReverseBtn() {
+        let hasReverseBtn = sut.reverseBtn.isDescendant(of: sut.view)
+        XCTAssertTrue(hasReverseBtn)
     }
     
 
-    func test_HasFromButton(){
+    func test_HasFromButton() {
         let hasFromButton = sut.fromBtn.isDescendant(of: sut.view)
         XCTAssertTrue(hasFromButton)
     }
-    func test_HasToButton(){
+    func test_HasToButton() {
         let hasToButton = sut.toBtn.isDescendant(of: sut.view)
         XCTAssertTrue(hasToButton)
     }
     
-    func test_HasfromCurrencyArrow(){
+    func test_HasfromCurrencyArrow() {
         let hasfromCurrencyArrow = sut.fromCurrencyArrow.isDescendant(of: sut.view)
         XCTAssertTrue(hasfromCurrencyArrow)
     }
     
-    func test_HastoCurrencyArrow(){
+    func test_HastoCurrencyArrow() {
         let hastoCurrencyArrow = sut.toCurrencyArrow.isDescendant(of: sut.view)
         XCTAssertTrue(hastoCurrencyArrow)
     }
     
-    func test_HasFromCurrencyTxtFiled(){
+    func test_HasFromCurrencyTxtFiled() {
         let hasFromCurrencyTxtFiled = sut.fromCurrencyTxtFiled.isDescendant(of: sut.view)
         XCTAssertTrue(hasFromCurrencyTxtFiled)
     }
-    func test_HasToCurrencyTxtFiled(){
+    func test_HasToCurrencyTxtFiled() {
         let hasToCurrencyTxtFiled = sut.toCurrencyTxtFiled.isDescendant(of: sut.view)
         XCTAssertTrue(hasToCurrencyTxtFiled)
     }
     
-    func test_HasCurrenciesListTableViewFor_FromAction(){
+    func test_HasCurrenciesListTableViewFor_FromAction() {
         let hasToCurrencyTxtFiled = sut.fromCurrencyTable
 //            .isDescendant(of: sut.view)
         XCTAssertNotNil(hasToCurrencyTxtFiled)
@@ -108,11 +108,11 @@ final class ConverterScreenTests: XCTestCase {
 
     
     
-    func test_fromBtnHasFromAction(){
+    func test_fromBtnHasFromAction() {
         let fromBtn: UIButton = sut.fromBtn
         
-        guard let actions = fromBtn.actions(forTarget: sut, forControlEvent: .touchUpInside)else{
-            XCTFail()
+        guard let actions = fromBtn.actions(forTarget: sut, forControlEvent: .touchUpInside) else {
+            XCTFail("coul not find action for this btn")
             return
         }
         

@@ -19,9 +19,9 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     
     var tablesDataSource: TablesDataSource?
     
-    var from_TextFieldHandler: From_TextFieldHandler?
+    var fromTextFieldHandler: From_TextFieldHandler?
     
-    var to_TextFieldHandler: To_TextFieldHandler?
+    var toTextFieldHandler: To_TextFieldHandler?
     
     
     // MARK: Life cycle
@@ -46,22 +46,22 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         setTextFieldsDelegates()
     }
     
-    func setTextFieldsDelegates(){
-        from_TextFieldHandler = From_TextFieldHandler()
-        to_TextFieldHandler =  To_TextFieldHandler()
+    func setTextFieldsDelegates() {
+        fromTextFieldHandler = From_TextFieldHandler()
+        toTextFieldHandler =  To_TextFieldHandler()
         
-        from_TextFieldHandler?.converterScreen = self
-        to_TextFieldHandler?.converterScreen = self
+        fromTextFieldHandler?.converterScreen = self
+        toTextFieldHandler?.converterScreen = self
         
         
         fromCurrencyTxtFiled.text = "1"
         
-        fromCurrencyTxtFiled.delegate = from_TextFieldHandler
-        toCurrencyTxtFiled.delegate = to_TextFieldHandler
+        fromCurrencyTxtFiled.delegate = fromTextFieldHandler
+        toCurrencyTxtFiled.delegate = toTextFieldHandler
 
         
     }
-    func setupTableViewDataSources(){
+    func setupTableViewDataSources() {
         tablesDataSource = TablesDataSource()
         tablesDataSource!.converterScreen = self
         
@@ -86,17 +86,16 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     let changeToCurrencyBtn = BehaviorSubject<CurrencyRate>(value: CurrencyRate(iso: "To", rate: 1))
     
     
-    var from_TextFieldChanged = PublishSubject<String>()
+    var fromTextFieldChanged = PublishSubject<String>()
     
-    var to_TextFieldChanged = PublishSubject<String>()
+    var toTextFieldChanged = PublishSubject<String>()
     
     func bindViewModel() {
         
         // MARK: Inputs
         
         changeFromCurrencyBtn
-            .subscribe{
-                [unowned self] currencyRate in
+            .subscribe {[unowned self] currencyRate in
                 self.viewModel.input.changeFromBtnName.on(currencyRate)
                 
                 self.updateRatesValues()
@@ -105,8 +104,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .disposed(by: disposeBag)
         
         changeToCurrencyBtn
-            .subscribe{
-                [unowned self] currencyRate in
+            .subscribe {[unowned self] currencyRate in
+                
                 self.viewModel.input.changeToBtnName.on(currencyRate)
                 
                 self.updateRatesValues()
@@ -114,12 +113,11 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             }
             .disposed(by: disposeBag)
         
-        from_TextFieldChanged
-            .subscribe{
-             [unowned self] string in
+        fromTextFieldChanged
+            .subscribe {[unowned self] string in
                 
                 print(string)
-                do{
+                do {
                     let fromValue = try changeFromCurrencyBtn.value().rate
                     let toValue = try changeToCurrencyBtn.value().rate
                     
@@ -127,8 +125,8 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                                                              fromRate: fromValue,
                                                              toRate: toValue)
                     
-                    viewModel.input.from_TextFieldChanged.onNext(decimalNum)
-                }catch{
+                    viewModel.input.fromTextFieldChanged.onNext(decimalNum)
+                } catch {
                     print(error)
                 }
                 
@@ -137,13 +135,12 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             .disposed(by: disposeBag)
                 
         
-        to_TextFieldChanged
+        toTextFieldChanged
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .subscribe{
-             [unowned self] string in
+            .subscribe {[unowned self] string in
                 
                 print(string)
-                do{
+                do {
                     let fromValue = try changeToCurrencyBtn.value().rate
                     let toValue = try changeFromCurrencyBtn.value().rate
                     
@@ -151,15 +148,15 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                                                              fromRate: fromValue,
                                                              toRate: toValue)
                     
-                    viewModel.input.to_TextFieldChanged.onNext(decimalNum)
-                }catch{
+                    viewModel.input.toTextFieldChanged.onNext(decimalNum)
+                } catch {
                     print(error)
                 }
             }
             .disposed(by: disposeBag)
         
         
-        //MARK: outputs
+        // MARK: outputs
         viewModel.output.rates.drive(onNext: { [unowned self] currencyList in
             self.currencyList = currencyList
             toCurrencyTable.reloadData()
@@ -169,28 +166,26 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         
         
         viewModel.output.fromBtnName
-            .drive{ [unowned self] currencyRate in
+            .drive {[unowned self] currencyRate in
                 self.fromBtn.setTitle(currencyRate.iso, for: .normal)
             }
             .disposed(by: disposeBag)
 
         viewModel.output.toBtnName
-            .drive{[unowned self] currencyRate in
+            .drive {[unowned self] currencyRate in
             self.toBtn.setTitle(currencyRate.iso, for: .normal)
             }.disposed(by: disposeBag)
         
         
-        viewModel.output.from_TextFieldChanged
-            .drive{
-                [unowned self] decimal in
+        viewModel.output.fromTextFieldChanged
+            .drive {[unowned self] decimal in
                 
                 toCurrencyTxtFiled.text = decimal.description
             }.disposed(by: disposeBag)
 
         
-        viewModel.output.to_TextFieldChanged
-            .drive{
-                [unowned self] decimal in
+        viewModel.output.toTextFieldChanged
+            .drive {[unowned self] decimal in
                 
                 fromCurrencyTxtFiled.text = decimal.description
             }.disposed(by: disposeBag)
@@ -220,7 +215,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         
     }()
     
-    func addFromCurrencyTableToScreen(){
+    func addFromCurrencyTableToScreen() {
         
             view.addSubview(fromCurrencyTable)
             
@@ -229,7 +224,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
                 fromCurrencyTable.leftAnchor.constraint(equalTo: fromBtn.leftAnchor),
                 //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
                 fromCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
-                fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2),
+                fromCurrencyTable.widthAnchor.constraint(equalToConstant: fromBtn.frame.width * 2)
                 
             ])
         
@@ -257,7 +252,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         
     }()
     
-    func addToCurrencyTableToScreen(){
+    func addToCurrencyTableToScreen() {
         
         
         view.addSubview(toCurrencyTable)
@@ -267,7 +262,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
             toCurrencyTable.leftAnchor.constraint(equalTo: toBtn.leftAnchor),
             //            currenciesListTableView.rightAnchor.constraint(equalTo: fromBtn.rightAnchor),
             toCurrencyTable.heightAnchor.constraint(equalToConstant: 200),
-            toCurrencyTable.widthAnchor.constraint(equalToConstant: toBtn.frame.width * 2),
+            toCurrencyTable.widthAnchor.constraint(equalToConstant: toBtn.frame.width * 2)
             
         ])
     }
@@ -290,7 +285,7 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     @IBOutlet weak var toCurrencyTxtFiled: UITextField!
     
     // MARK: Actions
-    func swapRates() throws{
+    func swapRates() throws {
         let fromRate = try changeFromCurrencyBtn.value()
         let toRate = try changeToCurrencyBtn.value()
         
@@ -305,30 +300,28 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
 
     }
     
-    private func updateRatesValues(){
-        guard let fromText = fromCurrencyTxtFiled.text else{
-            return
-        }
+    private func updateRatesValues() {
+        guard let fromText = fromCurrencyTxtFiled.text else { return }
         
-        from_TextFieldChanged.onNext(fromText)
+        fromTextFieldChanged.onNext(fromText)
     }
     
     @IBAction func swapRatesAction(_ sender: Any) {
-        do{
+        do {
             try swapRates()
-        }catch{
+        } catch {
             print(error)
         }
     }
     
     @IBAction func fromCurrencyAction(_ sender: Any) {
-        if !currencyList.isEmpty{
+        if !currencyList.isEmpty {
             
             addFromCurrencyTableToScreen()
         }
     }
     @IBAction func toCurrencyAction(_ sender: Any) {
-        if !currencyList.isEmpty{
+        if !currencyList.isEmpty {
             
             addToCurrencyTableToScreen()
         }
@@ -340,4 +333,3 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         navigationController?.pushViewController(detailsVc, animated: true)
     }
 }
-

@@ -18,13 +18,13 @@ class ConverterScreenViewModel {
     // MARK: - Outputs
     let output: Output
 
-    struct Output{
+    struct Output {
         let rates: Driver<[CurrencyRate]>
         let fromBtnName: Driver<CurrencyRate>
         let toBtnName: Driver<CurrencyRate>
 
-        let from_TextFieldChanged: Driver<Decimal>
-        let to_TextFieldChanged: Driver<Decimal>
+        let fromTextFieldChanged: Driver<Decimal>
+        let toTextFieldChanged: Driver<Decimal>
         
         // Loading
 //        let isLoading: Driver<Bool>
@@ -42,15 +42,15 @@ class ConverterScreenViewModel {
 
         let changeToBtnName: PublishSubject<CurrencyRate>
         
-        let from_TextFieldChanged: PublishSubject<Decimal>
+        let fromTextFieldChanged: PublishSubject<Decimal>
         
-        let to_TextFieldChanged: PublishSubject<Decimal>
+        let toTextFieldChanged: PublishSubject<Decimal>
         
 //        let
     }
 //    private let viewDidRefreshSubject = PublishSubject<Void>()
     
-    //MARK: Initializer
+    // MARK: Initializer
     init(
          _ latestRatesService: LatestRatesService
     ) {
@@ -62,13 +62,12 @@ class ConverterScreenViewModel {
         let rates = reloadRelay
             .asObservable()
             .flatMapLatest({ latestRatesService.getLatestRates() })
-            .map({
-                 LatestRatesModel in
+            .map({ latestRatesModel in
                         
 //                self.baseCurrency =
                 var currenciesRates = [CurrencyRate]()
 
-                for (key, value) in LatestRatesModel.rates{
+                for (key, value) in latestRatesModel.rates {
                     let currenctRate = CurrencyRate(iso: key, rate: value)
                     currenciesRates.append(currenctRate)
                 }
@@ -84,9 +83,9 @@ class ConverterScreenViewModel {
         
         changeFromBtnName = PublishSubject<CurrencyRate>()
         changeToBtnName = PublishSubject<CurrencyRate>()
-        from_TextFieldChanged = PublishSubject<Decimal>()
+        fromTextFieldChanged = PublishSubject<Decimal>()
         
-        to_TextFieldChanged = PublishSubject<Decimal>()
+        toTextFieldChanged = PublishSubject<Decimal>()
 
         let fromBtnName = changeFromBtnName
             .asDriver(onErrorJustReturn: CurrencyRate(iso: "From", rate: 0.0))
@@ -95,23 +94,23 @@ class ConverterScreenViewModel {
             .asDriver(onErrorJustReturn: CurrencyRate(iso: "From", rate: 0.0))
         
         
-        let from_TextFieldChangedDriver = from_TextFieldChanged
+        let fromTextFieldChangedDriver = fromTextFieldChanged
             .asDriver(onErrorJustReturn: 1.0)
         
-        let to_TextFieldChangedDriver = to_TextFieldChanged
+        let toTextFieldChangedDriver = toTextFieldChanged
             .asDriver(onErrorJustReturn: 1.0)
         
         // 1)
         input = Input(reload: reloadRelay,
                       changeFromBtnName: changeFromBtnName,
                       changeToBtnName: changeToBtnName,
-                      from_TextFieldChanged: from_TextFieldChanged, to_TextFieldChanged: to_TextFieldChanged)
+                      fromTextFieldChanged: fromTextFieldChanged, toTextFieldChanged: toTextFieldChanged)
         
         output = Output(rates: rates,
                         fromBtnName: fromBtnName,
                         toBtnName: toBtnName,
-                        from_TextFieldChanged: from_TextFieldChangedDriver,
-                        to_TextFieldChanged: to_TextFieldChangedDriver,
+                        fromTextFieldChanged: fromTextFieldChangedDriver,
+                        toTextFieldChanged: toTextFieldChangedDriver,
                         error: errorRelay.asDriver(onErrorJustReturn: "An error happened"))
         
     }
@@ -119,18 +118,18 @@ class ConverterScreenViewModel {
     let changeFromBtnName: PublishSubject<CurrencyRate>
     let changeToBtnName: PublishSubject<CurrencyRate>
     
-    let from_TextFieldChanged: PublishSubject<Decimal>
-    let to_TextFieldChanged: PublishSubject<Decimal>
+    let fromTextFieldChanged: PublishSubject<Decimal>
+    let toTextFieldChanged: PublishSubject<Decimal>
     
     let baseCurrency = CurrencyRate(iso: "EUR", rate: 1.0)
 
     
     func getCurrencyBy(entry: String?,
                        fromRate: Double,
-                       toRate: Double)->Decimal{
+                       toRate: Double) -> Decimal {
 
         if let string = entry,
-           let decimal = Decimal(string: string){
+           let decimal = Decimal(string: string) {
             
             let fromRate = Decimal(fromRate)
             let toRate = Decimal(toRate)
@@ -144,13 +143,10 @@ class ConverterScreenViewModel {
             //        200 / 3.2 = 62.5
             //        62.5 * 1.5 = 93.75
             
-        }else{
-            return Decimal()
-        }
+        } else { return Decimal() }
         
         
     }
 
     
 }
-

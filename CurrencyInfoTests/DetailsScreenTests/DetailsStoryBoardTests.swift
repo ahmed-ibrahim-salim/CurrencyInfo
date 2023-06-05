@@ -38,17 +38,17 @@ final class StoryBoardTests: XCTestCase {
     override func tearDownWithError() throws {
     }
     
-    func test_HasOtherCurrenciesTableView(){
-        let HasOtherCurrenciesTableView = sut.otherCurrenciesTableView.isDescendant(of: sut.view)
-        XCTAssertTrue(HasOtherCurrenciesTableView)
+    func test_HasOtherCurrenciesTableView() {
+        let hasOtherCurrenciesTableView = sut.otherCurrenciesTableView.isDescendant(of: sut.view)
+        XCTAssertTrue(hasOtherCurrenciesTableView)
     }
-    func test_HasHistoricalTableView(){
-        let HasHistoricalTableView = sut.historicalTableView.isDescendant(of: sut.view)
-        XCTAssertTrue(HasHistoricalTableView)
+    func test_HasHistoricalTableView() {
+        let hasHistoricalTableView = sut.historicalTableView.isDescendant(of: sut.view)
+        XCTAssertTrue(hasHistoricalTableView)
     }
-    func test_HasCharView(){
-        let HasChartView = sut.charView.isDescendant(of: sut.view)
-        XCTAssertTrue(HasChartView)
+    func test_HasCharView() {
+        let hasChartView = sut.charView.isDescendant(of: sut.view)
+        XCTAssertTrue(hasChartView)
     }
 
 

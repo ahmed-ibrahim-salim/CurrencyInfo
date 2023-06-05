@@ -9,6 +9,7 @@ target 'CurrencyInfo' do
    pod 'RxSwift'
    pod 'RxCocoa'
    pod 'RxRelay'
+   pod 'SwiftLint'
 
   target 'CurrencyInfoTests' do
     inherit! :search_paths

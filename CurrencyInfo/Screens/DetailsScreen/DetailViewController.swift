@@ -11,6 +11,7 @@ class DetailViewController: UIViewController {
 
     var viewModel: DetailViewModel!
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground

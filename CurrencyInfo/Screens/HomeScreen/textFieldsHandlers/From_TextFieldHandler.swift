@@ -54,7 +54,7 @@ class From_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerPro
     
     func textFieldDidChangeSelection(_ textField: UITextField){
         if let text = textField.text{
-            converterScreen.from_TextFieldChanged.onNext(text)
+            converterScreen.fromTextFieldChanged.onNext(text)
         }
     }
 
@@ -103,7 +103,7 @@ class To_TextFieldHandler: NSObject, UITextFieldDelegate, TextfieldsHandlerProto
     func textFieldDidChangeSelection(_ textField: UITextField){
         if let text = textField.text{
 //            to_TextFieldChanged
-            converterScreen.to_TextFieldChanged.onNext(text)
+            converterScreen.toTextFieldChanged.onNext(text)
         }
     }
 }
