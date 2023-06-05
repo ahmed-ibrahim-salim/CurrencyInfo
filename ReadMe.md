@@ -1,14 +1,30 @@
-if you are faceing error "Double-quoted include"
+# CurrencyInfo
 
-use:
+convert between different curruncies in real-time.
 
-rm -rf ~/Library/Developer/Xcode/DerivedData/
+## Installation:
 
-rm -rf ~/Library/Caches/CocoaPods/
+to install this project clone:
+https://github.com/ahmed-ibrahim-salim/CurrencyInfo
 
-pod deintegrate
+-  write: <br />
 
-pod update
+      ```sh
+      pod install
+      ```
 
+if you are faceing error "Double-quoted include" while building:
 
-used SwiftLint package
+- use:
+    ```sh
+        rm -rf ~/Library/Developer/Xcode/DerivedData/
+        rm -rf ~/Library/Caches/CocoaPods/
+        pod deintegrate
+        pod update
+    ```
+
+## Linting
+used SwiftLint package for linting
+
+## Used
+MVVM, RxSwift, Unit-tests and GCD.
