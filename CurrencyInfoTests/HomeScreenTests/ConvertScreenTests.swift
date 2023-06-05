@@ -415,14 +415,54 @@ final class ConverterScreenTests: XCTestCase {
         XCTAssertEqual(fromValue.iso, "USD")
 //        sut.swapRates()
     }
-    func test_PushDetailsViewController_IsPushed() {
-        
+    
+    func test_DetailsBtn_WhenNotChoseBothCurruncies_FailsToPush() {
+        // given
+        let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
+
+        sut.changeFromCurrencyBtn.onNext(fromCurrency)
+
+        // when
         sut.detailsBtn.sendActions(for: .touchUpInside)
         
         RunLoop.current.run(until: Date())
-                
-        XCTAssertTrue(navigationController.viewControllers.count == 2)
+
+ //    then
+        XCTAssertTrue(navigationController.viewControllers.count != 2)
+    }
+    func test_DetailsBtn_WhenBothCurrunciesHasSameIso_FailsToPush() {
+        // given
+        let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
+        let toCurrency = CurrencyRate(iso: "KZC", rate: 3.2)
+
+        sut.changeFromCurrencyBtn.onNext(fromCurrency)
+        sut.changeToCurrencyBtn.onNext(toCurrency)
+
+        // when
+        sut.detailsBtn.sendActions(for: .touchUpInside)
         
+        RunLoop.current.run(until: Date())
+
+ //    then
+        XCTAssertTrue(navigationController.viewControllers.count != 2)
+    }
+    
+    func test_DetailsBtn_OnlyPushesDetailsVc_WhenChoseBothCurruncies_AndBothDiffrent() {
+        // given
+        let fromCurrency = CurrencyRate(iso: "KZC", rate: 1.5)
+        let toCurrency = CurrencyRate(iso: "USD", rate: 3.2)
+
+        sut.changeFromCurrencyBtn.onNext(fromCurrency)
+        sut.changeToCurrencyBtn.onNext(toCurrency)
+
+        // when
+        sut.detailsBtn.sendActions(for: .touchUpInside)
+        
+        RunLoop.current.run(until: Date())
+
+//        let detailsVC = navigationController.viewControllers[1] as? DetailViewController
+        
+        XCTAssertTrue(navigationController.viewControllers[1] is DetailViewController)
     }
     
 }
@@ -436,5 +476,4 @@ private class LatestRatesServiceMock: LatestRatesService {
         return .error(ErrorResult.custom(string: ""))
 
     }
-    
 }

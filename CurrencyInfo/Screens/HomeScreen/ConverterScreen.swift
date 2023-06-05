@@ -29,10 +29,10 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
         super.viewDidLoad()
         view.backgroundColor = .systemGray5
         
-//                NotificationCenter.default.addObserver(self,
-//                                                       selector: #selector(didBecomeActiveThenRefresh),
-//                                                       name: UIApplication.didBecomeActiveNotification,
-//                                                       object: nil)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(didBecomeActiveThenRefresh),
+                                                       name: UIApplication.didBecomeActiveNotification,
+                                                       object: nil)
         
 
         setupTableViewDataSources()
@@ -330,8 +330,33 @@ class ConverterScreen: UIViewController, ConverterScreenControllerProtocol {
     }
     
     @IBAction func openDetailsAction(_ sender: Any) {
-        let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController")
         
-        navigationController?.pushViewController(detailsVc, animated: true)
+        guard let detailsVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else {
+            
+            self.showAlert(message: "could not load controller")
+            return
+        }
+        
+        do {
+            let fromRate = try changeFromCurrencyBtn.value()
+            let toRate = try changeToCurrencyBtn.value()
+            
+            guard fromRate.iso != "From" && toRate.iso != "To" else {
+                self.showAlert(message: "Please choose currencies to see details")
+                return
+            }
+            guard fromRate.iso != toRate.iso else {
+                self.showAlert(message: "Please choose different currencies to see details")
+                return
+            }
+            
+            detailsVc.fromCurrency = fromRate
+            detailsVc.toCurrency = toRate
+            navigationController?.pushViewController(detailsVc, animated: true)
+            
+        } catch {
+            self.showAlert(message: "Please choose currencies to see details")
+        }
     }
 }
+

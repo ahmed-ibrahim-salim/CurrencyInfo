@@ -66,7 +66,7 @@ struct HistoricalDataRequest {
 }
 
 struct HistoricalRequestData {
-    let date: String
+    var date: String
     let fromCurrency: CurrencyRate
     let toCurrencyRate: CurrencyRate
 }

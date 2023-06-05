@@ -50,12 +50,73 @@ final class DetailViewModelTests: XCTestCase {
         scheduler = nil
         disposeBag = nil
         historicalInputData = nil
+//        historicalOutputData = nil
+    }
+    
+    func test_getHistoricalDataForDay_ReturnsData() {
+
+//        let historyData = scheduler.createObserver(HistoricalDataModel.self)
+
+        let exp = expectation(description: "Loading Historical data")
+
+        
+        // when
+        historicalDataServiceMock.resultMock = .success(historicalOutputData)
+
+        var resultData: HistoricalDataModel?
+        
+        sut.getHistoricalDataForDay(historicalData: historicalInputData) {  result in
+            
+            switch result {
+            case .success(let data):
+                resultData = data
+            case .failure:
+                break
+            }
+            
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3)
+
+
+        // Then
+        XCTAssertEqual(resultData, historicalOutputData)
+    }
+    
+    func test_getHistoricalDataForDay_CanRaisesError() {
+
+        let exp = expectation(description: "Loading Historical data")
+
+        // when
+        let error = ErrorResult.network(string: "network error")
+
+        historicalDataServiceMock.resultMock = .failure(error)
+
+
+        var errorResult: ErrorResult?
+        
+        sut.getHistoricalDataForDay(historicalData: historicalInputData) {  result in
+            
+            switch result {
+            case .success(let data):
+               break
+            case .failure(let innerError):
+                errorResult = innerError
+            }
+            
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3)
+
+
+        // Then
+        XCTAssertEqual(errorResult, error)
     }
     
     func test_getHistoricalDataForPast3Days_WhenThereIsError_RaisesError() {
         
 
-        let historyData = scheduler.createObserver(HistoricalDataModel.self)
+        let historyData = scheduler.createObserver([CurrencyRate].self)
         let errorMessage = scheduler.createObserver(ErrorResult.self)
         
         let error = ErrorResult.network(string: "network error")
@@ -65,7 +126,7 @@ final class DetailViewModelTests: XCTestCase {
             .subscribe(errorMessage)
             .disposed(by: disposeBag)
 
-        sut.historicalData
+        sut.historicalDataLast3Days
             .subscribe(historyData)
             .disposed(by: disposeBag)
         
@@ -75,12 +136,12 @@ final class DetailViewModelTests: XCTestCase {
 
         historicalDataServiceMock.resultMock = .failure(error)
 
-        sut.getHistoricalDataForPast3Days(historicalData: historicalInputData) {_ in
+        sut.getHistoricalDataLast3Days(historicalInputData) {_ in
+            
             exp.fulfill()
         }
-
+        
         waitForExpectations(timeout: 3)
-
            
         // Then
         XCTAssertEqual(errorMessage.events, [.next(0, error)])
@@ -89,27 +150,36 @@ final class DetailViewModelTests: XCTestCase {
     
     func test_getHistoricalDataForPast3Days_ReturnsData() {
         
-        let historyData = scheduler.createObserver(HistoricalDataModel.self)
+
+        let historyData = scheduler.createObserver([CurrencyRate].self)
         
         let exp = expectation(description: "Loading Historical data")
-        
-        sut.historicalData
+
+        sut.historicalDataLast3Days
             .subscribe(historyData)
             .disposed(by: disposeBag)
         
         // when
         scheduler.start()
-        
+
         historicalDataServiceMock.resultMock = .success(historicalOutputData)
         
-        sut.getHistoricalDataForPast3Days(historicalData: historicalInputData) {_ in
+        sut.getHistoricalDataLast3Days(historicalInputData) {_ in
+            
             exp.fulfill()
         }
+        
         waitForExpectations(timeout: 3)
         
         
+        guard let rateDictItem = historicalOutputData.rates.first else {return}
+        let rate = CurrencyRate(iso: rateDictItem.key, rate: rateDictItem.value)
+        let rates = Array(repeating: rate, count: 3)
+
+        
         // Then
-        XCTAssertEqual(historyData.events, [.next(0, historicalOutputData)])
+        XCTAssertEqual(historyData.events, [.next(0, rates)])
+
     }
 }
 

@@ -25,6 +25,9 @@ final class StoryBoardTests: XCTestCase {
         converterScreen = navigationController.viewControllers[0] as? ConverterScreen
         converterScreen.loadViewIfNeeded()
         
+        converterScreen.changeFromCurrencyBtn.onNext(CurrencyRate(iso: "USD", rate: 1.2))
+        converterScreen.changeToCurrencyBtn.onNext(CurrencyRate(iso: "EUR", rate: 1.2))
+
         converterScreen.detailsBtn.sendActions(for: .touchUpInside)
         
         RunLoop.current.run(until: Date())
